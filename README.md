@@ -2,8 +2,6 @@
 
 Welcome to the "Budget App," a full-stack application created as a Java capstone project for the Neue Fische Java Bootcamp. This project aims to help you manage your finances efficiently and provides a consistent development and deployment workflow.
 
-[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-orange.svg)](https://sonarcloud.io/summary/new_code?id=ryliecc_capstone-java-backend)
-
 ## Project Overview
 
 The "Budget App" consists of a Java backend and a Vite React frontend with TypeScript. It leverages Docker for containerization, GitHub Actions for continuous integration, and Render for deployment. This ReadMe provides an overview of the project and its setup.
@@ -52,6 +50,8 @@ Once the "Budget App" is fully implemented, you can follow these steps to get st
 3. Access the application in your web browser.
 
 Stay tuned for further updates and contributions to the project. Happy budgeting!
+
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-orange.svg)](https://sonarcloud.io/summary/new_code?id=ryliecc_capstone-java-backend)
 
 ---
 
