@@ -15,6 +15,9 @@
     <description>backend</description>
     <properties>
         <java.version>17</java.version>
+        <sonar.organization>ryliecc</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.projectname>ryliecc_capstone-java-backend</sonar.projectname>
     </properties>
     <dependencies>
         <dependency>
