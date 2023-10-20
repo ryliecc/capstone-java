@@ -1,4 +1,4 @@
-package com.github.ryliecc.backend;
+package models;
 
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,7 +12,7 @@ import java.time.Instant;
 @Builder
 @Setter
 @Getter
-public class BudgetEntry {
+public class TransactionEntry {
     @MongoId
     private String id;
     private String title;

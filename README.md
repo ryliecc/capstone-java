@@ -11,8 +11,8 @@ The "Budget App" consists of a Java backend and a Vite React frontend with TypeS
 I've followed a structured approach to set up and deploy the "Budget App." Here are the key steps that have been completed:
 
 1. **GitHub Repository Setup:**
-    - A GitHub repository named "capstone-java" has been created to host the project.
-    - The repository is initialized with a `.gitignore` file suitable for Java, Maven, and React/Vite with TypeScript.
+    - A GitHub service named "capstone-java" has been created to host the project.
+    - The service is initialized with a `.gitignore` file suitable for Java, Maven, and React/Vite with TypeScript.
 
 2. **Backend Setup:**
     - A Maven project for the backend using Java has been created.
@@ -45,7 +45,7 @@ I've followed a structured approach to set up and deploy the "Budget App." Here 
 
 Once the "Budget App" is fully implemented, you can follow these steps to get started with the application:
 
-1. Clone the GitHub repository to your local machine.
+1. Clone the GitHub service to your local machine.
 2. Build and run the Docker image for the "Budget App."
 3. Access the application in your web browser.
 
