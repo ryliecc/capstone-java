@@ -17,5 +17,5 @@ public class TransactionEntry {
     private String id;
     private String title;
     private Instant timeLogged;
-    private double amountOfMoney;
+    private String amountOfMoney;
 }
