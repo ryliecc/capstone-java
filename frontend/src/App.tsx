@@ -5,7 +5,6 @@ import HomePage from "./pages/HomePage.tsx";
 export default function App() {
 
   return (
-    <>
         <div className="App">
             <BrowserRouter>
                 <Routes>
@@ -13,7 +12,6 @@ export default function App() {
                 </Routes>
             </BrowserRouter>
         </div>
-    </>
   )
 }
 
