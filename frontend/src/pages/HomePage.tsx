@@ -1,7 +1,18 @@
 import {Transaction} from "../models/TransactionModel.tsx";
 import axios from "axios";
+import {useEffect, useState} from "react";
 
 export default function HomePage() {
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+    useEffect(() => {
+        axios
+            .get("/api/budget-app")
+            .then((response) => {
+            setTransactions(response.data);
+        });
+        console.log(transactions);
+    }, [])
 
     function handleSubmitForm(event: React.FormEvent) {
         event.preventDefault();
@@ -24,6 +35,7 @@ export default function HomePage() {
 
     return <>
         <div>This is the HomePage.</div>
+        <h2>Add a new Transaction</h2>
         <form onSubmit={handleSubmitForm}>
             <label htmlFor={"title"}>Title:</label>
             <input name={"title"} id={"title"} type={"text"} required/>
@@ -31,5 +43,13 @@ export default function HomePage() {
             <input name={"amountOfMoney"} id={"moneyAmount"} type={"text"} required/>
             <button type={"submit"}>Submit</button>
         </form>
+        <h2>Past transactions:</h2>
+        <ul>{transactions?.map((transaction) => {
+            return <>
+                <li>
+                    <span>Title: {transaction.title}</span>
+                    <span>Amount of Money: {transaction.amountOfMoney}</span>
+                </li></>
+        })}</ul>
     </>
 }
