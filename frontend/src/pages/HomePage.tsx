@@ -9,9 +9,9 @@ export default function HomePage() {
         axios
             .get("/api/budget-app")
             .then((response) => {
-            setTransactions(response.data);
-            console.log(response.data);
-        });
+                setTransactions(response.data);
+                console.log(response.data);
+            });
         console.log(transactions);
     }, [])
 
@@ -27,11 +27,11 @@ export default function HomePage() {
         axios
             .post("/api/budget-app", newTransaction)
             .then((response) => {
-            console.log("Erfolgreich gespeichert:" + response.data);
-        })
+                console.log("Erfolgreich gespeichert:" + response.data);
+            })
             .catch((error) => {
-            console.error("Fehler beim Speichern:", error);
-        });
+                console.error("Fehler beim Speichern:", error);
+            });
     }
 
     return <>
@@ -46,11 +46,10 @@ export default function HomePage() {
         </form>
         <h2>Past transactions:</h2>
         <ul>{transactions?.map((transaction) => {
-            return <>
-                <li>
+            return(<li>
                     <span>Title: {transaction.title}</span>
                     <span>Amount of Money: {transaction.amountOfMoney}</span>
-                </li></>
+                </li>);
         })}</ul>
     </>
 }
