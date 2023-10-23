@@ -1,12 +1,25 @@
+import {Transaction} from "../models/TransactionModel.tsx";
+import axios from "axios";
+
 export default function HomePage() {
 
     function handleSubmitForm(event: React.FormEvent) {
         event.preventDefault();
         const formTarget = event.currentTarget as HTMLFormElement;
-        console.log(formTarget.elements.namedItem("title").value);
-        console.log(formTarget.elements.namedItem("amountOfMoney").value);
-
-
+        const titleElement = formTarget.elements.namedItem("title") as HTMLInputElement;
+        const amountElement = formTarget.elements.namedItem("amountOfMoney") as HTMLInputElement;
+        const newTransaction: Transaction = {
+            title: titleElement.value,
+            amountOfMoney: amountElement.value
+        };
+        axios
+            .post("/api/budget-app", {newTransaction})
+            .then((response) => {
+            console.log("Erfolgreich gespeichert:" + response.data);
+        })
+            .catch((error) => {
+            console.error("Fehler beim Speichern:", error);
+        });
     }
 
     return <>

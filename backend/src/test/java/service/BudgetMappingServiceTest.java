@@ -1,8 +1,9 @@
 package service;
 
-import models.NewTransaction;
-import models.TransactionEntry;
-import models.TransactionsResponse;
+import com.github.ryliecc.backend.models.NewTransaction;
+import com.github.ryliecc.backend.models.TransactionEntry;
+import com.github.ryliecc.backend.models.TransactionsResponse;
+import com.github.ryliecc.backend.service.BudgetMappingService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
