@@ -10,6 +10,7 @@ export default function HomePage() {
             .get("/api/budget-app")
             .then((response) => {
             setTransactions(response.data);
+            console.log(response.data);
         });
         console.log(transactions);
     }, [])
@@ -24,7 +25,7 @@ export default function HomePage() {
             amountOfMoney: amountElement.value
         };
         axios
-            .post("/api/budget-app", {newTransaction})
+            .post("/api/budget-app", newTransaction)
             .then((response) => {
             console.log("Erfolgreich gespeichert:" + response.data);
         })

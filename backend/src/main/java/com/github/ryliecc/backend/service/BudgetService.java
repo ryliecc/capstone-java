@@ -21,6 +21,7 @@ public class BudgetService {
 
     public TransactionsResponse addTransactionEntry(NewTransaction newTransaction) {
         TransactionEntry transactionEntry = budgetMappingService.mapNewTransactionToTransactionEntry(newTransaction);
-        return budgetMappingService.mapTransactionToResponse(transactionEntry);
+        TransactionEntry savedTransaction = transactionRepo.save(transactionEntry);
+        return budgetMappingService.mapTransactionToResponse(savedTransaction);
     }
 }
