@@ -33,12 +33,10 @@ I've followed a structured approach to set up and deploy the "Budget App." Here 
 7. **SonarCloud Integration:**
     - SonarCloud integration to perform code analysis and quality checks is in progress.
 
-8. **Deployment with Render:**
-    - A Render account has been set up and configured for deploying the full-stack application.
-    - The deployment process is automated and triggered upon successful CI/CD pipeline completion.
-
-9. **Documentation:**
-    - Documentation regarding the setup and deployment process is being maintained.
+8. **Expense and Income Tracking:**
+    - The application now supports expense and income tracking with the ability to add, retrieve, and view financial transactions.
+    - MongoDB integration has been implemented to store transaction data.
+    - User-friendly frontend pages have been created for adding and viewing financial transactions.
 
     
 ## Getting Started
