@@ -7,7 +7,7 @@ export type props = {
 const Container = styled.div`
   width: 100%;
   height: 4em;
-  background-color: #b7ded2;
+  background-color: #9fb9bf;
   padding-bottom: 0.6em;
 `;
 

@@ -2,7 +2,30 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import {Transaction} from "../models/TransactionModel.tsx";
 import {useNavigate} from "react-router-dom";
+import AppHeader from "../components/AppHeader.tsx";
+import Button from "../components/Button.tsx";
+import styled from "styled-components";
 
+const Main = styled.main`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  gap: 0.6em;
+  padding: 0.6em;
+`;
+
+const List = styled.ul`
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+`;
+
+const ListItem = styled.li`
+  display: flex;
+  flex-direction: column;
+`;
 
 export default function AllTransactionsPage() {
     const navigateTo = useNavigate();
@@ -21,13 +44,16 @@ export default function AllTransactionsPage() {
     }
 
     return <>
-        <button type="button" onClick={handleClickBackButton}>Go back</button>
+        <AppHeader headerText="Past expenses"/>
+        <Main>
+        <Button buttonType="button" handleButtonClick={handleClickBackButton} buttonText="Back"/>
         <h2>Past transactions:</h2>
-        <ul>{transactions?.map((transaction) => {
-            return(<li>
+        <List>{transactions?.map((transaction) => {
+            return(<ListItem>
                 <span>Title: {transaction.title}</span>
                 <span>Amount of Money: {transaction.amountOfMoney}</span>
-            </li>);
-        })}</ul>
+            </ListItem>);
+        })}</List>
+        </Main>
     </>
 }

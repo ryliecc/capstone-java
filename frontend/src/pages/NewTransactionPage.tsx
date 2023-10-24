@@ -1,8 +1,24 @@
 import {Transaction} from "../models/TransactionModel.tsx";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import AppHeader from "../components/AppHeader.tsx";
+import Button from "../components/Button.tsx";
+import styled from "styled-components";
 
+const Main = styled.main`
+display: flex;
+flex-direction: column;
+gap: 0.6em;
+  justify-content: center;
+  align-content: center;
+  padding: 0.6em;
+`;
 
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+`;
 export default function NewTransactionPage() {
     const navigateTo = useNavigate();
     function handleSubmitForm(event: React.FormEvent) {
@@ -30,14 +46,17 @@ export default function NewTransactionPage() {
     }
 
     return <>
-        <button type="button" onClick={handleClickBackButton}>Go back</button>
+        <AppHeader headerText="New Expense"/>
+        <Main>
+        <Button buttonType="button" handleButtonClick={handleClickBackButton} buttonText="Back"/>
         <div>Add a new transaction</div>
-        <form onSubmit={handleSubmitForm}>
+        <Form onSubmit={handleSubmitForm}>
             <label htmlFor={"title"}>Title:</label>
             <input name={"title"} id={"title"} type={"text"} required/>
             <label htmlFor={"moneyAmount"}>Amount of Money:</label>
             <input name={"amountOfMoney"} id={"moneyAmount"} type={"text"} required/>
-            <button type={"submit"}>Submit</button>
-        </form>
+            <Button buttonType={"submit"} buttonText="Submit" handleButtonClick={handleSubmitForm}/>
+        </Form>
+        </Main>
     </>
 }
