@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 export type props = {
-    buttonType : string,
-    handleButtonClick : Function,
     buttonText : string;
+    type?: 'button' | 'submit' | 'reset';
+    onClick?: () => void;
 }
 
 const StyledButton = styled.button`
@@ -62,7 +62,7 @@ const StyledButton = styled.button`
   }
 `;
 
-export default function Button(props : Readonly<props>) {
-    return (<StyledButton type={props.buttonType} onClick={props.handleButtonClick}>{props.buttonText}</StyledButton>)
+export default function Button(props : props) {
+    return (<StyledButton type={props.type || 'button'} onClick={props.onClick}>{props.buttonText}</StyledButton>)
 
 }

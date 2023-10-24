@@ -103,7 +103,7 @@ export default function NewTransactionPage() {
     return <>
         <AppHeader headerText="New Expense"/>
         <Main>
-        <Button buttonType="button" handleButtonClick={handleClickBackButton} buttonText="Back"/>
+        <Button onClick={handleClickBackButton} buttonText="Back"/>
         <div>Add a new transaction</div>
         <Form onSubmit={handleSubmitForm}>
             <label htmlFor={"title"}>Title:</label>
