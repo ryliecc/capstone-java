@@ -5,6 +5,7 @@ import {useNavigate} from "react-router-dom";
 import AppHeader from "../components/AppHeader.tsx";
 import Button from "../components/Button.tsx";
 import styled from "styled-components";
+import TrashIcon from "../assets/trash.svg";
 
 const Main = styled.main`
   display: flex;
@@ -25,6 +26,27 @@ const List = styled.ul`
 const ListItem = styled.li`
   display: flex;
   flex-direction: column;
+  position: relative;
+`;
+
+const DeleteButton = styled.button`
+  border-radius: 10px;
+  position: absolute;
+  align-self: end;
+  padding: 0;
+  background-color: #aec8ce;
+  border: none;
+  cursor: pointer;
+  height: 3em;
+  width: 3em;
+  font-size: 1em;
+`;
+
+const ButtonImage = styled.img`
+  position: absolute;
+  left: 0.4em;
+  top: 0.4em;
+  width: 2.2em;
 `;
 
 export default function AllTransactionsPage() {
@@ -43,6 +65,21 @@ export default function AllTransactionsPage() {
         navigateTo(-1);
     }
 
+    function handleClickDelete(id : string) {
+        axios
+            .delete("/api/budget-app/" + id)
+            .then(() => {
+                // If the deletion was successful, update the transactions state
+                setTransactions((prevTransactions) => {
+                    return prevTransactions.filter((transaction) => transaction.id !== id);
+                });
+            })
+            .catch((error) => {
+                console.error("Fehler beim Löschen", error);
+            });
+
+    }
+
     return <>
         <AppHeader headerText="Past expenses"/>
         <Main>
@@ -52,6 +89,9 @@ export default function AllTransactionsPage() {
             return(<ListItem key={transaction.title}>
                 <span>Title: {transaction.title}</span>
                 <span>Amount of Money: {transaction.amountOfMoney}</span>
+                <DeleteButton type="button" onClick={() => handleClickDelete(transaction.id)}>
+                    <ButtonImage src={TrashIcon} alt="Trash Icon"/>
+                </DeleteButton>
             </ListItem>);
         })}</List>
         </Main>
