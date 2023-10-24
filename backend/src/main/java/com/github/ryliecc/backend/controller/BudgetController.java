@@ -26,4 +26,10 @@ public class BudgetController {
     public TransactionsResponse addTransaction(@RequestBody NewTransaction newTransaction) {
         return budgetService.addTransactionEntry(newTransaction);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteTransaction(@PathVariable String id) {
+        budgetService.deleteTransactionEntry(id);
+    }
 }

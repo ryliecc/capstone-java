@@ -62,4 +62,11 @@ class BudgetServiceTest {
         Assertions.assertEquals("title", actual.title());
         Assertions.assertEquals("1.61", actual.amountOfMoney());
     }
+
+    @Test
+    void deleteTransactionEntry()
+    {
+
+        Assertions.assertTrue(true);
+    }
 }
