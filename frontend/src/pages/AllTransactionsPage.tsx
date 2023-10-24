@@ -46,7 +46,7 @@ export default function AllTransactionsPage() {
     return <>
         <AppHeader headerText="Past expenses"/>
         <Main>
-        <Button buttonType="button" handleButtonClick={handleClickBackButton} buttonText="Back"/>
+        <Button onClick={handleClickBackButton} buttonText="Back"/>
         <h2>Past transactions:</h2>
         <List>{transactions?.map((transaction) => {
             return(<ListItem key={transaction.title}>

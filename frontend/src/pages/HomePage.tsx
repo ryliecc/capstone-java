@@ -34,9 +34,9 @@ export default function HomePage() {
         <Main>
         <div>This is the HomePage.</div>
         <ButtonContainer>
-            <Button buttonType="button" handleButtonClick={handleClickAllTransactions}
+            <Button onClick={handleClickAllTransactions}
                     buttonText="See all transactions"/>
-            <Button buttonType="button" handleButtonClick={handleClickNewTransaction} buttonText="Add new transaction"/>
+            <Button onClick={handleClickNewTransaction} buttonText="Add new transaction"/>
         </ButtonContainer>
         </Main>
     </>
