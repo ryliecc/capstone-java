@@ -49,7 +49,7 @@ export default function AllTransactionsPage() {
         <Button buttonType="button" handleButtonClick={handleClickBackButton} buttonText="Back"/>
         <h2>Past transactions:</h2>
         <List>{transactions?.map((transaction) => {
-            return(<ListItem>
+            return(<ListItem key={transaction.title}>
                 <span>Title: {transaction.title}</span>
                 <span>Amount of Money: {transaction.amountOfMoney}</span>
             </ListItem>);

@@ -62,8 +62,7 @@ const StyledButton = styled.button`
   }
 `;
 
-export default function Button(props : props) {
-    return <>
-        <StyledButton type={props.buttonType} onClick={props.handleButtonClick}>{props.buttonText}</StyledButton>
-    </>
+export default function Button(props : Readonly<props>) {
+    return (<StyledButton type={props.buttonType} onClick={props.handleButtonClick}>{props.buttonText}</StyledButton>)
+
 }

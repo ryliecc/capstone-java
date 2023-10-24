@@ -17,7 +17,7 @@ const PageTitle = styled.h1`
   text-align: center;
 `
 
-export default function AppHeader(props : props) {
+export default function AppHeader(props : Readonly<props>) {
     return <Container>
         <PageTitle>{props.headerText}</PageTitle>
     </Container>
