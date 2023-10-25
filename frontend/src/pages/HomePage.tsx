@@ -30,7 +30,7 @@ export default function HomePage() {
             .then(response => {
                 setUsername(response.data);
             })
-    })
+    }, [])
 
     function handleClickNewTransaction() {
         navigateTo("/newtransaction");
@@ -48,12 +48,19 @@ export default function HomePage() {
     function handleClickMe() {
         axios.get("/api/users/me")
             .then(response => {
-                console.log("Username: " + response.data);
+                setUsername(response.data);
             })
     }
 
     function handleClickLogout() {
         console.log("Logout was clicked.");
+        axios.post("/api/logout")
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.log("Fehler beim Ausloggen: " + error);
+            })
     }
 
     const LoginButton = username === "anonymousUser" ? <Button buttonText="Login" onClick={handleClickLogin}/> : <Button buttonText="Logout" onClick={handleClickLogout}/>;
