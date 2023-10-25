@@ -1,4 +1,4 @@
-import {Transaction} from "../models/TransactionModel.tsx";
+import {NewTransaction} from "../models/NewTransactionModel.tsx";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import AppHeader from "../components/AppHeader.tsx";
@@ -81,10 +81,12 @@ export default function NewTransactionPage() {
         const formTarget = event.currentTarget as HTMLFormElement;
         const titleElement = formTarget.elements.namedItem("title") as HTMLInputElement;
         const amountElement = formTarget.elements.namedItem("amountOfMoney") as HTMLInputElement;
-        const newTransaction: Transaction = {
+
+        const newTransaction: NewTransaction = {
             title: titleElement.value,
             amountOfMoney: amountElement.value
         };
+
         axios
             .post("/api/budget-app", newTransaction)
             .then((response) => {

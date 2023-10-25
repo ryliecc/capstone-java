@@ -24,4 +24,8 @@ public class BudgetService {
         TransactionEntry savedTransaction = transactionRepo.save(transactionEntry);
         return budgetMappingService.mapTransactionToResponse(savedTransaction);
     }
+
+    public void deleteTransactionEntry(String id) {
+        transactionRepo.deleteById(id);
+    }
 }
