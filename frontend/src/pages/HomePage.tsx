@@ -9,7 +9,7 @@ const Main = styled.main`
   justify-content: center;
   align-content: center;
   text-align: center;
-  gap: 0.4em;
+  gap: 0.8em;
   padding: 0.4em;
 `;
 
@@ -29,10 +29,16 @@ export default function HomePage() {
         navigateTo("/transactions")
     }
 
+    function handleClickLogin() {
+        const host : string = window.location.host === 'localhost:5173' ? 'http://localhost:8080' : window.location.origin;
+        window.open(host + '/oauth2/authorization/github', '_blank');
+    }
+
     return <>
         <AppHeader headerText="Home"/>
         <Main>
         <div>This is the HomePage.</div>
+            <Button buttonText="Login" onClick={handleClickLogin}/>
         <ButtonContainer>
             <Button onClick={handleClickAllTransactions}
                     buttonText="See all transactions"/>
