@@ -69,7 +69,6 @@ export default function AllTransactionsPage() {
         axios
             .delete("/api/budget-app/" + id)
             .then(() => {
-                // If the deletion was successful, update the transactions state
                 setTransactions((prevTransactions) => {
                     return prevTransactions.filter((transaction) => transaction.id !== id);
                 });
