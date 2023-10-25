@@ -3,6 +3,7 @@ import styled from "styled-components";
 import AppHeader from "../components/AppHeader.tsx";
 import Button from "../components/Button.tsx";
 import axios from "axios";
+import {useEffect, useState} from "react";
 
 const Main = styled.main`
   display: flex;
@@ -22,6 +23,14 @@ const ButtonContainer = styled.div`
 
 export default function HomePage() {
     const navigateTo = useNavigate();
+    const [username, setUsername] = useState("");
+
+    useEffect(() => {
+        axios.get("/api/users/me")
+            .then(response => {
+                setUsername(response.data);
+            })
+    })
 
     function handleClickNewTransaction() {
         navigateTo("/newtransaction");
@@ -43,12 +52,18 @@ export default function HomePage() {
             })
     }
 
+    function handleClickLogout() {
+        console.log("Logout was clicked.");
+    }
+
+    const LoginButton = username === "anonymousUser" ? <Button buttonText="Login" onClick={handleClickLogin}/> : <Button buttonText="Logout" onClick={handleClickLogout}/>;
+
     return <>
         <AppHeader headerText="Home"/>
         <Main>
-            <div>This is the HomePage.</div>
+            <div>Hello User {username}! This is the HomePage.</div>
             <ButtonContainer>
-                <Button buttonText="Login with Github" onClick={handleClickLogin}/>
+                {LoginButton}
                 <Button buttonText="Get my name" onClick={handleClickMe}/>
             </ButtonContainer>
             <ButtonContainer>
