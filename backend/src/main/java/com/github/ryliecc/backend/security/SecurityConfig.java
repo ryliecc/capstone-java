@@ -19,6 +19,7 @@ public class SecurityConfig {
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/budget-app").authenticated()
                         .anyRequest().permitAll())
                 .sessionManagement(sessions ->
                         sessions.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
