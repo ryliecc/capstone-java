@@ -4,6 +4,7 @@ import {useNavigate} from "react-router-dom";
 import AppHeader from "../components/AppHeader.tsx";
 import Button from "../components/Button.tsx";
 import styled from "styled-components";
+import useLocalStorageState from "use-local-storage-state";
 
 const Main = styled.main`
 display: flex;
@@ -75,6 +76,7 @@ const SubmitButton = styled.button`align-items: center;
   }
 `;
 export default function NewTransactionPage() {
+    const [creatorId, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
     const navigateTo = useNavigate();
     function handleSubmitForm(event: React.FormEvent) {
         event.preventDefault();
@@ -84,7 +86,8 @@ export default function NewTransactionPage() {
 
         const newTransaction: NewTransaction = {
             title: titleElement.value,
-            amountOfMoney: amountElement.value
+            amountOfMoney: amountElement.value,
+            creatorId: creatorId
         };
 
         axios
