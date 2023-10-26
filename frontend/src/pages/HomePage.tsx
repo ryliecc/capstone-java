@@ -29,8 +29,8 @@ export default function HomePage() {
     }, [])
 
     function handleClickLogin() {
-        const host: string = window.location.host === 'localhost:5173' ? 'http://localhost:8080' : window.location.origin;
-        window.location.href = host + '/oauth2/authorization/github', '_blank';
+        const host = window.location.host === 'localhost:5173' ? 'http://localhost:8080' : window.location.origin;
+        window.location.href = host + '/oauth2/authorization/github';
     }
 
 
