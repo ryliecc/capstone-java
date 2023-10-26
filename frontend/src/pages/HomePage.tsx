@@ -3,7 +3,7 @@ import styled from "styled-components";
 import AppHeader from "../components/AppHeader.tsx";
 import Button from "../components/Button.tsx";
 import axios from "axios";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import useLocalStorageState from "use-local-storage-state";
 import LogoutIcon from "../assets/arrow-left-on-rectangle.svg";
 
@@ -49,6 +49,7 @@ const ButtonImage = styled.img`
 export default function HomePage() {
     const navigateTo = useNavigate();
     const [creatorId, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
+    const [userBalance, setUserBalance] = useState("0.00");
 
     useEffect(() => {
         axios.get("/api/users/me")
@@ -56,6 +57,13 @@ export default function HomePage() {
                 setCreatorId(response.data);
             })
     }, [])
+
+    useEffect(() => {
+        axios.get("/api/budget-app/balance/" + creatorId)
+            .then(response => {
+                setUserBalance(response.data);
+            })
+    }, [creatorId])
 
     function handleClickNewTransaction() {
         navigateTo("/newtransaction");
@@ -67,7 +75,7 @@ export default function HomePage() {
 
     function handleClickLogin() {
         const host: string = window.location.host === 'localhost:5173' ? 'http://localhost:8080' : window.location.origin;
-        window.open(host + '/oauth2/authorization/github', '_blank');
+        window.location.href = host + '/oauth2/authorization/github', '_blank';
     }
 
 
@@ -108,7 +116,7 @@ export default function HomePage() {
             <LogoutButton type="button" onClick={handleClickLogout}>
                 <ButtonImage src={LogoutIcon} alt="Logout Icon"/>
             </LogoutButton>
-            <div>Hello User {creatorId}! This is the HomePage.</div>
+            <div>Hello User {creatorId}! Your current balance is {userBalance}€</div>
 
             <ButtonContainer>
                 <Button onClick={handleClickAllTransactions}
