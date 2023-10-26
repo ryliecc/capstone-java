@@ -56,6 +56,13 @@ export default function AllTransactionsPage() {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
 
     useEffect(() => {
+        axios.get("/api/users/me")
+            .then(response => {
+                setCreatorId(response.data);
+            })
+    }, [])
+
+    useEffect(() => {
         axios
             .get("/api/budget-app/" + creatorId)
             .then((response) => {
@@ -81,6 +88,9 @@ export default function AllTransactionsPage() {
 
     }
 
+    if(creatorId === "anonymousUser") {
+        navigateTo("/");
+    }
     return <>
         <AppHeader headerText="Past expenses"/>
         <Main>
