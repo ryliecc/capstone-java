@@ -1,4 +1,5 @@
 export type NewTransaction = {
     title: string,
-    amountOfMoney: string
+    amountOfMoney: string,
+    creatorId: string
 }

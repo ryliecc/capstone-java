@@ -15,10 +15,10 @@ import java.util.List;
 public class BudgetController {
     private final BudgetService budgetService;
 
-    @GetMapping
+    @GetMapping("/{creatorId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<TransactionsResponse> getAllTransactions() {
-        return budgetService.getAllTransactions();
+    public List<TransactionsResponse> getTransactionsByCreatorId(@PathVariable String creatorId) {
+        return budgetService.getTransactionsByCreatorId(creatorId);
     }
 
     @PostMapping

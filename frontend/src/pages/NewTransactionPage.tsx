@@ -4,6 +4,8 @@ import {useNavigate} from "react-router-dom";
 import AppHeader from "../components/AppHeader.tsx";
 import Button from "../components/Button.tsx";
 import styled from "styled-components";
+import useLocalStorageState from "use-local-storage-state";
+import {useEffect} from "react";
 
 const Main = styled.main`
 display: flex;
@@ -75,7 +77,16 @@ const SubmitButton = styled.button`align-items: center;
   }
 `;
 export default function NewTransactionPage() {
+    const [creatorId, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
     const navigateTo = useNavigate();
+
+    useEffect(() => {
+        axios.get("/api/users/me")
+            .then(response => {
+                setCreatorId(response.data);
+            })
+    }, [])
+
     function handleSubmitForm(event: React.FormEvent) {
         event.preventDefault();
         const formTarget = event.currentTarget as HTMLFormElement;
@@ -84,7 +95,8 @@ export default function NewTransactionPage() {
 
         const newTransaction: NewTransaction = {
             title: titleElement.value,
-            amountOfMoney: amountElement.value
+            amountOfMoney: amountElement.value,
+            creatorId: creatorId
         };
 
         axios
@@ -102,6 +114,9 @@ export default function NewTransactionPage() {
         navigateTo(-1);
     }
 
+    if(creatorId === "anonymousUser") {
+        navigateTo("/");
+    }
     return <>
         <AppHeader headerText="New Expense"/>
         <Main>

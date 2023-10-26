@@ -15,9 +15,15 @@ public class BudgetService {
     private final TransactionRepo transactionRepo;
     private final BudgetMappingService budgetMappingService;
 
-    public List<TransactionsResponse> getAllTransactions() {
-        return transactionRepo.findAll().stream().map(budgetMappingService::mapTransactionToResponse).toList();
+
+    public List<TransactionsResponse> getTransactionsByCreatorId(String creatorId) {
+        return transactionRepo.findAll()
+                .stream()
+                .filter(transaction -> creatorId.equals(transaction.getCreatorId()))
+                .map(budgetMappingService::mapTransactionToResponse)
+                .toList();
     }
+
 
     public TransactionsResponse addTransactionEntry(NewTransaction newTransaction) {
         TransactionEntry transactionEntry = budgetMappingService.mapNewTransactionToTransactionEntry(newTransaction);
@@ -26,6 +32,7 @@ public class BudgetService {
     }
 
     public void deleteTransactionEntry(String id) {
+
         transactionRepo.deleteById(id);
     }
 }

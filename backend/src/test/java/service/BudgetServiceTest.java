@@ -27,19 +27,19 @@ class BudgetServiceTest {
         Instant fixedInstant = localDateTime.toInstant(ZoneOffset.UTC);
 
         return new TransactionEntry("1", "title", fixedInstant,
-                "1.61");
+                "1.61", "testId");
         //fixed instant = 2020-01-01T12:00:00Z
     }
 
     @Test
     void getAllTransactions() {
         //GIVEN
-        List<TransactionsResponse> expected = List.of(new TransactionsResponse("1", "title", "2020-01-01T12:00:00Z", "1.61"));
+        List<TransactionsResponse> expected = List.of(new TransactionsResponse("1", "title", "2020-01-01T12:00:00Z", "1.61", "testId"));
 
         when(transactionRepo.findAll()).thenReturn(List.of(setUp()));
 
         //WHEN
-        List<TransactionsResponse> actual = budgetService.getAllTransactions();
+        List<TransactionsResponse> actual = budgetService.getTransactionsByCreatorId("testId");
 
         //THEN
         Assertions.assertEquals(1, actual.size());
@@ -52,6 +52,7 @@ class BudgetServiceTest {
         NewTransaction newTransaction = new NewTransaction();
         newTransaction.setTitle("title");
         newTransaction.setAmountOfMoney("1.61");
+        newTransaction.setCreatorId("testId");
 
         when(transactionRepo.save(any(TransactionEntry.class))).thenReturn(setUp());
 
@@ -61,6 +62,7 @@ class BudgetServiceTest {
         //THEN
         Assertions.assertEquals("title", actual.title());
         Assertions.assertEquals("1.61", actual.amountOfMoney());
+        Assertions.assertEquals("testId", actual.creatorId());
     }
 
     @Test

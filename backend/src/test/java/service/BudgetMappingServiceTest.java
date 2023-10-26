@@ -20,6 +20,7 @@ class BudgetMappingServiceTest {
         transactionEntry.setTitle("title");
         transactionEntry.setTimeLogged(Instant.now());
         transactionEntry.setAmountOfMoney("13.12");
+        transactionEntry.setCreatorId("testId");
 
         // WHEN
         TransactionsResponse actual = budgetMappingService.mapTransactionToResponse(transactionEntry);
@@ -29,6 +30,7 @@ class BudgetMappingServiceTest {
         assert actual.title().equals("title");
         assert actual.amountOfMoney().equals("13.12");
         assert actual.timeLogged() != null;
+        assert actual.creatorId().equals("testId");
 
     }
 
@@ -38,6 +40,7 @@ class BudgetMappingServiceTest {
         NewTransaction newTransaction = new NewTransaction();
         newTransaction.setTitle("title");
         newTransaction.setAmountOfMoney("4.20");
+        newTransaction.setCreatorId("testId");
 
         // WHEN
         TransactionEntry actual = budgetMappingService.mapNewTransactionToTransactionEntry(newTransaction);
@@ -46,5 +49,6 @@ class BudgetMappingServiceTest {
         Assertions.assertEquals("title", actual.getTitle());
         assert actual.getAmountOfMoney().equals("4.20");
         assert actual.getTimeLogged() != null;
+        assert actual.getCreatorId().equals("testId");
     }
 }
