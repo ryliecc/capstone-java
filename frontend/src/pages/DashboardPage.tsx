@@ -5,7 +5,7 @@ import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 import useLocalStorageState from "use-local-storage-state";
 import {useEffect, useState} from "react";
-import axios from "axios/index";
+import axios from "axios";
 
 const Main = styled.main`
   display: flex;
@@ -74,6 +74,14 @@ export default function DashboardPage() {
         setCreatorId("anonymousUser");
     }
 
+    function handleClickAddIncome() {
+        navigateTo("/new-income");
+    }
+
+    function handleClickAddExpense() {
+        navigateTo("/new-expense");
+    }
+
     if(creatorId === "anonymousUser") {
         navigateTo("/");
     }
@@ -89,6 +97,10 @@ export default function DashboardPage() {
                 <Button onClick={handleClickAllTransactions}
                         buttonText="All transactions"/>
                 <Button onClick={handleClickNewTransaction} buttonText="New transaction"/>
+            </ButtonContainer>
+            <ButtonContainer>
+                <Button buttonText="Add income" onClick={handleClickAddIncome} />
+                <Button buttonText="Add expense" onClick={handleClickAddExpense} />
             </ButtonContainer>
         </Main>
     </>
