@@ -6,6 +6,7 @@ import AppHeader from "../components/AppHeader.tsx";
 import Button from "../components/Button.tsx";
 import styled from "styled-components";
 import TrashIcon from "../assets/trash.svg";
+import useLocalStorageState from "use-local-storage-state";
 
 const Main = styled.main`
   display: flex;
@@ -50,16 +51,17 @@ const ButtonImage = styled.img`
 `;
 
 export default function AllTransactionsPage() {
+    const [creatorId, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
     const navigateTo = useNavigate();
     const [transactions, setTransactions] = useState<Transaction[]>([]);
 
     useEffect(() => {
         axios
-            .get("/api/budget-app")
+            .get("/api/budget-app/" + creatorId)
             .then((response) => {
                 setTransactions(response.data);
             });
-    }, []);
+    }, [creatorId]);
 
     function handleClickBackButton() {
         navigateTo(-1);
@@ -85,7 +87,7 @@ export default function AllTransactionsPage() {
         <Button onClick={handleClickBackButton} buttonText="Back"/>
         <h2>Past transactions:</h2>
         <List>{transactions?.map((transaction) => {
-            return(<ListItem key={transaction.title}>
+            return(<ListItem key={transaction.id}>
                 <span>Title: {transaction.title}</span>
                 <span>Amount of Money: {transaction.amountOfMoney}</span>
                 <DeleteButton type="button" onClick={() => handleClickDelete(transaction.id)}>
