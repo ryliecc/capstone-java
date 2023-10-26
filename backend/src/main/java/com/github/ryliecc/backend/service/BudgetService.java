@@ -6,7 +6,10 @@ import com.github.ryliecc.backend.models.TransactionEntry;
 import com.github.ryliecc.backend.models.TransactionsResponse;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +26,23 @@ public class BudgetService {
                 .map(budgetMappingService::mapTransactionToResponse)
                 .toList();
     }
+
+    public String getSumOfAmountsByCreatorId(String creatorId) {
+        List<TransactionsResponse> transactions = transactionRepo.findAll()
+                .stream()
+                .filter(transaction -> creatorId.equals(transaction.getCreatorId()))
+                .map(budgetMappingService::mapTransactionToResponse)
+                .toList();
+
+        BigDecimal totalAmount = transactions.stream()
+                .map(transaction -> new BigDecimal(transaction.amountOfMoney()))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal roundedTotalAmount = totalAmount.setScale(2, RoundingMode.HALF_UP);
+
+        return roundedTotalAmount.toString();
+    }
+
 
 
     public TransactionsResponse addTransactionEntry(NewTransaction newTransaction) {
