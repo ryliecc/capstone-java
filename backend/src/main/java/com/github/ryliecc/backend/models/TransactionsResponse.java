@@ -6,6 +6,7 @@ import lombok.Builder;
 public record TransactionsResponse(String id,
                                    String title,
                                    String timeLogged,
-                                   String amountOfMoney) {
+                                   String amountOfMoney,
+                                   String creatorId) {
 
 }

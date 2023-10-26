@@ -6,4 +6,5 @@ import lombok.Data;
 public class NewTransaction {
     private String title;
     private String amountOfMoney;
+    private String creatorId;
 }
