@@ -7,6 +7,12 @@ import styled from "styled-components";
 import useLocalStorageState from "use-local-storage-state";
 import {useEffect} from "react";
 
+export type props = {
+    titleText: string,
+    moneyText: string,
+    headerText: string;
+}
+
 const Main = styled.main`
 display: flex;
 flex-direction: column;
@@ -76,7 +82,7 @@ const SubmitButton = styled.button`align-items: center;
     padding: 0 40px;
   }
 `;
-export default function NewTransactionPage() {
+export default function NewTransactionPage(props: props) {
     const [creatorId, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
     const navigateTo = useNavigate();
 
@@ -118,14 +124,14 @@ export default function NewTransactionPage() {
         navigateTo("/");
     }
     return <>
-        <AppHeader headerText="New Expense"/>
+        <AppHeader headerText={props.headerText}/>
         <Main>
         <Button onClick={handleClickBackButton} buttonText="Back"/>
         <div>Add a new transaction</div>
         <Form onSubmit={handleSubmitForm}>
-            <label htmlFor={"title"}>Title:</label>
+            <label htmlFor={"title"}>{props.titleText}</label>
             <input name={"title"} id={"title"} type={"text"} required/>
-            <label htmlFor={"moneyAmount"}>Amount of Money:</label>
+            <label htmlFor={"moneyAmount"}>{props.moneyText}</label>
             <input name={"amountOfMoney"} id={"moneyAmount"} type={"text"} required/>
             <SubmitButton type="submit">Submit</SubmitButton>
         </Form>

@@ -58,10 +58,6 @@ export default function DashboardPage() {
             })
     }, [creatorId])
 
-    function handleClickNewTransaction() {
-        navigateTo("/newtransaction");
-    }
-
     function handleClickAllTransactions() {
         navigateTo("/transactions")
     }
@@ -82,7 +78,7 @@ export default function DashboardPage() {
         navigateTo("/new-expense");
     }
 
-    if(creatorId === "anonymousUser") {
+    if (creatorId === "anonymousUser") {
         navigateTo("/");
     }
     return <>
@@ -92,15 +88,11 @@ export default function DashboardPage() {
                 <ButtonImage src={LogoutIcon} alt="Logout Icon"/>
             </LogoutButton>
             <div>Hello User {creatorId}! Your current balance is {userBalance}€</div>
-
+            <Button onClick={handleClickAllTransactions}
+                    buttonText="All transactions"/>
             <ButtonContainer>
-                <Button onClick={handleClickAllTransactions}
-                        buttonText="All transactions"/>
-                <Button onClick={handleClickNewTransaction} buttonText="New transaction"/>
-            </ButtonContainer>
-            <ButtonContainer>
-                <Button buttonText="Add income" onClick={handleClickAddIncome} />
-                <Button buttonText="Add expense" onClick={handleClickAddExpense} />
+                <Button buttonText="Add income" onClick={handleClickAddIncome}/>
+                <Button buttonText="Add expense" onClick={handleClickAddExpense}/>
             </ButtonContainer>
         </Main>
     </>
