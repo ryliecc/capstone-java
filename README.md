@@ -38,7 +38,11 @@ I've followed a structured approach to set up and deploy the "Budget App." Here 
     - MongoDB integration has been implemented to store transaction data.
     - User-friendly frontend pages have been created for adding and viewing financial transactions.
 
-    
+9. **User Authentication:**
+    - OAuth-based authentication with Github has been integrated to allow users to securely log in to their accounts.
+    - A user dashboard or profile page in the frontend displays personalized transaction history.
+    - Data isolation ensures that each user can only access their own financial data.
+
 ## Getting Started
 
 Once the "Budget App" is fully implemented, you can follow these steps to get started with the application:
