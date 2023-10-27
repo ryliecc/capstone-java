@@ -10,7 +10,8 @@ import {useEffect} from "react";
 export type props = {
     titleText: string,
     moneyText: string,
-    headerText: string;
+    headerText: string,
+    isExpense: boolean;
 }
 
 const Main = styled.main`
@@ -45,9 +46,10 @@ export default function NewTransactionPage(props: props) {
         const titleElement = formTarget.elements.namedItem("title") as HTMLInputElement;
         const amountElement = formTarget.elements.namedItem("amountOfMoney") as HTMLInputElement;
 
+        const amountOfMoneyData = props.isExpense ? ("-" + amountElement.value) : amountElement.value;
         const newTransaction: NewTransaction = {
             title: titleElement.value,
-            amountOfMoney: amountElement.value,
+            amountOfMoney: amountOfMoneyData,
             creatorId: creatorId
         };
 

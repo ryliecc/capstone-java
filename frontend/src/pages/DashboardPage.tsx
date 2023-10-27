@@ -88,12 +88,12 @@ export default function DashboardPage() {
                 <ButtonImage src={LogoutIcon} alt="Logout Icon"/>
             </LogoutButton>
             <div>Hello User {creatorId}! Your current balance is {userBalance}€</div>
-            <Button onClick={handleClickAllTransactions}
-                    buttonText="All transactions"/>
             <ButtonContainer>
                 <Button buttonText="Add income" onClick={handleClickAddIncome}/>
                 <Button buttonText="Add expense" onClick={handleClickAddExpense}/>
             </ButtonContainer>
+            <Button onClick={handleClickAllTransactions}
+                    buttonText="All transactions"/>
         </Main>
     </>
 }
