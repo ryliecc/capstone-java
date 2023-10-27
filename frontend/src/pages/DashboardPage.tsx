@@ -6,6 +6,8 @@ import {useNavigate} from "react-router-dom";
 import useLocalStorageState from "use-local-storage-state";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import PlusIcon from "../assets/plus.svg";
+import MinusIcon from "../assets/minus.svg";
 
 const Main = styled.main`
   display: flex;
@@ -16,18 +18,56 @@ const Main = styled.main`
   gap: 0.8em;
   padding: 0.4em;
   position: relative;
+  background-color: #aec8ce;
+  padding-bottom: 10.7em;
+`;
+
+const BalanceContainer = styled.div`
+  width: 7em;
+  height: 7em;
+  border: 0.2em solid #333;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3em;
+  font-weight: bold;
+  align-self: center;
+  position: relative;
+`;
+
+const BalanceText = styled.div`
+  position: absolute;
+  font-size: 0.4em;
+  top: 6em;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
-  gap: 0.6em;
-  justify-content: center;
+  justify-content: space-between;
+  padding: 0.8em;
+  position: relative;
+  top: -3em;
 `;
+
+const TransactionButton = styled.button`
+  width: 5em;
+  height: 5em;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #d6c7c7;
+  cursor: pointer;
+`;
+
+const TransactionButtonImage = styled.img`
+width: 3em;`;
 
 const LogoutButton = styled.button`
   border-radius: 10px;
   position: absolute;
-  align-self: end;
   padding: 0;
   background-color: #aec8ce;
   border: none;
@@ -35,8 +75,9 @@ const LogoutButton = styled.button`
   height: 3em;
   width: 3em;
   top: -3.8em;
-  left: 1em;
+  left: 0.6em;
   font-size: 1em;
+  bottom: 0;
 `;
 
 const ButtonImage = styled.img`
@@ -87,10 +128,17 @@ export default function DashboardPage() {
             <LogoutButton type="button" onClick={handleClickLogout}>
                 <ButtonImage src={LogoutIcon} alt="Logout Icon"/>
             </LogoutButton>
-            <div>Hello User {creatorId}! Your current balance is {userBalance}€</div>
+            <div>Hello User {creatorId}!</div>
+            <BalanceContainer>
+                <BalanceText>Current Balance:</BalanceText>
+                {userBalance}€</BalanceContainer>
             <ButtonContainer>
-                <Button buttonText="Add income" onClick={handleClickAddIncome}/>
-                <Button buttonText="Add expense" onClick={handleClickAddExpense}/>
+                <TransactionButton type="button" onClick={handleClickAddIncome}>
+                    <TransactionButtonImage src={PlusIcon} alt="Add income"/>
+                </TransactionButton>
+                <TransactionButton type="button" onClick={handleClickAddExpense}>
+                    <TransactionButtonImage src={MinusIcon} alt="Add expense"/>
+                </TransactionButton>
             </ButtonContainer>
             <Button onClick={handleClickAllTransactions}
                     buttonText="All transactions"/>
