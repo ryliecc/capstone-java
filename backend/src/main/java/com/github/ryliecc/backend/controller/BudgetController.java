@@ -21,6 +21,12 @@ public class BudgetController {
         return budgetService.getTransactionsByCreatorId(creatorId);
     }
 
+    @GetMapping("/balance/{creatorId}")
+    @ResponseStatus(HttpStatus.OK)
+    public String getBalanceByCreatorId(@PathVariable String creatorId) {
+        return budgetService.getSumOfAmountsByCreatorId(creatorId);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TransactionsResponse addTransaction(@RequestBody NewTransaction newTransaction) {

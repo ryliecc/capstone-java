@@ -9,6 +9,8 @@ import com.github.ryliecc.backend.service.TransactionRepo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -45,6 +47,22 @@ class BudgetServiceTest {
         Assertions.assertEquals(1, actual.size());
         Assertions.assertEquals(expected, actual);
     }
+
+    @Test
+    void testGetSumOfAmountsByCreatorId() {
+        // GIVEN
+        List<TransactionsResponse> expected = List.of(new TransactionsResponse("1", "title", "2020-01-01T12:00:00Z", "1.61", "testId"));
+        BigDecimal expectedSum = new BigDecimal("1.61").setScale(2, RoundingMode.HALF_UP);
+
+        when(transactionRepo.findAll()).thenReturn(List.of(setUp()));
+
+        // WHEN
+        String actualSum = budgetService.getSumOfAmountsByCreatorId("testId");
+
+        // THEN
+        Assertions.assertEquals(expectedSum.toString(), actualSum);
+    }
+
 
     @Test
     void addTransactionEntry() {
