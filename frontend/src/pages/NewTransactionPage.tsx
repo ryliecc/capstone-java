@@ -15,9 +15,9 @@ export type props = {
 }
 
 const Main = styled.main`
-display: flex;
-flex-direction: column;
-gap: 0.6em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
   justify-content: center;
   align-content: center;
   padding: 0.6em;
@@ -29,7 +29,7 @@ const Form = styled.form`
   gap: 0.6em;
 `;
 
-export default function NewTransactionPage(props: props) {
+export default function NewTransactionPage(props: Readonly<props>) {
     const [creatorId, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
     const navigateTo = useNavigate();
 
@@ -68,21 +68,21 @@ export default function NewTransactionPage(props: props) {
         navigateTo(-1);
     }
 
-    if(creatorId === "anonymousUser") {
+    if (creatorId === "anonymousUser") {
         navigateTo("/");
     }
     return <>
         <AppHeader headerText={props.headerText}/>
         <Main>
-        <Button onClick={handleClickBackButton} buttonText="Back"/>
-        <div>Add a new transaction</div>
-        <Form onSubmit={handleSubmitForm}>
-            <label htmlFor={"title"}>{props.titleText}</label>
-            <input name={"title"} id={"title"} type={"text"} required/>
-            <label htmlFor={"moneyAmount"}>{props.moneyText}</label>
-            <input name={"amountOfMoney"} id={"moneyAmount"} type={"text"} required/>
-            <Button type="submit" buttonText="Submit"/>
-        </Form>
+            <Button onClick={handleClickBackButton} buttonText="Back"/>
+            <div>Add a new transaction</div>
+            <Form onSubmit={handleSubmitForm}>
+                <label htmlFor={"title"}>{props.titleText}</label>
+                <input name={"title"} id={"title"} type={"text"} required/>
+                <label htmlFor={"moneyAmount"}>{props.moneyText}</label>
+                <input name={"amountOfMoney"} id={"moneyAmount"} type={"text"} required/>
+                <Button type="submit" buttonText="Submit"/>
+            </Form>
         </Main>
     </>
 }
