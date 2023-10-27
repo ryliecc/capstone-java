@@ -59,7 +59,7 @@ export default function NewTransactionPage(props: props) {
             .catch((error) => {
                 console.error("Fehler beim Speichern:", error);
             })
-            .then(() => navigateTo("/"));
+            .then(() => navigateTo("/dashboard"));
     }
 
     function handleClickBackButton() {
