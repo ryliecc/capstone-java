@@ -31,6 +31,27 @@ const Form = styled.form`
   gap: 0.6em;
 `;
 
+const CategoryContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+`;
+
+const SingleCategory = styled.label`
+  display: inline-block;
+  padding: 0.4em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+`;
+
+const CategoryInput = styled.input`
+    display: inline-block;
+`;
+
+
 export default function NewTransactionPage(props: Readonly<props>) {
     const [transactionCategories, setTransactionCategories] = useState<Category[]>([]);
     const [newCategoryIsVisible, setNewCategoryIsVisible] = useState(false);
@@ -94,7 +115,7 @@ export default function NewTransactionPage(props: Readonly<props>) {
     }
 
     const allCategories = transactionCategories.map((category: Category) => {
-        return (<div key={category.id}><input type="radio" name="transactionCategory" value={category.title} id={category.title}/><label htmlFor={category.title}>{category.title}</label></div>)
+        return (<SingleCategory key={category.id} htmlFor={category.title}><CategoryInput type="radio" name="transactionCategory" value={category.title} id={category.title}/>{category.title}</SingleCategory>)
     });
     const categoriesElement = transactionCategories.length >= 1 ? allCategories : "No categories created yet."
 
@@ -114,7 +135,9 @@ export default function NewTransactionPage(props: Readonly<props>) {
                 <label htmlFor={"moneyAmount"}>{props.moneyText}</label>
                 <input name={"amountOfMoney"} id={"moneyAmount"} type={"text"} required/>
                 <div>Choose a category:</div>
+                <CategoryContainer>
                 {categoriesElement}
+                </CategoryContainer>
                 <Button buttonText="Add new Category" onClick={handleClickAddNewCategory}/>
                 <Button type="submit" buttonText="Submit"/>
             </Form>
