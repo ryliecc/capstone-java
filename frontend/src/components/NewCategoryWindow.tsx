@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Button from "./Button.tsx";
 import {NewCategory} from "../models/NewCategoryModel.tsx";
 import axios from "axios";
+import CloseIcon from "../assets/x-mark.svg";
 
 export type props = {
     creatorId: string,
@@ -31,6 +32,18 @@ const Window = styled.div`
   border: solid black 1em;
   border-radius: 2em;
   padding: 0.8em;
+  position: relative;
+`;
+
+const CloseButton = styled.button`
+  border: none;
+  background-color: transparent;
+  position: absolute;
+  right: 1em;
+`;
+
+const ButtonImage = styled.img`
+  width: 2.6em;
 `;
 
 const Form = styled.form`
@@ -38,11 +51,18 @@ const Form = styled.form`
   flex-direction: column;
   gap: 0.4em;
   margin-bottom: 1em;
+  font-size: 1.2em;
 `;
 
-const Label = styled.label``;
+const Label = styled.label`
+    font-size: 1.4em;
+`;
 
-const Input = styled.input``;
+const Input = styled.input`
+  background-color: whitesmoke;
+  color: black;
+  font-size: 1.2em;
+`;
 export default function NewCategoryWindow(props: Readonly<props>) {
 
     function handleClickSubmit(event: React.FormEvent) {
@@ -72,12 +92,14 @@ export default function NewCategoryWindow(props: Readonly<props>) {
 
     return <Container $isVisible={props.isVisible}>
         <Window>
+            <CloseButton onClick={handleClickCloseWindow}>
+                <ButtonImage src={CloseIcon} alt="Close Window Icon"/>
+            </CloseButton>
             <Form onSubmit={handleClickSubmit}>
-                <Label htmlFor="categoryName">Category Name:</Label>
+                <Label htmlFor="categoryName">New Category</Label>
                 <Input type="text" id="categoryName" name="categoryName"/>
                 <Button buttonText="Submit" type="submit"/>
             </Form>
-            <Button buttonText="Close Window" onClick={handleClickCloseWindow}/>
         </Window>
     </Container>
 }
