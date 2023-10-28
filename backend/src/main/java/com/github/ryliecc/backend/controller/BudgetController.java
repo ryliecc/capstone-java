@@ -1,5 +1,7 @@
 package com.github.ryliecc.backend.controller;
 
+import com.github.ryliecc.backend.models.NewCategory;
+import com.github.ryliecc.backend.models.TransactionCategory;
 import lombok.RequiredArgsConstructor;
 import com.github.ryliecc.backend.models.NewTransaction;
 import com.github.ryliecc.backend.models.TransactionsResponse;
@@ -27,15 +29,33 @@ public class BudgetController {
         return budgetService.getSumOfAmountsByCreatorId(creatorId);
     }
 
+    @GetMapping("/category/{creatorId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<TransactionCategory> getCategoriesByCreatorId(@PathVariable String creatorId) {
+        return budgetService.getCategoriesByCreatorId(creatorId);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TransactionsResponse addTransaction(@RequestBody NewTransaction newTransaction) {
         return budgetService.addTransactionEntry(newTransaction);
     }
 
+    @PostMapping("/category")
+    @ResponseStatus(HttpStatus.CREATED)
+    public TransactionCategory addCategory (@RequestBody NewCategory newCategory) {
+        return budgetService.addTransactionCategory(newCategory);
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteTransaction(@PathVariable String id) {
         budgetService.deleteTransactionEntry(id);
+    }
+
+    @DeleteMapping("/category/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteCategory(@PathVariable String id) {
+        budgetService.deleteCategory(id);
     }
 }

@@ -1,9 +1,7 @@
 package com.github.ryliecc.backend.service;
 
+import com.github.ryliecc.backend.models.*;
 import lombok.RequiredArgsConstructor;
-import com.github.ryliecc.backend.models.NewTransaction;
-import com.github.ryliecc.backend.models.TransactionEntry;
-import com.github.ryliecc.backend.models.TransactionsResponse;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -28,6 +26,14 @@ public class BudgetMappingService {
                 .amountOfMoney(newTransaction.getAmountOfMoney())
                 .timeLogged(Instant.now())
                 .creatorId(newTransaction.getCreatorId())
+                .build();
+    }
+
+    public TransactionCategory mapNewCategoryToTransactionCategory(NewCategory newCategory) {
+        return TransactionCategory.builder()
+                .title(newCategory.getTitle())
+                .creatorId(newCategory.getCreatorId())
+                .categoryType(newCategory.getCategoryType())
                 .build();
     }
 }
