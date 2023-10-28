@@ -8,6 +8,7 @@ import useLocalStorageState from "use-local-storage-state";
 import React, {useEffect, useState} from "react";
 import {Category} from "../models/CategoryModel.tsx";
 import NewCategoryWindow from "../components/NewCategoryWindow.tsx";
+import AddIcon from "../assets/plus-circle.svg";
 
 export type props = {
     titleText: string,
@@ -29,6 +30,14 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 0.6em;
+  font-size: 1.2em;
+`;
+
+const FormInput = styled.input`
+  background-color: whitesmoke;
+  height: 2em;
+  color: black;
+  font-size: 1.2em;
 `;
 
 const CategoryContainer = styled.div`
@@ -38,17 +47,37 @@ const CategoryContainer = styled.div`
 `;
 
 const SingleCategory = styled.label`
-  display: inline-block;
-  padding: 0.4em;
+  display: flex;
+  gap: 0.4em;
+  padding: 0 0.4em;
   border: 1px solid #ccc;
   border-radius: 5px;
   text-align: center;
   cursor: pointer;
   position: relative;
+  background-color: #d6c7c7;
+  font-size: 1em;
 `;
 
 const CategoryInput = styled.input`
-    display: inline-block;
+  display: inline-block;
+`;
+
+const AddButton = styled.button`
+  background-color: #d6c7c7;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  position: relative;
+  font-size: 1em;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 0.2em;
+  padding: 0 0.2em;
+`;
+
+const ButtonImage = styled.img`
+    width: 1.6em;
 `;
 
 
@@ -115,7 +144,11 @@ export default function NewTransactionPage(props: Readonly<props>) {
     }
 
     const allCategories = transactionCategories.map((category: Category) => {
-        return (<SingleCategory key={category.id} htmlFor={category.title}><CategoryInput type="radio" name="transactionCategory" value={category.title} id={category.title}/>{category.title}</SingleCategory>)
+        return (<SingleCategory key={category.id} htmlFor={category.title}><CategoryInput type="radio"
+                                                                                          name="transactionCategory"
+                                                                                          value={category.title}
+                                                                                          id={category.title}/>{category.title}
+        </SingleCategory>)
     });
     const categoriesElement = transactionCategories.length >= 1 ? allCategories : "No categories created yet."
 
@@ -128,17 +161,20 @@ export default function NewTransactionPage(props: Readonly<props>) {
             <NewCategoryWindow creatorId={creatorId} isExpense={props.isExpense} isVisible={newCategoryIsVisible}
                                setIsVisible={setNewCategoryIsVisible}/>
             <Button onClick={handleClickBackButton} buttonText="Back"/>
-            <div>Add a new transaction</div>
             <Form onSubmit={handleSubmitForm}>
                 <label htmlFor={"title"}>{props.titleText}</label>
-                <input name={"title"} id={"title"} type={"text"} required/>
+                <FormInput name={"title"} id={"title"} type={"text"} required/>
                 <label htmlFor={"moneyAmount"}>{props.moneyText}</label>
-                <input name={"amountOfMoney"} id={"moneyAmount"} type={"text"} required/>
+                <FormInput name={"amountOfMoney"} id={"moneyAmount"} type="number" step="0.01" min="0" required/>
                 <div>Choose a category:</div>
                 <CategoryContainer>
-                {categoriesElement}
+                    {categoriesElement}
+                    <AddButton type="button" onClick={handleClickAddNewCategory}>
+                        <ButtonImage src={AddIcon} alt="Add new Category"/>
+                        New Category
+                    </AddButton>
                 </CategoryContainer>
-                <Button buttonText="Add new Category" onClick={handleClickAddNewCategory}/>
+
                 <Button type="submit" buttonText="Submit"/>
             </Form>
         </Main>
