@@ -3,11 +3,11 @@ import axios from "axios";
 import {Transaction} from "../models/TransactionModel.tsx";
 import {useNavigate} from "react-router-dom";
 import AppHeader from "../components/AppHeader.tsx";
-import Button from "../components/Button.tsx";
 import styled from "styled-components";
 import TrashIcon from "../assets/trash.svg";
 import useLocalStorageState from "use-local-storage-state";
 import Background from "../components/Background.tsx";
+import BackButton from "../components/BackButton.tsx";
 
 const Main = styled.main`
   display: flex;
@@ -16,6 +16,7 @@ const Main = styled.main`
   align-content: center;
   gap: 0.6em;
   padding: 0.6em;
+  position: relative;
 `;
 
 const List = styled.ul`
@@ -78,10 +79,6 @@ export default function AllTransactionsPage() {
             });
     }, [creatorId]);
 
-    function handleClickBackButton() {
-        navigateTo(-1);
-    }
-
     function handleClickDelete(id: string) {
         axios
             .delete("/api/budget-app/" + id)
@@ -103,7 +100,7 @@ export default function AllTransactionsPage() {
         <AppHeader headerText="Past expenses"/>
         <Main>
             <Background/>
-            <Button onClick={handleClickBackButton} buttonText="Back"/>
+            <BackButton/>
             <h2>Past transactions:</h2>
             <List>{transactions?.map((transaction) => {
                 return (<ListItem key={transaction.id}>

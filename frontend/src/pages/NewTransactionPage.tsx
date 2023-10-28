@@ -10,6 +10,7 @@ import {Category} from "../models/CategoryModel.tsx";
 import NewCategoryWindow from "../components/NewCategoryWindow.tsx";
 import AddIcon from "../assets/plus-circle.svg";
 import Background from "../components/Background.tsx";
+import BackButton from "../components/BackButton.tsx";
 
 export type props = {
     titleText: string,
@@ -25,6 +26,7 @@ const Main = styled.main`
   justify-content: center;
   align-content: center;
   padding: 0.6em;
+  position: relative;
 `;
 
 const Form = styled.form`
@@ -136,10 +138,6 @@ export default function NewTransactionPage(props: Readonly<props>) {
             .then(() => navigateTo("/dashboard"));
     }
 
-    function handleClickBackButton() {
-        navigateTo(-1);
-    }
-
     function handleClickAddNewCategory() {
         setNewCategoryIsVisible(true);
     }
@@ -160,9 +158,9 @@ export default function NewTransactionPage(props: Readonly<props>) {
         <AppHeader headerText={props.headerText}/>
         <Main>
             <Background/>
+            <BackButton/>
             <NewCategoryWindow creatorId={creatorId} isExpense={props.isExpense} isVisible={newCategoryIsVisible}
                                setIsVisible={setNewCategoryIsVisible}/>
-            <Button onClick={handleClickBackButton} buttonText="Back"/>
             <Form onSubmit={handleSubmitForm}>
                 <label htmlFor={"title"}>{props.titleText}</label>
                 <FormInput name={"title"} id={"title"} type={"text"} required/>

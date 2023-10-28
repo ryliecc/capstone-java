@@ -5,16 +5,15 @@ import axios from "axios";
 import useLocalStorageState from "use-local-storage-state";
 import {useNavigate} from "react-router-dom";
 import styled from "styled-components";
-import Button from "../components/Button.tsx";
 import TrashIcon from "../assets/trash.svg";
 import Background from "../components/Background.tsx";
+import BackButton from "../components/BackButton.tsx";
 
 const Main = styled.main`
   display: flex;
   flex-direction: column;
   gap: 0.4em;
   padding: 0.4em;
-  background-color: #aec8ce;
   position: relative;
   bottom: 0;
   left: 0;
@@ -88,10 +87,6 @@ export default function CategoryManagementPage() {
             })
     }, []);
 
-    function handleClickBack() {
-        navigateTo(-1);
-    }
-
     function handleClickDelete(id: string) {
         axios.delete("/api/budget-app/category/" + id)
             .then(() => {
@@ -108,10 +103,10 @@ export default function CategoryManagementPage() {
         navigateTo("/");
     }
     return <>
-        <AppHeader headerText="Manage categories"/>
+        <AppHeader headerText="All Categories"/>
         <Main>
             <Background/>
-            <Button buttonText="Back" onClick={handleClickBack}/>
+            <BackButton/>
             <CategoryType>Income categories:</CategoryType>
             <CategoryList>
                 {incomeCategories.map((category: Category) => {
