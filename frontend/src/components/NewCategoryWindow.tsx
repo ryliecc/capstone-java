@@ -5,14 +5,40 @@ import axios from "axios";
 
 export type props = {
     creatorId: string,
-    isExpense: boolean;
+    isExpense: boolean,
+    isVisible: boolean,
+    setIsVisible: Function;
 }
 
-const Container = styled.div``;
+const Container = styled.div<{ $isVisible?: boolean }>`
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(174, 200, 206, 0.5);
+  z-index: 1;
+  display: ${props => (props.$isVisible ? 'flex' : 'none')};
+  flex-direction: column;
+  padding: 1em;
+  padding-top: 50%;
+`;
 
-const Window = styled.div``;
 
-const Form = styled.form``;
+const Window = styled.div`
+  background-color: white;
+  border: solid black 1em;
+  border-radius: 2em;
+  padding: 0.8em;
+  
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+  margin-bottom: 1em;
+`;
 
 const Label = styled.label``;
 
@@ -37,15 +63,21 @@ export default function NewCategoryWindow(props: props) {
             .catch((error) => {
                 console.error("Fehler beim Speichern:", error);
             });
+        props.setIsVisible(false);
     }
 
-    return <Container>
+    function handleClickCloseWindow() {
+        props.setIsVisible(false);
+    }
+
+    return <Container $isVisible={props.isVisible}>
         <Window>
             <Form onSubmit={handleClickSubmit}>
                 <Label htmlFor="categoryName">Category Name:</Label>
                 <Input type="text" id="categoryName" name="categoryName"/>
                 <Button buttonText="Submit" type="submit"/>
             </Form>
+            <Button buttonText="Close Window" onClick={handleClickCloseWindow}/>
         </Window>
     </Container>
 }

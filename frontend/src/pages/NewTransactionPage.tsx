@@ -5,7 +5,9 @@ import AppHeader from "../components/AppHeader.tsx";
 import Button from "../components/Button.tsx";
 import styled from "styled-components";
 import useLocalStorageState from "use-local-storage-state";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
+import {Category} from "../models/CategoryModel.tsx";
+import NewCategoryWindow from "../components/NewCategoryWindow.tsx";
 
 export type props = {
     titleText: string,
@@ -30,7 +32,8 @@ const Form = styled.form`
 `;
 
 export default function NewTransactionPage(props: Readonly<props>) {
-    const [transactionCategories, setTransactionCategories] = useState([]);
+    const [transactionCategories, setTransactionCategories] = useState<Category[]>([]);
+    const [newCategoryIsVisible, setNewCategoryIsVisible] = useState(false);
     const [creatorId, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
     const navigateTo = useNavigate();
 
@@ -44,9 +47,17 @@ export default function NewTransactionPage(props: Readonly<props>) {
     useEffect(() => {
         axios.get("api/budget-app/category/" + creatorId)
             .then((response) => {
-                setTransactionCategories(response.data);
-            })
-    }, [])
+                const fetchedCategories = response.data;
+                const filteredCategories = fetchedCategories.filter((category: Category) => {
+                    if (props.isExpense) {
+                        return category.categoryType === "expense";
+                    } else {
+                        return category.categoryType === "income";
+                    }
+                });
+                setTransactionCategories(filteredCategories);
+            });
+    }, []);
 
     function handleSubmitForm(event: React.FormEvent) {
         event.preventDefault();
@@ -76,12 +87,22 @@ export default function NewTransactionPage(props: Readonly<props>) {
         navigateTo(-1);
     }
 
+    function handleClickAddNewCategory() {
+        setNewCategoryIsVisible(true);
+    }
+
+    const allCategories = transactionCategories.map((category: Category) => {
+        return (<div key={category.id}>{category.title}</div>)
+    });
+    const categoriesElement = transactionCategories.length >= 1 ? allCategories : "No categories created yet."
+
     if (creatorId === "anonymousUser") {
         navigateTo("/");
     }
     return <>
         <AppHeader headerText={props.headerText}/>
         <Main>
+            <NewCategoryWindow creatorId={creatorId} isExpense={props.isExpense} isVisible={newCategoryIsVisible} setIsVisible={setNewCategoryIsVisible}/>
             <Button onClick={handleClickBackButton} buttonText="Back"/>
             <div>Add a new transaction</div>
             <Form onSubmit={handleSubmitForm}>
@@ -89,6 +110,10 @@ export default function NewTransactionPage(props: Readonly<props>) {
                 <input name={"title"} id={"title"} type={"text"} required/>
                 <label htmlFor={"moneyAmount"}>{props.moneyText}</label>
                 <input name={"amountOfMoney"} id={"moneyAmount"} type={"text"} required/>
+                <div>Categories:
+                    {categoriesElement}
+                    <Button buttonText="Add new Category" onClick={handleClickAddNewCategory}/>
+                </div>
                 <Button type="submit" buttonText="Submit"/>
             </Form>
         </Main>
