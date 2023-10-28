@@ -28,7 +28,7 @@ class BudgetServiceTest {
         LocalDateTime localDateTime = LocalDateTime.of(2020, 1, 1, 12, 0, 0);
         Instant fixedInstant = localDateTime.toInstant(ZoneOffset.UTC);
 
-        return new TransactionEntry("1", "title", fixedInstant, "1.61", "testId");
+        return new TransactionEntry("1", "title", fixedInstant, "1.61", "testId", "category");
     }
 
     private TransactionCategory setUpCategory() {
@@ -41,7 +41,7 @@ class BudgetServiceTest {
     @Test
     void getAllTransactions() {
         //GIVEN
-        List<TransactionsResponse> expected = List.of(new TransactionsResponse("1", "title", "2020-01-01T12:00:00Z", "1.61", "testId"));
+        List<TransactionsResponse> expected = List.of(new TransactionsResponse("1", "title", "2020-01-01T12:00:00Z", "1.61", "testId", "category"));
 
         when(transactionRepo.findAll()).thenReturn(List.of(setUpTransaction()));
 
