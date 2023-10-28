@@ -165,7 +165,7 @@ export default function NewTransactionPage(props: Readonly<props>) {
             <Background/>
             <BackButton/>
             <NewCategoryWindow creatorId={creatorId} isExpense={props.isExpense} isVisible={newCategoryIsVisible}
-                               setIsVisible={setNewCategoryIsVisible} updateCategories={updateCategories}g/>
+                               setIsVisible={setNewCategoryIsVisible} updateCategories={updateCategories}/>
             <Form onSubmit={handleSubmitForm}>
                 <label htmlFor={"title"}>{props.titleText}</label>
                 <FormInput name={"title"} id={"title"} type={"text"} required/>
