@@ -17,6 +17,7 @@ public class BudgetMappingService {
                 .timeLogged(transactionEntry.getTimeLogged().toString())
                 .amountOfMoney(transactionEntry.getAmountOfMoney())
                 .creatorId(transactionEntry.getCreatorId())
+                .transactionCategory(transactionEntry.getTransactionCategory())
                 .build();
     }
 
@@ -35,6 +36,7 @@ public class BudgetMappingService {
                 .amountOfMoney(newTransaction.getAmountOfMoney())
                 .timeLogged(Instant.now())
                 .creatorId(newTransaction.getCreatorId())
+                .transactionCategory(newTransaction.getTransactionCategory())
                 .build();
     }
 

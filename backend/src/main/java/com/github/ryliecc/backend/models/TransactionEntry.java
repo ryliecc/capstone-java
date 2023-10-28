@@ -19,4 +19,5 @@ public class TransactionEntry {
     private Instant timeLogged;
     private String amountOfMoney;
     private String creatorId;
+    private String transactionCategory;
 }
