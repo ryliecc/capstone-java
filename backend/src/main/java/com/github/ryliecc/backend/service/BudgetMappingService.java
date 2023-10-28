@@ -45,4 +45,5 @@ public class BudgetMappingService {
                 .categoryType(newCategory.getCategoryType())
                 .build();
     }
+
 }
