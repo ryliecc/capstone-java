@@ -92,7 +92,7 @@ export default function NewTransactionPage(props: Readonly<props>) {
     }
 
     const allCategories = transactionCategories.map((category: Category) => {
-        return (<div key={category.id}>{category.title}</div>)
+        return (<div><input type="radio" name="transactionCategory" key={category.id} value={category.title} id={category.title}/><label htmlFor={category.title}>{category.title}</label></div>)
     });
     const categoriesElement = transactionCategories.length >= 1 ? allCategories : "No categories created yet."
 
@@ -102,7 +102,8 @@ export default function NewTransactionPage(props: Readonly<props>) {
     return <>
         <AppHeader headerText={props.headerText}/>
         <Main>
-            <NewCategoryWindow creatorId={creatorId} isExpense={props.isExpense} isVisible={newCategoryIsVisible} setIsVisible={setNewCategoryIsVisible}/>
+            <NewCategoryWindow creatorId={creatorId} isExpense={props.isExpense} isVisible={newCategoryIsVisible}
+                               setIsVisible={setNewCategoryIsVisible}/>
             <Button onClick={handleClickBackButton} buttonText="Back"/>
             <div>Add a new transaction</div>
             <Form onSubmit={handleSubmitForm}>
@@ -110,10 +111,9 @@ export default function NewTransactionPage(props: Readonly<props>) {
                 <input name={"title"} id={"title"} type={"text"} required/>
                 <label htmlFor={"moneyAmount"}>{props.moneyText}</label>
                 <input name={"amountOfMoney"} id={"moneyAmount"} type={"text"} required/>
-                <div>Categories:
-                    {categoriesElement}
-                    <Button buttonText="Add new Category" onClick={handleClickAddNewCategory}/>
-                </div>
+                <div>Choose a category:</div>
+                {categoriesElement}
+                <Button buttonText="Add new Category" onClick={handleClickAddNewCategory}/>
                 <Button type="submit" buttonText="Submit"/>
             </Form>
         </Main>

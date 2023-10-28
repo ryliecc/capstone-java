@@ -27,11 +27,10 @@ const Container = styled.div<{ $isVisible?: boolean }>`
 
 
 const Window = styled.div`
-  background-color: white;
+  background-color: #9fb9bf;
   border: solid black 1em;
   border-radius: 2em;
   padding: 0.8em;
-  
 `;
 
 const Form = styled.form`
