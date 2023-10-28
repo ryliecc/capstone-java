@@ -113,7 +113,7 @@ export default function CategoryManagementPage() {
             <CategoryType>Income categories:</CategoryType>
             <CategoryList>
                 {incomeCategories.map((category: Category) => {
-                    return (<CategoryListItem>
+                    return (<CategoryListItem key={category.id}>
                         {category.title}
                         <DeleteButton type="button" onClick={() => handleClickDelete(category.id)}><DeleteImage
                             src={TrashIcon} alt="Delete Button"/></DeleteButton>
@@ -123,7 +123,7 @@ export default function CategoryManagementPage() {
             <CategoryType>Expense categories:</CategoryType>
             <CategoryList>
                 {expenseCategories.map((category: Category) => {
-                    return (<CategoryListItem>
+                    return (<CategoryListItem key={category.id}>
                         {category.title}
                         <DeleteButton type="button" onClick={() => handleClickDelete(category.id)}><DeleteImage
                             src={TrashIcon} alt="Delete Button"/></DeleteButton>
