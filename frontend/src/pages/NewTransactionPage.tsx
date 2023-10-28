@@ -5,7 +5,7 @@ import AppHeader from "../components/AppHeader.tsx";
 import Button from "../components/Button.tsx";
 import styled from "styled-components";
 import useLocalStorageState from "use-local-storage-state";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 export type props = {
     titleText: string,
@@ -30,6 +30,7 @@ const Form = styled.form`
 `;
 
 export default function NewTransactionPage(props: Readonly<props>) {
+    const [transactionCategories, setTransactionCategories] = useState([]);
     const [creatorId, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
     const navigateTo = useNavigate();
 
@@ -37,6 +38,13 @@ export default function NewTransactionPage(props: Readonly<props>) {
         axios.get("/api/users/me")
             .then(response => {
                 setCreatorId(response.data);
+            })
+    }, [])
+
+    useEffect(() => {
+        axios.get("api/budget-app/category/" + creatorId)
+            .then((response) => {
+                setTransactionCategories(response.data);
             })
     }, [])
 
