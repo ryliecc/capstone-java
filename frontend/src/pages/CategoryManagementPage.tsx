@@ -8,11 +8,13 @@ import styled from "styled-components";
 import TrashIcon from "../assets/trash.svg";
 import Background from "../components/Background.tsx";
 import BackButton from "../components/BackButton.tsx";
+import AddIcon from "../assets/plus-circle.svg";
+import NewCategoryWindow from "../components/NewCategoryWindow.tsx";
 
 const Main = styled.main`
   display: flex;
   flex-direction: column;
-  gap: 0.4em;
+  gap: 0.8em;
   padding: 0.4em;
   position: relative;
   bottom: 0;
@@ -24,11 +26,24 @@ const CategoryType = styled.h2`
   align-self: center;
 `;
 
+const AddButton = styled.button`
+  background-color: transparent;
+  border: none;
+  position: absolute;
+  right: 0.6em;
+  top: -3.6em;
+`;
+
+const AddImage = styled.img`
+  width: 3.4em;
+`;
+
 const CategoryList = styled.ul`
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: 0.4em;
+  position: relative;
 `;
 const CategoryListItem = styled.li`
   font-size: 1.4em;
@@ -65,6 +80,8 @@ export default function CategoryManagementPage() {
     const [transactionCategories, setTransactionCategories] = useState<Category[]>([]);
     const [creatorId, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
     const navigateTo = useNavigate();
+    const [newCategoryType, setNewCategoryType] = useState("income");
+    const [newCategoryWindowIsVisible, setNewCategoryIsVisible] = useState(false);
 
     const incomeCategories: Category[] = transactionCategories.filter((category: Category) => {
         return category.categoryType === "income";
@@ -99,6 +116,20 @@ export default function CategoryManagementPage() {
             });
     }
 
+    function handleClickAddIncome() {
+        setNewCategoryType("income");
+        setNewCategoryIsVisible(true);
+    }
+
+    function handleClickAddExpense() {
+        setNewCategoryType("expense");
+        setNewCategoryIsVisible(true);
+    }
+
+    const updateCategories = (newCategory: Category) => {
+        setTransactionCategories((prevCategories: Category[]) => [...prevCategories, newCategory]);
+    };
+
     if (creatorId === "anonymousUser") {
         navigateTo("/");
     }
@@ -107,8 +138,12 @@ export default function CategoryManagementPage() {
         <Main>
             <Background/>
             <BackButton/>
+            <NewCategoryWindow creatorId={creatorId} isExpense={newCategoryType === "expense"} isVisible={newCategoryWindowIsVisible} setIsVisible={setNewCategoryIsVisible} updateCategories={updateCategories} />
             <CategoryType>Income categories:</CategoryType>
             <CategoryList>
+                <AddButton type="button" onClick={handleClickAddIncome}>
+                    <AddImage src={AddIcon} alt="Add new income category"/>
+                </AddButton>
                 {incomeCategories.map((category: Category) => {
                     return (<CategoryListItem key={category.id}>
                         {category.title}
@@ -119,6 +154,9 @@ export default function CategoryManagementPage() {
             </CategoryList>
             <CategoryType>Expense categories:</CategoryType>
             <CategoryList>
+                <AddButton type="button" onClick={handleClickAddExpense}>
+                    <AddImage src={AddIcon} alt="Add new income category"/>
+                </AddButton>
                 {expenseCategories.map((category: Category) => {
                     return (<CategoryListItem key={category.id}>
                         {category.title}
