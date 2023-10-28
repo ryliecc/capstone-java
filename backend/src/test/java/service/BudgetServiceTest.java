@@ -7,6 +7,7 @@ import com.github.ryliecc.backend.service.CategoryRepo;
 import com.github.ryliecc.backend.service.TransactionRepo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -16,8 +17,7 @@ import java.time.ZoneOffset;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class BudgetServiceTest {
     TransactionRepo transactionRepo = mock(TransactionRepo.class);
@@ -28,14 +28,13 @@ class BudgetServiceTest {
         LocalDateTime localDateTime = LocalDateTime.of(2020, 1, 1, 12, 0, 0);
         Instant fixedInstant = localDateTime.toInstant(ZoneOffset.UTC);
 
-        return new TransactionEntry("1", "title", fixedInstant,
-                "1.61", "testId");
-        //fixed instant = 2020-01-01T12:00:00Z
+        return new TransactionEntry("1", "title", fixedInstant, "1.61", "testId");
     }
 
     private TransactionCategory setUpCategory() {
         return new TransactionCategory("1", "title", "testId", "expense");
     }
+
 
 
 
@@ -72,7 +71,6 @@ class BudgetServiceTest {
     @Test
     void testGetSumOfAmountsByCreatorId() {
         // GIVEN
-        List<TransactionsResponse> expected = List.of(new TransactionsResponse("1", "title", "2020-01-01T12:00:00Z", "1.61", "testId"));
         BigDecimal expectedSum = new BigDecimal("1.61").setScale(2, RoundingMode.HALF_UP);
 
         when(transactionRepo.findAll()).thenReturn(List.of(setUpTransaction()));
@@ -124,15 +122,32 @@ class BudgetServiceTest {
     }
 
     @Test
-    void deleteTransactionEntry()
-    {
+    void deleteTransactionEntry() {
+        // GIVEN
+        String transactionId = "1"; // Set the ID to match your sample transaction
 
-        Assertions.assertTrue(true);
+        // Mock the deleteById method of the transactionRepo
+        doNothing().when(transactionRepo).deleteById(transactionId);
+
+        // WHEN
+        budgetService.deleteTransactionEntry(transactionId);
+
+        // THEN
+        verify(transactionRepo).deleteById(transactionId);
     }
 
+
     @Test
-    void deleteCategory()
-    {
-        Assertions.assertTrue(true);
+    void deleteCategory() {
+        // GIVEN
+        String categoryId = "1";
+        when(categoryRepo.findById(categoryId)).thenReturn(java.util.Optional.of(setUpCategory()));
+        doNothing().when(categoryRepo).deleteById(categoryId);
+
+        // WHEN
+        budgetService.deleteCategory(categoryId);
+
+        // THEN
+        Mockito.verify(categoryRepo, Mockito.times(1)).deleteById(categoryId);
     }
 }
