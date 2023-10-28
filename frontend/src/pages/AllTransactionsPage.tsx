@@ -38,6 +38,21 @@ const ListItem = styled.li`
   color: black;
 `;
 
+const DataContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding-right: 3.2em;
+`;
+
+const Category = styled.div`
+  background-color: #ddadad;
+  font-size: 1em;
+  text-align: center;
+  padding: 0 0.4em;
+  width: min-content;
+  border-radius: 5px;
+`;
+
 const DeleteButton = styled.button`
   border-radius: 10px;
   position: absolute;
@@ -46,17 +61,17 @@ const DeleteButton = styled.button`
   background-color: #aec8ce;
   border: none;
   cursor: pointer;
-  height: 3em;
-  width: 3em;
+  height: 2.6em;
+  width: 2.6em;
   font-size: 1em;
-  top: 1.2em;
+  top: 0.6em;
 `;
 
 const ButtonImage = styled.img`
   position: absolute;
-  left: 0.4em;
-  top: 0.4em;
-  width: 2.2em;
+  left: 0.3em;
+  top: 0.3em;
+  width: 2em;
 `;
 
 export default function AllTransactionsPage() {
@@ -104,9 +119,11 @@ export default function AllTransactionsPage() {
             <h2>Past transactions:</h2>
             <List>{transactions?.map((transaction) => {
                 return (<ListItem key={transaction.id}>
-                    <span>Title: {transaction.title}</span>
-                    <span>Amount of Money: {transaction.amountOfMoney}</span>
-                    <span>Category: {transaction.transactionCategory}</span>
+                    <DataContainer>
+                    <span>{transaction.title}</span>
+                    <span>{transaction.amountOfMoney}</span>
+                    </DataContainer>
+                    <Category>{transaction.transactionCategory}</Category>
                     <DeleteButton type="button" onClick={() => handleClickDelete(transaction.id)}>
                         <ButtonImage src={TrashIcon} alt="Trash Icon"/>
                     </DeleteButton>
