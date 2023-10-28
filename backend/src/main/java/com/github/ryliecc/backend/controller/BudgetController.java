@@ -40,7 +40,7 @@ public class BudgetController {
 
     @PostMapping("/category")
     @ResponseStatus(HttpStatus.CREATED)
-    public TransactionCategory addCategory (@RequestBody NewCategory newCategory) {
+    public CategoryResponse addCategory (@RequestBody NewCategory newCategory) {
         return budgetService.addTransactionCategory(newCategory);
     }
 

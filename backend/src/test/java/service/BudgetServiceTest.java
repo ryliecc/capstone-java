@@ -105,6 +105,25 @@ class BudgetServiceTest {
     }
 
     @Test
+    void addCategory() {
+        //GIVEN
+        NewCategory newCategory = new NewCategory();
+        newCategory.setTitle("title");
+        newCategory.setCreatorId("testId");
+        newCategory.setCategoryType("expense");
+
+        when(categoryRepo.save(any(TransactionCategory.class))).thenReturn(setUpCategory());
+
+        //WHEN
+        CategoryResponse actual = budgetService.addTransactionCategory(newCategory);
+
+        //THEN
+        Assertions.assertEquals("title", actual.title());
+        Assertions.assertEquals("testId", actual.creatorId());
+        Assertions.assertEquals("expense", actual.categoryType());
+    }
+
+    @Test
     void deleteTransactionEntry()
     {
 

@@ -58,9 +58,10 @@ public class BudgetService {
         return budgetMappingService.mapTransactionToResponse(savedTransaction);
     }
 
-    public TransactionCategory addTransactionCategory(NewCategory newCategory) {
+    public CategoryResponse addTransactionCategory(NewCategory newCategory) {
         TransactionCategory transactionCategory = budgetMappingService.mapNewCategoryToTransactionCategory(newCategory);
-        return categoryRepo.save(transactionCategory);
+        TransactionCategory savedCategory = categoryRepo.save(transactionCategory);
+        return budgetMappingService.mapCategoryToResponse(savedCategory);
     }
 
     public void deleteTransactionEntry(String id) {
