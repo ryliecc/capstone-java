@@ -4,7 +4,7 @@ Welcome to the "Budget App," a full-stack application created as a Java capstone
 
 ## Project Overview
 
-The "Budget App" is a feature-rich financial management application with both Java backend and Vite React frontend. The application leverages Docker for containerization, GitHub Actions for continuous integration, and Render for deployment. This ReadMe provides an overview of the project and its current features.
+The "Budget App" is a feature-rich financial management application with both Java backend and Vite React frontend. The application leverages Docker for containerization, GitHub Actions for continuous integration, and Render for deployment. It also utilizes MongoDB for data storage, and MongoDB Atlas for cloud-based database services. Styled-components are used for styling, and icons are sourced from Heroicons. This ReadMe provides an overview of the project and its current features.
 
 ## Features
 
@@ -41,9 +41,10 @@ Here's an overview of the project setup and deployment:
 
 2. **Backend Setup:**
    - The backend is powered by a Maven project using Java.
+   - Data is stored in a MongoDB database, with MongoDB Atlas providing cloud-based database services.
 
 3. **Frontend Setup:**
-   - The frontend is developed using Vite React with TypeScript.
+   - The frontend is developed using Vite React with TypeScript and styled with styled-components.
 
 4. **Docker Image Creation:**
    - A Docker image for the full-stack application has been created using a Dockerfile.
@@ -58,6 +59,10 @@ Here's an overview of the project setup and deployment:
 7. **SonarCloud Integration:**
    - SonarCloud integration is being used to perform code analysis and ensure code quality.
 
+## Automatic Deployment
+
+The "Budget App" is automatically deployed to [https://capstone-java-budget-app.onrender.com](https://capstone-java-budget-app.onrender.com) whenever a pull request is merged to the main branch. This ensures that the main branch always represents the working version of the app.
+
 ## Getting Started
 
 To get started with the "Budget App," follow these steps:
@@ -66,10 +71,10 @@ To get started with the "Budget App," follow these steps:
 2. Build and run the Docker image for the "Budget App."
 3. Access the application in your web browser.
 
-Stay tuned for further updates and contributions to the project. Happy budgeting!
+Happy budgeting!
 
 [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-orange.svg)](https://sonarcloud.io/summary/new_code?id=ryliecc_capstone-java-backend)
 
 ---
 
-*Note: This ReadMe provides an overview of the project setup and its current features. For detailed instructions on building, running, and contributing to the "Budget App," refer to the project's documentation.*
+*Note: This ReadMe is the primary source of documentation for the "Budget App." For detailed instructions on building, running, and contributing to the project, refer to this ReadMe.*
