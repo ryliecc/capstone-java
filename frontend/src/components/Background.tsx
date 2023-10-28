@@ -11,7 +11,5 @@ const BackgroundElement = styled.div`
 `;
 
 export default function Background() {
-    return <>
-        <BackgroundElement/>
-    </>
+    return (<BackgroundElement/>)
 }
