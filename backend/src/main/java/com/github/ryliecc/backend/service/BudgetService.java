@@ -26,10 +26,11 @@ public class BudgetService {
                 .toList();
     }
 
-    public List<TransactionCategory> getCategoriesByCreatorId(String creatorId) {
+    public List<CategoryResponse> getCategoriesByCreatorId(String creatorId) {
         return categoryRepo.findAll()
                 .stream()
                 .filter(category -> creatorId.equals(category.getCreatorId()))
+                .map(budgetMappingService::mapCategoryToResponse)
                 .toList();
     }
 

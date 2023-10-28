@@ -1,8 +1,6 @@
 package service;
 
-import com.github.ryliecc.backend.models.NewTransaction;
-import com.github.ryliecc.backend.models.TransactionEntry;
-import com.github.ryliecc.backend.models.TransactionsResponse;
+import com.github.ryliecc.backend.models.*;
 import com.github.ryliecc.backend.service.BudgetMappingService;
 import com.github.ryliecc.backend.service.BudgetService;
 import com.github.ryliecc.backend.service.CategoryRepo;
@@ -26,7 +24,7 @@ class BudgetServiceTest {
     CategoryRepo categoryRepo = mock(CategoryRepo.class);
     BudgetService budgetService = new BudgetService(transactionRepo, categoryRepo, new BudgetMappingService());
 
-    private TransactionEntry setUp() {
+    private TransactionEntry setUpTransaction() {
         LocalDateTime localDateTime = LocalDateTime.of(2020, 1, 1, 12, 0, 0);
         Instant fixedInstant = localDateTime.toInstant(ZoneOffset.UTC);
 
@@ -35,15 +33,36 @@ class BudgetServiceTest {
         //fixed instant = 2020-01-01T12:00:00Z
     }
 
+    private TransactionCategory setUpCategory() {
+        return new TransactionCategory("1", "title", "testId", "expense");
+    }
+
+
+
     @Test
     void getAllTransactions() {
         //GIVEN
         List<TransactionsResponse> expected = List.of(new TransactionsResponse("1", "title", "2020-01-01T12:00:00Z", "1.61", "testId"));
 
-        when(transactionRepo.findAll()).thenReturn(List.of(setUp()));
+        when(transactionRepo.findAll()).thenReturn(List.of(setUpTransaction()));
 
         //WHEN
         List<TransactionsResponse> actual = budgetService.getTransactionsByCreatorId("testId");
+
+        //THEN
+        Assertions.assertEquals(1, actual.size());
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void getAllCategories() {
+        //GIVEN
+        List<CategoryResponse> expected = List.of(new CategoryResponse("1", "title", "testId", "expense"));
+
+        when(categoryRepo.findAll()).thenReturn(List.of(setUpCategory()));
+
+        //WHEN
+        List<CategoryResponse> actual = budgetService.getCategoriesByCreatorId("testId");
 
         //THEN
         Assertions.assertEquals(1, actual.size());
@@ -56,7 +75,7 @@ class BudgetServiceTest {
         List<TransactionsResponse> expected = List.of(new TransactionsResponse("1", "title", "2020-01-01T12:00:00Z", "1.61", "testId"));
         BigDecimal expectedSum = new BigDecimal("1.61").setScale(2, RoundingMode.HALF_UP);
 
-        when(transactionRepo.findAll()).thenReturn(List.of(setUp()));
+        when(transactionRepo.findAll()).thenReturn(List.of(setUpTransaction()));
 
         // WHEN
         String actualSum = budgetService.getSumOfAmountsByCreatorId("testId");
@@ -74,7 +93,7 @@ class BudgetServiceTest {
         newTransaction.setAmountOfMoney("1.61");
         newTransaction.setCreatorId("testId");
 
-        when(transactionRepo.save(any(TransactionEntry.class))).thenReturn(setUp());
+        when(transactionRepo.save(any(TransactionEntry.class))).thenReturn(setUpTransaction());
 
         //WHEN
         TransactionsResponse actual = budgetService.addTransactionEntry(newTransaction);

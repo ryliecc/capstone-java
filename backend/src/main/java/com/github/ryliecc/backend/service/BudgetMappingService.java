@@ -20,6 +20,15 @@ public class BudgetMappingService {
                 .build();
     }
 
+    public CategoryResponse mapCategoryToResponse(TransactionCategory transactionCategory) {
+        return CategoryResponse.builder()
+                .id(transactionCategory.getId())
+                .title(transactionCategory.getTitle())
+                .creatorId(transactionCategory.getCreatorId())
+                .categoryType(transactionCategory.getCategoryType())
+                .build();
+    }
+
     public TransactionEntry mapNewTransactionToTransactionEntry(NewTransaction newTransaction){
         return TransactionEntry.builder()
                 .title(newTransaction.getTitle())

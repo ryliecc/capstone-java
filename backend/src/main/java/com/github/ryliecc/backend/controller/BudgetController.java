@@ -1,10 +1,7 @@
 package com.github.ryliecc.backend.controller;
 
-import com.github.ryliecc.backend.models.NewCategory;
-import com.github.ryliecc.backend.models.TransactionCategory;
+import com.github.ryliecc.backend.models.*;
 import lombok.RequiredArgsConstructor;
-import com.github.ryliecc.backend.models.NewTransaction;
-import com.github.ryliecc.backend.models.TransactionsResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import com.github.ryliecc.backend.service.BudgetService;
@@ -31,7 +28,7 @@ public class BudgetController {
 
     @GetMapping("/category/{creatorId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<TransactionCategory> getCategoriesByCreatorId(@PathVariable String creatorId) {
+    public List<CategoryResponse> getCategoriesByCreatorId(@PathVariable String creatorId) {
         return budgetService.getCategoriesByCreatorId(creatorId);
     }
 
