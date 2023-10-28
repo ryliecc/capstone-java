@@ -6,7 +6,7 @@ const BackgroundElement = styled.div`
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: #aec8ce; /* Adjust the background color and opacity as needed */
+  background-color: #aec8ce;
   z-index: -100;
 `;
 
