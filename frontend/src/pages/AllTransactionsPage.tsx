@@ -7,6 +7,7 @@ import Button from "../components/Button.tsx";
 import styled from "styled-components";
 import TrashIcon from "../assets/trash.svg";
 import useLocalStorageState from "use-local-storage-state";
+import Background from "../components/Background.tsx";
 
 const Main = styled.main`
   display: flex;
@@ -81,7 +82,7 @@ export default function AllTransactionsPage() {
         navigateTo(-1);
     }
 
-    function handleClickDelete(id : string) {
+    function handleClickDelete(id: string) {
         axios
             .delete("/api/budget-app/" + id)
             .then(() => {
@@ -95,24 +96,25 @@ export default function AllTransactionsPage() {
 
     }
 
-    if(creatorId === "anonymousUser") {
+    if (creatorId === "anonymousUser") {
         navigateTo("/");
     }
     return <>
         <AppHeader headerText="Past expenses"/>
         <Main>
-        <Button onClick={handleClickBackButton} buttonText="Back"/>
-        <h2>Past transactions:</h2>
-        <List>{transactions?.map((transaction) => {
-            return(<ListItem key={transaction.id}>
-                <span>Title: {transaction.title}</span>
-                <span>Amount of Money: {transaction.amountOfMoney}</span>
-                <span>Category: {transaction.transactionCategory}</span>
-                <DeleteButton type="button" onClick={() => handleClickDelete(transaction.id)}>
-                    <ButtonImage src={TrashIcon} alt="Trash Icon"/>
-                </DeleteButton>
-            </ListItem>);
-        })}</List>
+            <Background/>
+            <Button onClick={handleClickBackButton} buttonText="Back"/>
+            <h2>Past transactions:</h2>
+            <List>{transactions?.map((transaction) => {
+                return (<ListItem key={transaction.id}>
+                    <span>Title: {transaction.title}</span>
+                    <span>Amount of Money: {transaction.amountOfMoney}</span>
+                    <span>Category: {transaction.transactionCategory}</span>
+                    <DeleteButton type="button" onClick={() => handleClickDelete(transaction.id)}>
+                        <ButtonImage src={TrashIcon} alt="Trash Icon"/>
+                    </DeleteButton>
+                </ListItem>);
+            })}</List>
         </Main>
     </>
 }

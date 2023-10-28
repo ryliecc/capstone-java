@@ -5,6 +5,7 @@ import Button from "../components/Button.tsx";
 import axios from "axios";
 import {useEffect} from "react";
 import useLocalStorageState from "use-local-storage-state";
+import Background from "../components/Background.tsx";
 
 const Main = styled.main`
   display: flex;
@@ -40,6 +41,7 @@ export default function HomePage() {
     return <>
         <AppHeader headerText="Budget App"/>
         <Main>
+            <Background/>
             <div>Welcome to the Budget App! Please log in to proceed.</div>
                 <Button buttonText="Login" onClick={handleClickLogin}/>
         </Main>

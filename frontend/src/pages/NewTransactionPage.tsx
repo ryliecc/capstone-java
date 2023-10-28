@@ -9,6 +9,7 @@ import React, {useEffect, useState} from "react";
 import {Category} from "../models/CategoryModel.tsx";
 import NewCategoryWindow from "../components/NewCategoryWindow.tsx";
 import AddIcon from "../assets/plus-circle.svg";
+import Background from "../components/Background.tsx";
 
 export type props = {
     titleText: string,
@@ -77,7 +78,7 @@ const AddButton = styled.button`
 `;
 
 const ButtonImage = styled.img`
-    width: 1.6em;
+  width: 1.6em;
 `;
 
 
@@ -158,6 +159,7 @@ export default function NewTransactionPage(props: Readonly<props>) {
     return <>
         <AppHeader headerText={props.headerText}/>
         <Main>
+            <Background/>
             <NewCategoryWindow creatorId={creatorId} isExpense={props.isExpense} isVisible={newCategoryIsVisible}
                                setIsVisible={setNewCategoryIsVisible}/>
             <Button onClick={handleClickBackButton} buttonText="Back"/>

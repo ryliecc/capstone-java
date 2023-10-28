@@ -8,6 +8,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import PlusIcon from "../assets/plus.svg";
 import MinusIcon from "../assets/minus.svg";
+import Background from "../components/Background.tsx";
 
 const Main = styled.main`
   display: flex;
@@ -18,8 +19,6 @@ const Main = styled.main`
   gap: 0.8em;
   padding: 0.4em;
   position: relative;
-  background-color: #aec8ce;
-  padding-bottom: 10.7em;
 `;
 
 const BalanceContainer = styled.div`
@@ -130,6 +129,7 @@ export default function DashboardPage() {
     return <>
         <AppHeader headerText="Dashboard"/>
         <Main>
+            <Background/>
             <LogoutButton type="button" onClick={handleClickLogout}>
                 <ButtonImage src={LogoutIcon} alt="Logout Icon"/>
             </LogoutButton>

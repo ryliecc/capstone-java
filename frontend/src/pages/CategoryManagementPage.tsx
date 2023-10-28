@@ -7,6 +7,7 @@ import {useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import Button from "../components/Button.tsx";
 import TrashIcon from "../assets/trash.svg";
+import Background from "../components/Background.tsx";
 
 const Main = styled.main`
   display: flex;
@@ -109,6 +110,7 @@ export default function CategoryManagementPage() {
     return <>
         <AppHeader headerText="Manage categories"/>
         <Main>
+            <Background/>
             <Button buttonText="Back" onClick={handleClickBack}/>
             <CategoryType>Income categories:</CategoryType>
             <CategoryList>
