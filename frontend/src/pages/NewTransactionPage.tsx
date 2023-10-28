@@ -92,7 +92,7 @@ export default function NewTransactionPage(props: Readonly<props>) {
     }
 
     const allCategories = transactionCategories.map((category: Category) => {
-        return (<div><input type="radio" name="transactionCategory" key={category.id} value={category.title} id={category.title}/><label htmlFor={category.title}>{category.title}</label></div>)
+        return (<div key={category.id}><input type="radio" name="transactionCategory" value={category.title} id={category.title}/><label htmlFor={category.title}>{category.title}</label></div>)
     });
     const categoriesElement = transactionCategories.length >= 1 ? allCategories : "No categories created yet."
 
