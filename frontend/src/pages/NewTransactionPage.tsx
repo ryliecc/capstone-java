@@ -112,6 +112,11 @@ export default function NewTransactionPage(props: Readonly<props>) {
             });
     }, []);
 
+    const updateCategories = (newCategory: Category) => {
+        setTransactionCategories((prevCategories: Category[]) => [...prevCategories, newCategory]);
+    };
+
+
     function handleSubmitForm(event: React.FormEvent) {
         event.preventDefault();
         const formTarget = event.currentTarget as HTMLFormElement;
@@ -160,7 +165,7 @@ export default function NewTransactionPage(props: Readonly<props>) {
             <Background/>
             <BackButton/>
             <NewCategoryWindow creatorId={creatorId} isExpense={props.isExpense} isVisible={newCategoryIsVisible}
-                               setIsVisible={setNewCategoryIsVisible}/>
+                               setIsVisible={setNewCategoryIsVisible} updateCategories={updateCategories}g/>
             <Form onSubmit={handleSubmitForm}>
                 <label htmlFor={"title"}>{props.titleText}</label>
                 <FormInput name={"title"} id={"title"} type={"text"} required/>

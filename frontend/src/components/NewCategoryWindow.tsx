@@ -9,7 +9,9 @@ export type props = {
     isExpense: boolean,
     isVisible: boolean,
     // eslint-disable-next-line @typescript-eslint/ban-types
-    setIsVisible: Function;
+    setIsVisible: Function,
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    updateCategories: Function;
 }
 
 const Container = styled.div<{ $isVisible?: boolean }>`
@@ -78,7 +80,7 @@ export default function NewCategoryWindow(props: Readonly<props>) {
 
         axios.post("/api/budget-app/category", newCategory)
             .then((response) => {
-            console.log("Erfolgreich gespeichert:" + response.data);
+                props.updateCategories(response.data);
         })
             .catch((error) => {
                 console.error("Fehler beim Speichern:", error);
