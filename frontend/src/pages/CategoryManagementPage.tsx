@@ -81,7 +81,7 @@ export default function CategoryManagementPage() {
     const [creatorId, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
     const navigateTo = useNavigate();
     const [newCategoryType, setNewCategoryType] = useState("income");
-    const [newCategoryWindowIsVisible, setNewCategoryIsVisible] = useState(false);
+    const [newCategoryWindowIsVisible, setNewCategoryWindowIsVisible] = useState(false);
 
     const incomeCategories: Category[] = transactionCategories.filter((category: Category) => {
         return category.categoryType === "income";
@@ -118,12 +118,12 @@ export default function CategoryManagementPage() {
 
     function handleClickAddIncome() {
         setNewCategoryType("income");
-        setNewCategoryIsVisible(true);
+        setNewCategoryWindowIsVisible(true);
     }
 
     function handleClickAddExpense() {
         setNewCategoryType("expense");
-        setNewCategoryIsVisible(true);
+        setNewCategoryWindowIsVisible(true);
     }
 
     const updateCategories = (newCategory: Category) => {
@@ -138,7 +138,7 @@ export default function CategoryManagementPage() {
         <Main>
             <Background/>
             <BackButton/>
-            <NewCategoryWindow creatorId={creatorId} isExpense={newCategoryType === "expense"} isVisible={newCategoryWindowIsVisible} setIsVisible={setNewCategoryIsVisible} updateCategories={updateCategories} />
+            <NewCategoryWindow creatorId={creatorId} isExpense={newCategoryType === "expense"} isVisible={newCategoryWindowIsVisible} setIsVisible={setNewCategoryWindowIsVisible} updateCategories={updateCategories} />
             <CategoryType>Income categories:</CategoryType>
             <CategoryList>
                 <AddButton type="button" onClick={handleClickAddIncome}>
