@@ -100,6 +100,7 @@ export default function AllTransactionsPage() {
             return(<ListItem key={transaction.id}>
                 <span>Title: {transaction.title}</span>
                 <span>Amount of Money: {transaction.amountOfMoney}</span>
+                <span>Category: {transaction.transactionCategory}</span>
                 <DeleteButton type="button" onClick={() => handleClickDelete(transaction.id)}>
                     <ButtonImage src={TrashIcon} alt="Trash Icon"/>
                 </DeleteButton>

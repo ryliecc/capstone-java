@@ -64,12 +64,14 @@ export default function NewTransactionPage(props: Readonly<props>) {
         const formTarget = event.currentTarget as HTMLFormElement;
         const titleElement = formTarget.elements.namedItem("title") as HTMLInputElement;
         const amountElement = formTarget.elements.namedItem("amountOfMoney") as HTMLInputElement;
+        const categoryElement = formTarget.elements.namedItem("transactionCategory") as HTMLInputElement;
 
         const amountOfMoneyData = props.isExpense ? ("-" + amountElement.value) : amountElement.value;
         const newTransaction: NewTransaction = {
             title: titleElement.value,
             amountOfMoney: amountOfMoneyData,
-            creatorId: creatorId
+            creatorId: creatorId,
+            transactionCategory: categoryElement.value
         };
 
         axios
