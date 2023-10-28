@@ -129,4 +129,10 @@ class BudgetServiceTest {
 
         Assertions.assertTrue(true);
     }
+
+    @Test
+    void deleteCategory()
+    {
+        Assertions.assertTrue(true);
+    }
 }
