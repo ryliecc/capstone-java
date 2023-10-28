@@ -7,6 +7,7 @@ export type props = {
     creatorId: string,
     isExpense: boolean,
     isVisible: boolean,
+    // eslint-disable-next-line @typescript-eslint/ban-types
     setIsVisible: Function;
 }
 
@@ -43,7 +44,7 @@ const Form = styled.form`
 const Label = styled.label``;
 
 const Input = styled.input``;
-export default function NewCategoryWindow(props: props) {
+export default function NewCategoryWindow(props: Readonly<props>) {
 
     function handleClickSubmit(event: React.FormEvent) {
         event.preventDefault();
