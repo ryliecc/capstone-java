@@ -25,7 +25,7 @@ const Main = styled.main`
 const BalanceContainer = styled.div`
   width: 7em;
   height: 7em;
-  border: 0.2em solid #333;
+  border: 0.2em solid whitesmoke;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -53,7 +53,7 @@ const ButtonContainer = styled.div`
 const TransactionButton = styled.button`
   width: 5em;
   height: 5em;
-  border: none;
+  border: 0.2em whitesmoke solid;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -63,7 +63,8 @@ const TransactionButton = styled.button`
 `;
 
 const TransactionButtonImage = styled.img`
-width: 3em;`;
+  width: 3em;
+`;
 
 const LogoutButton = styled.button`
   border-radius: 10px;
@@ -74,7 +75,7 @@ const LogoutButton = styled.button`
   cursor: pointer;
   height: 3em;
   width: 3em;
-  top: -3.8em;
+  top: -3.6em;
   left: 0.6em;
   font-size: 1em;
   bottom: 0;
@@ -119,6 +120,10 @@ export default function DashboardPage() {
         navigateTo("/new-expense");
     }
 
+    function handleClickManageCategories() {
+        navigateTo("/category-management");
+    }
+
     if (creatorId === "anonymousUser") {
         navigateTo("/");
     }
@@ -142,6 +147,7 @@ export default function DashboardPage() {
             </ButtonContainer>
             <Button onClick={handleClickAllTransactions}
                     buttonText="All transactions"/>
+            <Button buttonText="Manage categories" onClick={handleClickManageCategories} />
         </Main>
     </>
 }

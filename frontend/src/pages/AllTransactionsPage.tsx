@@ -28,6 +28,12 @@ const ListItem = styled.li`
   display: flex;
   flex-direction: column;
   position: relative;
+  font-size: 1.2em;
+  border: 0.2em black solid;
+  background-color: #d6c7c7;
+  border-radius: 10px;
+  padding: 0.4em;
+  color: black;
 `;
 
 const DeleteButton = styled.button`
@@ -41,6 +47,7 @@ const DeleteButton = styled.button`
   height: 3em;
   width: 3em;
   font-size: 1em;
+  top: 1.2em;
 `;
 
 const ButtonImage = styled.img`
