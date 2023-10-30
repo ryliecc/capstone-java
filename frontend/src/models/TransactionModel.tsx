@@ -3,5 +3,6 @@ export type Transaction = {
     title: string,
     timeLogged: string,
     amountOfMoney: string,
-    creatorId: string
+    creatorId: string,
+    transactionCategory: string
 }

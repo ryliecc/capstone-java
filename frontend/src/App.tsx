@@ -4,6 +4,7 @@ import AllTransactionsPage from "./pages/AllTransactionsPage.tsx";
 import DashboardPage from "./pages/DashboardPage.tsx";
 import NewIncomePage from "./pages/NewIncomePage.tsx";
 import NewExpensePage from "./pages/NewExpensePage.tsx";
+import CategoryManagementPage from "./pages/CategoryManagementPage.tsx";
 
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
                     <Route path="new-income" element={<NewIncomePage/>} />
                     <Route path="new-expense" element={<NewExpensePage/>} />
                     <Route path="/transactions" element={<AllTransactionsPage/>} />
+                    <Route path="/category-management" element={<CategoryManagementPage/>}/>
                 </Routes>
             </BrowserRouter>
         </div>

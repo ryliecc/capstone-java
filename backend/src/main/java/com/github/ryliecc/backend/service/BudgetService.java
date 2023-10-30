@@ -1,21 +1,19 @@
 package com.github.ryliecc.backend.service;
 
+import com.github.ryliecc.backend.models.*;
 import lombok.RequiredArgsConstructor;
-import com.github.ryliecc.backend.models.NewTransaction;
-import com.github.ryliecc.backend.models.TransactionEntry;
-import com.github.ryliecc.backend.models.TransactionsResponse;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class BudgetService {
 
     private final TransactionRepo transactionRepo;
+    private final CategoryRepo categoryRepo;
     private final BudgetMappingService budgetMappingService;
 
 
@@ -24,6 +22,14 @@ public class BudgetService {
                 .stream()
                 .filter(transaction -> creatorId.equals(transaction.getCreatorId()))
                 .map(budgetMappingService::mapTransactionToResponse)
+                .toList();
+    }
+
+    public List<CategoryResponse> getCategoriesByCreatorId(String creatorId) {
+        return categoryRepo.findAll()
+                .stream()
+                .filter(category -> creatorId.equals(category.getCreatorId()))
+                .map(budgetMappingService::mapCategoryToResponse)
                 .toList();
     }
 
@@ -51,8 +57,18 @@ public class BudgetService {
         return budgetMappingService.mapTransactionToResponse(savedTransaction);
     }
 
+    public CategoryResponse addTransactionCategory(NewCategory newCategory) {
+        TransactionCategory transactionCategory = budgetMappingService.mapNewCategoryToTransactionCategory(newCategory);
+        TransactionCategory savedCategory = categoryRepo.save(transactionCategory);
+        return budgetMappingService.mapCategoryToResponse(savedCategory);
+    }
+
     public void deleteTransactionEntry(String id) {
 
         transactionRepo.deleteById(id);
+    }
+
+    public void deleteCategory(String id) {
+        categoryRepo.deleteById(id);
     }
 }

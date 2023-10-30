@@ -3,9 +3,8 @@ package com.github.ryliecc.backend.models;
 import lombok.Data;
 
 @Data
-public class NewTransaction {
+public class NewCategory {
     private String title;
-    private String amountOfMoney;
     private String creatorId;
-    private String transactionCategory;
+    private String categoryType;
 }

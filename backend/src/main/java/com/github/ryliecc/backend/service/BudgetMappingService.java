@@ -1,9 +1,7 @@
 package com.github.ryliecc.backend.service;
 
+import com.github.ryliecc.backend.models.*;
 import lombok.RequiredArgsConstructor;
-import com.github.ryliecc.backend.models.NewTransaction;
-import com.github.ryliecc.backend.models.TransactionEntry;
-import com.github.ryliecc.backend.models.TransactionsResponse;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -19,6 +17,16 @@ public class BudgetMappingService {
                 .timeLogged(transactionEntry.getTimeLogged().toString())
                 .amountOfMoney(transactionEntry.getAmountOfMoney())
                 .creatorId(transactionEntry.getCreatorId())
+                .transactionCategory(transactionEntry.getTransactionCategory())
+                .build();
+    }
+
+    public CategoryResponse mapCategoryToResponse(TransactionCategory transactionCategory) {
+        return CategoryResponse.builder()
+                .id(transactionCategory.getId())
+                .title(transactionCategory.getTitle())
+                .creatorId(transactionCategory.getCreatorId())
+                .categoryType(transactionCategory.getCategoryType())
                 .build();
     }
 
@@ -28,6 +36,16 @@ public class BudgetMappingService {
                 .amountOfMoney(newTransaction.getAmountOfMoney())
                 .timeLogged(Instant.now())
                 .creatorId(newTransaction.getCreatorId())
+                .transactionCategory(newTransaction.getTransactionCategory())
                 .build();
     }
+
+    public TransactionCategory mapNewCategoryToTransactionCategory(NewCategory newCategory) {
+        return TransactionCategory.builder()
+                .title(newCategory.getTitle())
+                .creatorId(newCategory.getCreatorId())
+                .categoryType(newCategory.getCategoryType())
+                .build();
+    }
+
 }

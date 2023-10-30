@@ -8,6 +8,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import PlusIcon from "../assets/plus.svg";
 import MinusIcon from "../assets/minus.svg";
+import Background from "../components/Background.tsx";
 
 const Main = styled.main`
   display: flex;
@@ -18,14 +19,12 @@ const Main = styled.main`
   gap: 0.8em;
   padding: 0.4em;
   position: relative;
-  background-color: #aec8ce;
-  padding-bottom: 10.7em;
 `;
 
 const BalanceContainer = styled.div`
   width: 7em;
   height: 7em;
-  border: 0.2em solid #333;
+  border: 0.2em solid whitesmoke;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -53,7 +52,7 @@ const ButtonContainer = styled.div`
 const TransactionButton = styled.button`
   width: 5em;
   height: 5em;
-  border: none;
+  border: 0.2em whitesmoke solid;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -63,7 +62,8 @@ const TransactionButton = styled.button`
 `;
 
 const TransactionButtonImage = styled.img`
-width: 3em;`;
+  width: 3em;
+`;
 
 const LogoutButton = styled.button`
   border-radius: 10px;
@@ -74,7 +74,7 @@ const LogoutButton = styled.button`
   cursor: pointer;
   height: 3em;
   width: 3em;
-  top: -3.8em;
+  top: -3.6em;
   left: 0.6em;
   font-size: 1em;
   bottom: 0;
@@ -119,12 +119,17 @@ export default function DashboardPage() {
         navigateTo("/new-expense");
     }
 
+    function handleClickManageCategories() {
+        navigateTo("/category-management");
+    }
+
     if (creatorId === "anonymousUser") {
         navigateTo("/");
     }
     return <>
         <AppHeader headerText="Dashboard"/>
         <Main>
+            <Background/>
             <LogoutButton type="button" onClick={handleClickLogout}>
                 <ButtonImage src={LogoutIcon} alt="Logout Icon"/>
             </LogoutButton>
@@ -142,6 +147,7 @@ export default function DashboardPage() {
             </ButtonContainer>
             <Button onClick={handleClickAllTransactions}
                     buttonText="All transactions"/>
+            <Button buttonText="Manage categories" onClick={handleClickManageCategories} />
         </Main>
     </>
 }

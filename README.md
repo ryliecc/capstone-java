@@ -4,57 +4,77 @@ Welcome to the "Budget App," a full-stack application created as a Java capstone
 
 ## Project Overview
 
-The "Budget App" consists of a Java backend and a Vite React frontend with TypeScript. It leverages Docker for containerization, GitHub Actions for continuous integration, and Render for deployment. This ReadMe provides an overview of the project and its setup.
+The "Budget App" is a feature-rich financial management application with both Java backend and Vite React frontend. The application leverages Docker for containerization, GitHub Actions for continuous integration, and Render for deployment. It also utilizes MongoDB for data storage, and MongoDB Atlas for cloud-based database services. Styled-components are used for styling, and icons are sourced from Heroicons. This ReadMe provides an overview of the project and its current features.
+
+## Features
+
+### User Authentication
+
+- Log in securely via GitHub OAuth.
+- Access personalized financial data.
+
+### Dashboard
+
+- View your current financial balance at a glance.
+
+### Income and Expense Tracking
+
+- Add income and expenses with a title, amount, and category.
+- Create and manage categories for your transactions.
+
+### Transaction History
+
+- View all your financial transactions.
+- Delete individual transactions as needed.
+
+### Category Management
+
+- View, create, and delete transaction categories.
 
 ## Project Setup and Deployment
 
-I've followed a structured approach to set up and deploy the "Budget App." Here are the key steps that have been completed:
+Here's an overview of the project setup and deployment:
 
 1. **GitHub Repository Setup:**
-    - A GitHub service named "capstone-java" has been created to host the project.
-    - The service is initialized with a `.gitignore` file suitable for Java, Maven, and React/Vite with TypeScript.
+   - A GitHub repository named "capstone-java" hosts the project.
+   - The repository includes a `.gitignore` file suitable for Java, Maven, and React/Vite with TypeScript.
 
 2. **Backend Setup:**
-    - A Maven project for the backend using Java has been created.
+   - The backend is powered by a Maven project using Java.
+   - Data is stored in a MongoDB database, with MongoDB Atlas providing cloud-based database services.
 
 3. **Frontend Setup:**
-    - A Vite React project with TypeScript for the frontend has been set up.
+   - The frontend is developed using Vite React with TypeScript and styled with styled-components.
 
 4. **Docker Image Creation:**
-    - A Docker image for the full-stack application has been created using a Dockerfile.
+   - A Docker image for the full-stack application has been created using a Dockerfile.
 
 5. **Docker Image Push to Docker Hub:**
-    - Docker Hub credentials have been configured for the project.
+   - Docker Hub credentials are configured for the project.
 
 6. **Continuous Integration (CI) with GitHub Actions:**
-    - GitHub Actions have been set up for automated testing and deployment.
-    - CI workflows build and test the full-stack application on every code push, including linting, unit tests, and integration tests.
+   - GitHub Actions are set up for automated testing and deployment.
+   - CI workflows build and test the full-stack application on every code push, including linting, unit tests, and integration tests.
 
 7. **SonarCloud Integration:**
-    - SonarCloud integration to perform code analysis and quality checks is in progress.
+   - SonarCloud integration is being used to perform code analysis and ensure code quality.
 
-8. **Expense and Income Tracking:**
-    - The application now supports expense and income tracking with the ability to add, retrieve, and view financial transactions.
-    - MongoDB integration has been implemented to store transaction data.
-    - User-friendly frontend pages have been created for adding and viewing financial transactions.
+## Automatic Deployment
 
-9. **User Authentication:**
-    - OAuth-based authentication with Github has been integrated to allow users to securely log in to their accounts.
-    - A user dashboard or profile page in the frontend displays personalized transaction history.
-    - Data isolation ensures that each user can only access their own financial data.
+The "Budget App" is automatically deployed to [https://capstone-java-budget-app.onrender.com](https://capstone-java-budget-app.onrender.com) whenever a pull request is merged to the main branch. This ensures that the main branch always represents the working version of the app.
 
 ## Getting Started
 
-Once the "Budget App" is fully implemented, you can follow these steps to get started with the application:
+To get started with the "Budget App," follow these steps:
 
-1. Clone the GitHub service to your local machine.
+1. Clone the GitHub repository to your local machine.
 2. Build and run the Docker image for the "Budget App."
 3. Access the application in your web browser.
 
-Stay tuned for further updates and contributions to the project. Happy budgeting!
+Happy budgeting!
 
 [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-orange.svg)](https://sonarcloud.io/summary/new_code?id=ryliecc_capstone-java-backend)
 
 ---
 
-*Note: This ReadMe provides an overview of the project setup. Detailed instructions for building, running, and contributing to the "Budget App" will be available in subsequent documentation.*
+*Note: This ReadMe is the primary source of documentation for the "Budget App." For detailed instructions on building, running, and contributing to the project, refer to this ReadMe.*
