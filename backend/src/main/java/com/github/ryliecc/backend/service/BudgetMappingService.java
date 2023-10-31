@@ -8,10 +8,12 @@ import com.github.ryliecc.backend.models.transaction.daily.TransactionEntry;
 import com.github.ryliecc.backend.models.transaction.daily.TransactionsResponse;
 import com.github.ryliecc.backend.models.transaction.monthly.MonthlyRecurringTransaction;
 import com.github.ryliecc.backend.models.transaction.monthly.MonthlyTransactionResponse;
+import com.github.ryliecc.backend.models.transaction.monthly.NewMonthlyTransaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
@@ -56,6 +58,19 @@ public class BudgetMappingService {
                 .timeLogged(Instant.now())
                 .creatorId(newTransaction.getCreatorId())
                 .transactionCategory(newTransaction.getTransactionCategory())
+                .build();
+    }
+
+    public MonthlyRecurringTransaction mapNewMonthlyTransactionToRecurringTransaction(NewMonthlyTransaction newMonthlyTransaction) {
+        String dateTimeString = newMonthlyTransaction.getStartDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT;
+        Instant instant = Instant.from(formatter.parse(dateTimeString));
+        return MonthlyRecurringTransaction.builder()
+                .title(newMonthlyTransaction.getTitle())
+                .startDate(instant)
+                .amountOfMoney(newMonthlyTransaction.getAmountOfMoney())
+                .creatorId(newMonthlyTransaction.getCreatorId())
+                .transactionCategory(newMonthlyTransaction.getTransactionCategory())
                 .build();
     }
 

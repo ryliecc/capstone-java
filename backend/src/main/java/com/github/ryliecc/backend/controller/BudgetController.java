@@ -5,6 +5,7 @@ import com.github.ryliecc.backend.models.categories.NewCategory;
 import com.github.ryliecc.backend.models.transaction.daily.NewTransaction;
 import com.github.ryliecc.backend.models.transaction.daily.TransactionsResponse;
 import com.github.ryliecc.backend.models.transaction.monthly.MonthlyTransactionResponse;
+import com.github.ryliecc.backend.models.transaction.monthly.NewMonthlyTransaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +53,12 @@ public class BudgetController {
     @ResponseStatus(HttpStatus.CREATED)
     public TransactionsResponse addTransaction(@RequestBody NewTransaction newTransaction) {
         return budgetService.addTransactionEntry(newTransaction);
+    }
+
+    @PostMapping("/monthly")
+    @ResponseStatus(HttpStatus.CREATED)
+    public MonthlyTransactionResponse addMonthlyTransaction(@RequestBody NewMonthlyTransaction newMonthlyTransaction) {
+        return budgetService.addMonthlyTransaction(newMonthlyTransaction);
     }
 
     @PostMapping("/category")
