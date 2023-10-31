@@ -16,10 +16,7 @@ import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.YearMonth;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -230,23 +227,23 @@ class BudgetServiceTest {
         MonthlyRecurringTransaction recurringTransaction2 = new MonthlyRecurringTransaction("2", "monthlyTitle2", Instant.now(), "15.75", creatorId, "category2");
 
         when(transactionRepo.findAll()).thenReturn(List.of(transaction1, transaction2));
-
         when(recurringTransactionRepo.findAll()).thenReturn(List.of(recurringTransaction1, recurringTransaction2));
 
-
-        // WHEN
-        String dailyBudget = budgetService.calculateDailyBudget(creatorId);
-
-        // THEN
         // Calculate the expected daily budget
         BigDecimal expectedTotalAmount = new BigDecimal("10.50").add(new BigDecimal("5.25"));
         BigDecimal expectedTotalRecurringAmount = new BigDecimal("20.00").add(new BigDecimal("15.75"));
         BigDecimal expectedTotalAmountForCurrentMonth = expectedTotalAmount.add(expectedTotalRecurringAmount);
         YearMonth currentYearMonth = YearMonth.now();
-        int numberOfDaysInMonth = currentYearMonth.lengthOfMonth();
-        BigDecimal expectedDailyBudget = expectedTotalAmountForCurrentMonth.divide(BigDecimal.valueOf(numberOfDaysInMonth), 2, RoundingMode.HALF_UP);
+        int totalDaysInMonth = currentYearMonth.lengthOfMonth();
+        int remainingDaysInMonth = totalDaysInMonth - LocalDate.now().getDayOfMonth() + 1;
+        BigDecimal expectedDailyBudget = expectedTotalAmountForCurrentMonth.divide(BigDecimal.valueOf(remainingDaysInMonth), 2, RoundingMode.HALF_UP);
 
+        // WHEN
+        String dailyBudget = budgetService.calculateDailyBudget(creatorId);
+
+        // THEN
         Assertions.assertEquals(expectedDailyBudget.toString(), dailyBudget);
     }
+
 
 }
