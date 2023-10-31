@@ -6,6 +6,9 @@ import com.github.ryliecc.backend.models.categories.TransactionCategory;
 import com.github.ryliecc.backend.models.transaction.daily.NewTransaction;
 import com.github.ryliecc.backend.models.transaction.daily.TransactionEntry;
 import com.github.ryliecc.backend.models.transaction.daily.TransactionsResponse;
+import com.github.ryliecc.backend.models.transaction.monthly.MonthlyRecurringTransaction;
+import com.github.ryliecc.backend.models.transaction.monthly.MonthlyTransactionResponse;
+import com.github.ryliecc.backend.models.transaction.monthly.NewMonthlyTransaction;
 import com.github.ryliecc.backend.service.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -35,6 +38,13 @@ class BudgetServiceTest {
         return new TransactionEntry("1", "title", fixedInstant, "1.61", "testId", "category");
     }
 
+    private MonthlyRecurringTransaction setUpRecurringTransaction() {
+        LocalDateTime localDateTime = LocalDateTime.of(2020, 1, 1, 12, 0, 0);
+        Instant fixedInstant = localDateTime.toInstant(ZoneOffset.UTC);
+
+        return new MonthlyRecurringTransaction("1", "title", fixedInstant, "1.61", "testId", "category");
+    }
+
     private TransactionCategory setUpCategory() {
         return new TransactionCategory("1", "title", "testId", "expense");
     }
@@ -53,6 +63,21 @@ class BudgetServiceTest {
         List<TransactionsResponse> actual = budgetService.getTransactionsByCreatorId("testId");
 
         //THEN
+        Assertions.assertEquals(1, actual.size());
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void getAllMonthlyTransactions() {
+        // GIVEN
+        List<MonthlyTransactionResponse> expected = List.of(new MonthlyTransactionResponse("1", "title", "2020-01-01T12:00:00Z", "1.61", "testId", "category"));
+
+        when(recurringTransactionRepo.findAll()).thenReturn(List.of(setUpRecurringTransaction()));
+
+        // WHEN
+        List<MonthlyTransactionResponse> actual = budgetService.getMonthlyTransactionsByCreatorId("testId");
+
+        // THEN
         Assertions.assertEquals(1, actual.size());
         Assertions.assertEquals(expected, actual);
     }
@@ -107,6 +132,30 @@ class BudgetServiceTest {
     }
 
     @Test
+    void addMonthlyTransaction() {
+        //GIVEN
+        NewMonthlyTransaction newMonthlyTransaction = new NewMonthlyTransaction();
+        newMonthlyTransaction.setTitle("title");
+        newMonthlyTransaction.setStartDate("2020-01-01T12:00:00Z");
+        newMonthlyTransaction.setAmountOfMoney("1.61");
+        newMonthlyTransaction.setCreatorId("testId");
+        newMonthlyTransaction.setTransactionCategory("category");
+
+        when(recurringTransactionRepo.save(any(MonthlyRecurringTransaction.class))).thenReturn(setUpRecurringTransaction());
+
+        //WHEN
+        MonthlyTransactionResponse actual = budgetService.addMonthlyTransaction(newMonthlyTransaction);
+
+        //THEN
+        Assertions.assertEquals("title", actual.title());
+        Assertions.assertEquals("2020-01-01T12:00:00Z", actual.startDate());
+        Assertions.assertEquals("1.61", actual.amountOfMoney());
+        Assertions.assertEquals("testId", actual.creatorId());
+        Assertions.assertEquals("category", actual.transactionCategory());
+    }
+
+
+    @Test
     void addCategory() {
         //GIVEN
         NewCategory newCategory = new NewCategory();
@@ -128,9 +177,8 @@ class BudgetServiceTest {
     @Test
     void deleteTransactionEntry() {
         // GIVEN
-        String transactionId = "1"; // Set the ID to match your sample transaction
+        String transactionId = "1";
 
-        // Mock the deleteById method of the transactionRepo
         doNothing().when(transactionRepo).deleteById(transactionId);
 
         // WHEN
@@ -138,6 +186,20 @@ class BudgetServiceTest {
 
         // THEN
         verify(transactionRepo).deleteById(transactionId);
+    }
+
+    @Test
+    void deleteMonthlyTransaction() {
+        // GIVEN
+        String transactionId = "1";
+
+        doNothing().when(recurringTransactionRepo).deleteById(transactionId);
+
+        // WHEN
+        budgetService.deleteMonthlyTransaction(transactionId);
+
+        // THEN
+        verify(recurringTransactionRepo).deleteById(transactionId);
     }
 
 
