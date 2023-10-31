@@ -5,6 +5,8 @@ import com.github.ryliecc.backend.models.categories.CategoryResponse;
 import com.github.ryliecc.backend.models.categories.NewCategory;
 import com.github.ryliecc.backend.models.transaction.daily.NewTransaction;
 import com.github.ryliecc.backend.models.transaction.daily.TransactionsResponse;
+import com.github.ryliecc.backend.models.transaction.monthly.MonthlyTransactionResponse;
+import com.github.ryliecc.backend.models.transaction.monthly.NewMonthlyTransaction;
 import com.github.ryliecc.backend.service.BudgetService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +21,7 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BudgetControllerTest {
+
     @Mock
     private BudgetService budgetService;
 
@@ -57,6 +60,22 @@ class BudgetControllerTest {
     }
 
     @Test
+    void getMonthlyTransactionsByCreatorId() {
+        // GIVEN
+        String creatorId = "testCreatorId";
+        List<MonthlyTransactionResponse> responseList = new ArrayList<>();
+        responseList.add(new MonthlyTransactionResponse("1", "title", "2020-01-01T12:00:00Z", "1.61", "testCreatorId", "category"));
+
+        when(budgetService.getMonthlyTransactionsByCreatorId(creatorId)).thenReturn(responseList);
+
+        // WHEN
+        List<MonthlyTransactionResponse> result = budgetController.getMonthlyTransactionsByCreatorId(creatorId);
+
+        // THEN
+        assertEquals(responseList, result);
+    }
+
+    @Test
     void getBalanceByCreatorId() {
         // GIVEN
         String creatorId = "testCreatorId";
@@ -87,6 +106,20 @@ class BudgetControllerTest {
     }
 
     @Test
+    void getDailyBudgetByCreatorId() {
+        // GIVEN
+        String creatorId = "testCreatorId";
+        String budget = "100.00";
+        when(budgetService.calculateDailyBudget(creatorId)).thenReturn(budget);
+
+        // WHEN
+        String result = budgetController.getDailyBudgetByCreatorId(creatorId);
+
+        // THEN
+        assertEquals(budget, result);
+    }
+
+    @Test
     void addTransaction() {
         // GIVEN
         NewTransaction newTransaction = new NewTransaction();
@@ -99,6 +132,26 @@ class BudgetControllerTest {
 
         // WHEN
         TransactionsResponse result = budgetController.addTransaction(newTransaction);
+
+        // THEN
+        assertEquals(response, result);
+    }
+
+    @Test
+    void addMonthlyTransaction() {
+        // GIVEN
+        NewMonthlyTransaction newMonthlyTransaction = new NewMonthlyTransaction();
+        newMonthlyTransaction.setTitle("title");
+        newMonthlyTransaction.setStartDate("2020-01-01T12:00:00Z");
+        newMonthlyTransaction.setTransactionCategory("category");
+        newMonthlyTransaction.setCreatorId("testId");
+        newMonthlyTransaction.setAmountOfMoney("1.61");
+
+        MonthlyTransactionResponse response = new MonthlyTransactionResponse("1", "title", "2020-01-01T12:00:00Z", "1.61", "testId", "category");
+        when(budgetService.addMonthlyTransaction(newMonthlyTransaction)).thenReturn(response);
+
+        // WHEN
+        MonthlyTransactionResponse result = budgetController.addMonthlyTransaction(newMonthlyTransaction);
 
         // THEN
         assertEquals(response, result);
@@ -136,6 +189,18 @@ class BudgetControllerTest {
 
         // THEN
         verify(budgetService).deleteTransactionEntry(transactionId);
+    }
+
+    @Test
+    void deleteMonthlyTransaction() {
+        // GIVEN
+        String transactionId = "testTransactionId";
+
+        // WHEN
+        assertDoesNotThrow(() -> budgetController.deleteMonthlyTransaction(transactionId));
+
+        // THEN
+        verify(budgetService).deleteMonthlyTransaction(transactionId);
     }
 
     @Test

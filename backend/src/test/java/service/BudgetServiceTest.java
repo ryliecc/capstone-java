@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.ZoneOffset;
 import java.util.List;
 
@@ -216,4 +217,36 @@ class BudgetServiceTest {
         // THEN
         Mockito.verify(categoryRepo, Mockito.times(1)).deleteById(categoryId);
     }
+
+    @Test
+    void calculateDailyBudget() {
+        // GIVEN
+        String creatorId = "testId";
+
+        TransactionEntry transaction1 = new TransactionEntry("1", "title1", Instant.now(), "10.50", creatorId, "category1");
+        TransactionEntry transaction2 = new TransactionEntry("2", "title2", Instant.now(), "5.25", creatorId, "category2");
+
+        MonthlyRecurringTransaction recurringTransaction1 = new MonthlyRecurringTransaction("1", "monthlyTitle1", Instant.now(), "20.00", creatorId, "category1");
+        MonthlyRecurringTransaction recurringTransaction2 = new MonthlyRecurringTransaction("2", "monthlyTitle2", Instant.now(), "15.75", creatorId, "category2");
+
+        when(transactionRepo.findAll()).thenReturn(List.of(transaction1, transaction2));
+
+        when(recurringTransactionRepo.findAll()).thenReturn(List.of(recurringTransaction1, recurringTransaction2));
+
+
+        // WHEN
+        String dailyBudget = budgetService.calculateDailyBudget(creatorId);
+
+        // THEN
+        // Calculate the expected daily budget
+        BigDecimal expectedTotalAmount = new BigDecimal("10.50").add(new BigDecimal("5.25"));
+        BigDecimal expectedTotalRecurringAmount = new BigDecimal("20.00").add(new BigDecimal("15.75"));
+        BigDecimal expectedTotalAmountForCurrentMonth = expectedTotalAmount.add(expectedTotalRecurringAmount);
+        YearMonth currentYearMonth = YearMonth.now();
+        int numberOfDaysInMonth = currentYearMonth.lengthOfMonth();
+        BigDecimal expectedDailyBudget = expectedTotalAmountForCurrentMonth.divide(BigDecimal.valueOf(numberOfDaysInMonth), 2, RoundingMode.HALF_UP);
+
+        Assertions.assertEquals(expectedDailyBudget.toString(), dailyBudget);
+    }
+
 }
