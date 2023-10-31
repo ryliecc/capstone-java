@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.util.List;
@@ -40,6 +41,10 @@ public class BudgetService {
     }
 
     public String calculateDailyBudget(String creatorId) {
+        YearMonth currentYearMonth = YearMonth.now();
+        int totalDaysInMonth = currentYearMonth.lengthOfMonth();
+        int remainingDaysInMonth = totalDaysInMonth - LocalDate.now().getDayOfMonth() + 1;
+
         List<TransactionsResponse> transactions = transactionRepo.findAll()
                 .stream()
                 .filter(transaction -> creatorId.equals(transaction.getCreatorId()))
@@ -63,13 +68,11 @@ public class BudgetService {
 
         BigDecimal totalAmountForCurrentMonth = totalAmount.add(totalRecurringAmount);
 
-        YearMonth currentYearMonth = YearMonth.now();
-        int numberOfDaysInMonth = currentYearMonth.lengthOfMonth();
-
-        BigDecimal dailyBudget = totalAmountForCurrentMonth.divide(BigDecimal.valueOf(numberOfDaysInMonth), 2, RoundingMode.HALF_UP);
+        BigDecimal dailyBudget = totalAmountForCurrentMonth.divide(BigDecimal.valueOf(remainingDaysInMonth), 2, RoundingMode.HALF_UP);
 
         return dailyBudget.toString();
     }
+
 
     public List<TransactionsResponse> getTransactionsByCreatorId(String creatorId) {
         return transactionRepo.findAll()
