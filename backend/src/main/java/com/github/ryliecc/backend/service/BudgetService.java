@@ -7,6 +7,7 @@ import com.github.ryliecc.backend.models.transaction.daily.NewTransaction;
 import com.github.ryliecc.backend.models.transaction.daily.TransactionEntry;
 import com.github.ryliecc.backend.models.transaction.daily.TransactionsResponse;
 import com.github.ryliecc.backend.models.transaction.monthly.MonthlyRecurringTransaction;
+import com.github.ryliecc.backend.models.transaction.monthly.MonthlyTransactionResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -74,6 +75,14 @@ public class BudgetService {
                 .stream()
                 .filter(transaction -> creatorId.equals(transaction.getCreatorId()))
                 .map(budgetMappingService::mapTransactionToResponse)
+                .toList();
+    }
+
+    public List<MonthlyTransactionResponse> getMonthlyTransactionsByCreatorId(String creatorId) {
+        return recurringTransactionRepo.findAll()
+                .stream()
+                .filter(transaction -> creatorId.equals(transaction.getCreatorId()))
+                .map(budgetMappingService::mapRecurringTransactionToResponse)
                 .toList();
     }
 

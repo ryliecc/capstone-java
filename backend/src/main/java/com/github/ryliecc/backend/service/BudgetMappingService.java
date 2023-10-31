@@ -6,6 +6,8 @@ import com.github.ryliecc.backend.models.categories.TransactionCategory;
 import com.github.ryliecc.backend.models.transaction.daily.NewTransaction;
 import com.github.ryliecc.backend.models.transaction.daily.TransactionEntry;
 import com.github.ryliecc.backend.models.transaction.daily.TransactionsResponse;
+import com.github.ryliecc.backend.models.transaction.monthly.MonthlyRecurringTransaction;
+import com.github.ryliecc.backend.models.transaction.monthly.MonthlyTransactionResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,18 @@ public class BudgetMappingService {
                 .creatorId(transactionEntry.getCreatorId())
                 .transactionCategory(transactionEntry.getTransactionCategory())
                 .build();
+    }
+
+    public MonthlyTransactionResponse mapRecurringTransactionToResponse(MonthlyRecurringTransaction recurringTransaction) {
+        return MonthlyTransactionResponse.builder()
+                .id(recurringTransaction.getId())
+                .title(recurringTransaction.getTitle())
+                .startDate(recurringTransaction.getStartDate().toString())
+                .amountOfMoney(recurringTransaction.getAmountOfMoney())
+                .creatorId(recurringTransaction.getCreatorId())
+                .transactionCategory(recurringTransaction.getTransactionCategory())
+                .build();
+
     }
 
     public CategoryResponse mapCategoryToResponse(TransactionCategory transactionCategory) {
