@@ -1,4 +1,4 @@
-package com.github.ryliecc.backend.models;
+package com.github.ryliecc.backend.models.transaction.daily;
 
 import lombok.Data;
 
