@@ -32,6 +32,12 @@ public class BudgetController {
         return budgetService.getCategoriesByCreatorId(creatorId);
     }
 
+    @GetMapping("/daily-budget/{creatorId}")
+    @ResponseStatus(HttpStatus.OK)
+    public String getDailyBudgetByCreatorId(@PathVariable String creatorId) {
+        return budgetService.calculateDailyBudget(creatorId);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TransactionsResponse addTransaction(@RequestBody NewTransaction newTransaction) {

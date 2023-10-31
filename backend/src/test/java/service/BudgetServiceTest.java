@@ -1,10 +1,7 @@
 package service;
 
 import com.github.ryliecc.backend.models.*;
-import com.github.ryliecc.backend.service.BudgetMappingService;
-import com.github.ryliecc.backend.service.BudgetService;
-import com.github.ryliecc.backend.service.CategoryRepo;
-import com.github.ryliecc.backend.service.TransactionRepo;
+import com.github.ryliecc.backend.service.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -22,7 +19,9 @@ import static org.mockito.Mockito.*;
 class BudgetServiceTest {
     TransactionRepo transactionRepo = mock(TransactionRepo.class);
     CategoryRepo categoryRepo = mock(CategoryRepo.class);
-    BudgetService budgetService = new BudgetService(transactionRepo, categoryRepo, new BudgetMappingService());
+
+    MonthlyRecurringTransactionRepo recurringTransactionRepo = mock(MonthlyRecurringTransactionRepo.class);
+    BudgetService budgetService = new BudgetService(transactionRepo, categoryRepo, recurringTransactionRepo, new BudgetMappingService());
 
     private TransactionEntry setUpTransaction() {
         LocalDateTime localDateTime = LocalDateTime.of(2020, 1, 1, 12, 0, 0);
