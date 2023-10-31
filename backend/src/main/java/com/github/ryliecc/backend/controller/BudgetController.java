@@ -73,6 +73,12 @@ public class BudgetController {
         budgetService.deleteTransactionEntry(id);
     }
 
+    @DeleteMapping("/monthly/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteMonthlyTransaction(@PathVariable String id) {
+        budgetService.deleteMonthlyTransaction(id);
+    }
+
     @DeleteMapping("/category/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteCategory(@PathVariable String id) {

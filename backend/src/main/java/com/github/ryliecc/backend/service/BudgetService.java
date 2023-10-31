@@ -136,6 +136,10 @@ public class BudgetService {
         transactionRepo.deleteById(id);
     }
 
+    public void deleteMonthlyTransaction(String id) {
+        recurringTransactionRepo.deleteById(id);
+    }
+
     public void deleteCategory(String id) {
         categoryRepo.deleteById(id);
     }
