@@ -16,7 +16,8 @@ export type props = {
     titleText: string,
     moneyText: string,
     headerText: string,
-    isExpense: boolean;
+    isExpense: boolean,
+    isMonthly?: boolean;
 }
 
 const Main = styled.main`
@@ -140,7 +141,7 @@ export default function NewTransactionPage(props: Readonly<props>) {
             .catch((error) => {
                 console.error("Fehler beim Speichern:", error);
             })
-            .then(() => navigateTo("/dashboard"));
+            .then(() => navigateTo(-1));
     }
 
     function handleClickAddNewCategory() {
