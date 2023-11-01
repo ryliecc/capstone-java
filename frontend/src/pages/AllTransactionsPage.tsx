@@ -134,7 +134,7 @@ export default function AllTransactionsPage() {
                 return (<ListItem key={transaction.id}>
                     <DataContainer>
                         <span>{transaction.title}</span>
-                        <span>{formatMoney(transaction.amountOfMoney.toString())}</span>
+                        <span>{formatMoney(transaction.amountOfMoney.toString())}€</span>
                     </DataContainer>
                     <Category>{transaction.transactionCategory}</Category>
                     <DeleteButton type="button"
