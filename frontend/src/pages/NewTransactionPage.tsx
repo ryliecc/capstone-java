@@ -185,7 +185,7 @@ export default function NewTransactionPage(props: Readonly<props>) {
     const monthlyTimeElement = (<><label htmlFor="startDate">Start Date: <FormInput name="startDate"
                                                                                     type="datetime-local"
                                                                                     required/></label>
-        <label htmlFor="endDate">End Date: <FormInput name="endDate" type="datetime-local" /></label></>)
+        <label htmlFor="endDate">End Date: <FormInput name="endDate" type="datetime-local"/></label></>)
     const monthlyElement = isMonthly ? monthlyTimeElement : ""
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
