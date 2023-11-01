@@ -127,6 +127,7 @@ public class BudgetService {
         List<TransactionEntry> futureEntries = transactionRepo.findAll()
                 .stream()
                 .filter(entry -> id.equals(entry.getReferenceId()))
+                .filter(entry -> entry.getTimeLogged().isAfter(currentInstant))
                 .toList();
 
 
