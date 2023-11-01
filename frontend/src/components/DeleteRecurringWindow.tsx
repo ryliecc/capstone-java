@@ -77,9 +77,7 @@ export default function DeleteRecurringWindow(props: Readonly<props>) {
     function handleClickDeleteAll() {
         axios.delete("api/budget-app/monthly/" + props.referenceId)
             .then(() => {
-                props.setTransactions((prevTransactions: Transaction[]) => {
-                    return prevTransactions.filter((transaction: Transaction) => transaction.referenceId !== props.referenceId);
-                });
+                handleClickDeleteThisOne();
                 props.setIsVisible(false);
             })
             .catch((error) => {

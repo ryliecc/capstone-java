@@ -120,6 +120,29 @@ export default function AllTransactionsPage() {
 
     }
 
+    // Sort transactions by date in descending order
+    const sortedTransactions = transactions.slice().sort((a: Transaction, b: Transaction) => {
+        const dateA= new Date(a.timeLogged).getTime();
+        const dateB= new Date(b.timeLogged).getTime();
+        return dateB - dateA;
+    });
+
+    // Group transactions by date
+    const groupedTransactions: { [dateKey: string]: Transaction[] } = {};
+
+    sortedTransactions.forEach((transaction: Transaction) => {
+        const dateKey: string = transaction.timeLogged.split("T")[0]; // Extract date part
+        if (!groupedTransactions[dateKey]) {
+            groupedTransactions[dateKey] = [];
+        }
+        groupedTransactions[dateKey].push(transaction);
+    });
+
+    function formatDate(dateKey: string) {
+        const parts = dateKey.split('-'); // Assuming the dateKey is in the format 'yyyy-mm-dd'
+        return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
+
     if (creatorId === "anonymousUser") {
         navigateTo("/");
     }
@@ -130,19 +153,28 @@ export default function AllTransactionsPage() {
             <BackButton/>
             <DeleteRecurringWindow setIsVisible={setIsDeleteWindowVisible} isVisible={isDeleteWindowVisible} id={deleteId} referenceId={deleteReferenceId} setTransactions={setTransactions}/>
             <h2>Past transactions:</h2>
-            <List>{transactions?.map((transaction) => {
-                return (<ListItem key={transaction.id}>
-                    <DataContainer>
-                        <span>{transaction.title}</span>
-                        <span>{formatMoney(transaction.amountOfMoney.toString())}€</span>
-                    </DataContainer>
-                    <Category>{transaction.transactionCategory}</Category>
-                    <DeleteButton type="button"
-                                  onClick={() => handleClickDelete(transaction.id, transaction.referenceId)}>
-                        <ButtonImage src={TrashIcon} alt="Trash Icon"/>
-                    </DeleteButton>
-                </ListItem>);
-            })}</List>
+            {Object.keys(groupedTransactions).map((dateKey: string) => (
+                <div key={dateKey}>
+                    <h3>{formatDate(dateKey)}</h3>
+                    <List>
+                        {groupedTransactions[dateKey].map((transaction: Transaction) => (
+                            <ListItem key={transaction.id}>
+                                <DataContainer>
+                                    <span>{transaction.title}</span>
+                                    <span>{formatMoney(transaction.amountOfMoney.toString())}€</span>
+                                </DataContainer>
+                                <Category>{transaction.transactionCategory}</Category>
+                                <DeleteButton
+                                    type="button"
+                                    onClick={() => handleClickDelete(transaction.id, transaction.referenceId)}
+                                >
+                                    <ButtonImage src={TrashIcon} alt="Trash Icon" />
+                                </DeleteButton>
+                            </ListItem>
+                        ))}
+                    </List>
+                </div>
+            ))}
         </Main>
     </>
 }
