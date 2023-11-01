@@ -28,12 +28,6 @@ public class BudgetService {
     private final MonthlyRecurringTransactionRepo recurringTransactionRepo;
     private final BudgetMappingService budgetMappingService;
 
-    private boolean isTransactionInCurrentMonth(TransactionEntry transaction) {
-        YearMonth currentYearMonth = YearMonth.now();
-        YearMonth transactionYearMonth = YearMonth.from(transaction.getTimeLogged().atZone(ZoneId.systemDefault()));
-        return currentYearMonth.equals(transactionYearMonth);
-    }
-
     private boolean isRecurringTransactionInCurrentMonth(MonthlyRecurringTransaction transaction) {
         YearMonth currentYearMonth = YearMonth.now();
         YearMonth transactionYearMonth = YearMonth.from(transaction.getStartDate().atZone(ZoneId.systemDefault()));
@@ -48,7 +42,6 @@ public class BudgetService {
         List<TransactionsResponse> transactions = transactionRepo.findAll()
                 .stream()
                 .filter(transaction -> creatorId.equals(transaction.getCreatorId()))
-                .filter(this::isTransactionInCurrentMonth)
                 .map(budgetMappingService::mapTransactionToResponse)
                 .toList();
 
