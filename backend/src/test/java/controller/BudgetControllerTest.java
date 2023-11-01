@@ -48,7 +48,7 @@ class BudgetControllerTest {
         // GIVEN
         String creatorId = "testCreatorId";
         List<TransactionsResponse> responseList = new ArrayList<>();
-        responseList.add(new TransactionsResponse("1", "title", "2020-01-01T12:00:00Z", "1.61", "testId", "category"));
+        responseList.add(new TransactionsResponse("1", "title", "2020-01-01T12:00:00Z", "1.61", "testId", "category", "daily_transaction"));
 
         when(budgetService.getTransactionsByCreatorId(creatorId)).thenReturn(responseList);
 
@@ -64,7 +64,7 @@ class BudgetControllerTest {
         // GIVEN
         String creatorId = "testCreatorId";
         List<MonthlyTransactionResponse> responseList = new ArrayList<>();
-        responseList.add(new MonthlyTransactionResponse("1", "title", "2020-01-01T12:00:00Z", "1.61", "testCreatorId", "category"));
+        responseList.add(new MonthlyTransactionResponse("1", "title", "2020-01-01T12:00:00Z", "2024-01-01T12:00:00Z", "1.61", "testCreatorId", "category"));
 
         when(budgetService.getMonthlyTransactionsByCreatorId(creatorId)).thenReturn(responseList);
 
@@ -127,7 +127,7 @@ class BudgetControllerTest {
         newTransaction.setAmountOfMoney("1.61");
         newTransaction.setCreatorId("testId");
 
-        TransactionsResponse response = new TransactionsResponse("1", "title", "2020-01-01T12:00:00Z", "1.61", "testId", "category");
+        TransactionsResponse response = new TransactionsResponse("1", "title", "2020-01-01T12:00:00Z", "1.61", "testId", "category", "daily_transaction");
         when(budgetService.addTransactionEntry(newTransaction)).thenReturn(response);
 
         // WHEN
@@ -147,7 +147,7 @@ class BudgetControllerTest {
         newMonthlyTransaction.setCreatorId("testId");
         newMonthlyTransaction.setAmountOfMoney("1.61");
 
-        MonthlyTransactionResponse response = new MonthlyTransactionResponse("1", "title", "2020-01-01T12:00:00Z", "1.61", "testId", "category");
+        MonthlyTransactionResponse response = new MonthlyTransactionResponse("1", "title", "2020-01-01T12:00:00Z", "2021-01-01T12:00:00Z", "1.61", "testId", "category");
         when(budgetService.addMonthlyTransaction(newMonthlyTransaction)).thenReturn(response);
 
         // WHEN

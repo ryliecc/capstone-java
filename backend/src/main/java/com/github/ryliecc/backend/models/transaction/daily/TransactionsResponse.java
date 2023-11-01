@@ -8,6 +8,7 @@ public record TransactionsResponse(String id,
                                    String timeLogged,
                                    String amountOfMoney,
                                    String creatorId,
-                                   String transactionCategory) {
+                                   String transactionCategory,
+                                   String referenceId) {
 
 }

@@ -20,4 +20,5 @@ public class TransactionEntry {
     private String amountOfMoney;
     private String creatorId;
     private String transactionCategory;
+    private String referenceId;
 }

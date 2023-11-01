@@ -101,6 +101,7 @@ class BudgetMappingServiceTest {
         recurringTransaction.setId("recurring_id");
         recurringTransaction.setTitle("recurring_title");
         recurringTransaction.setStartDate(Instant.now());
+        recurringTransaction.setEndDate(Instant.now());
         recurringTransaction.setAmountOfMoney("99.99");
         recurringTransaction.setCreatorId("testId");
         recurringTransaction.setTransactionCategory("category");
@@ -123,6 +124,7 @@ class BudgetMappingServiceTest {
         NewMonthlyTransaction newMonthlyTransaction = new NewMonthlyTransaction();
         newMonthlyTransaction.setTitle("new_monthly_title");
         newMonthlyTransaction.setStartDate("2023-10-01T12:00:00Z");
+        newMonthlyTransaction.setEndDate("not set");
         newMonthlyTransaction.setAmountOfMoney("123.45");
         newMonthlyTransaction.setCreatorId("testId");
         newMonthlyTransaction.setTransactionCategory("new_category");

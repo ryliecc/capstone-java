@@ -6,6 +6,7 @@ import lombok.Builder;
 public record MonthlyTransactionResponse(String id,
                                          String title,
                                          String startDate,
+                                         String endDate,
                                          String amountOfMoney,
                                          String creatorId,
                                          String transactionCategory) {

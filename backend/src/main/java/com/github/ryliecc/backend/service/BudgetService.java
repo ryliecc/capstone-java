@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.ZoneId;
@@ -28,43 +29,28 @@ public class BudgetService {
     private final MonthlyRecurringTransactionRepo recurringTransactionRepo;
     private final BudgetMappingService budgetMappingService;
 
-    private boolean isRecurringTransactionInCurrentMonth(MonthlyRecurringTransaction transaction) {
-        YearMonth currentYearMonth = YearMonth.now();
-        YearMonth transactionYearMonth = YearMonth.from(transaction.getStartDate().atZone(ZoneId.systemDefault()));
-        return currentYearMonth.equals(transactionYearMonth);
-    }
+    private final Instant currentInstant = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant();
 
     public String calculateDailyBudget(String creatorId) {
         YearMonth currentYearMonth = YearMonth.now();
         int totalDaysInMonth = currentYearMonth.lengthOfMonth();
         int remainingDaysInMonth = totalDaysInMonth - LocalDate.now().getDayOfMonth() + 1;
 
-        List<TransactionsResponse> transactions = transactionRepo.findAll()
+        List<TransactionEntry> transactions = transactionRepo.findAll()
                 .stream()
-                .filter(transaction -> creatorId.equals(transaction.getCreatorId()))
-                .map(budgetMappingService::mapTransactionToResponse)
+                .filter(transaction -> creatorId.equals(transaction.getCreatorId()) &&
+                        !transaction.getTimeLogged().isAfter(currentInstant))
                 .toList();
 
         BigDecimal totalAmount = transactions.stream()
-                .map(transaction -> new BigDecimal(transaction.amountOfMoney()))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        List<MonthlyRecurringTransaction> recurringTransactions = recurringTransactionRepo.findAll()
-                .stream()
-                .filter(transaction -> creatorId.equals(transaction.getCreatorId()))
-                .filter(this::isRecurringTransactionInCurrentMonth)
-                .toList();
-
-        BigDecimal totalRecurringAmount = recurringTransactions.stream()
                 .map(transaction -> new BigDecimal(transaction.getAmountOfMoney()))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        BigDecimal totalAmountForCurrentMonth = totalAmount.add(totalRecurringAmount);
-
-        BigDecimal dailyBudget = totalAmountForCurrentMonth.divide(BigDecimal.valueOf(remainingDaysInMonth), 2, RoundingMode.HALF_UP);
+        BigDecimal dailyBudget = totalAmount.divide(BigDecimal.valueOf(remainingDaysInMonth), 2, RoundingMode.HALF_UP);
 
         return dailyBudget.toString();
     }
+
 
 
     public List<TransactionsResponse> getTransactionsByCreatorId(String creatorId) {
@@ -92,14 +78,15 @@ public class BudgetService {
     }
 
     public String getSumOfAmountsByCreatorId(String creatorId) {
-        List<TransactionsResponse> transactions = transactionRepo.findAll()
+
+        List<TransactionEntry> transactions = transactionRepo.findAll()
                 .stream()
-                .filter(transaction -> creatorId.equals(transaction.getCreatorId()))
-                .map(budgetMappingService::mapTransactionToResponse)
+                .filter(transaction -> creatorId.equals(transaction.getCreatorId()) &&
+                        !transaction.getTimeLogged().isAfter(currentInstant))
                 .toList();
 
         BigDecimal totalAmount = transactions.stream()
-                .map(transaction -> new BigDecimal(transaction.amountOfMoney()))
+                .map(transaction -> new BigDecimal(transaction.getAmountOfMoney()))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         BigDecimal roundedTotalAmount = totalAmount.setScale(2, RoundingMode.HALF_UP);
@@ -117,8 +104,10 @@ public class BudgetService {
 
     public MonthlyTransactionResponse addMonthlyTransaction(NewMonthlyTransaction newMonthlyTransaction) {
         MonthlyRecurringTransaction recurringTransaction = budgetMappingService.mapNewMonthlyTransactionToRecurringTransaction(newMonthlyTransaction);
-        MonthlyRecurringTransaction savedTransaction = recurringTransactionRepo.save(recurringTransaction);
-        return budgetMappingService.mapRecurringTransactionToResponse(savedTransaction);
+        MonthlyRecurringTransaction savedRecurring = recurringTransactionRepo.save(recurringTransaction);
+        List<TransactionEntry> allTransactions = budgetMappingService.mapNewMonthlyTransaction(savedRecurring);
+        transactionRepo.saveAll(allTransactions);
+        return budgetMappingService.mapRecurringTransactionToResponse(recurringTransaction);
     }
 
     public CategoryResponse addTransactionCategory(NewCategory newCategory) {
@@ -134,6 +123,10 @@ public class BudgetService {
 
     public void deleteMonthlyTransaction(String id) {
         recurringTransactionRepo.deleteById(id);
+
+        List<TransactionEntry> futureEntries = transactionRepo.findAllByReferenceIdAndTimeLoggedAfter(id, currentInstant);
+
+        transactionRepo.deleteAll(futureEntries);
     }
 
     public void deleteCategory(String id) {

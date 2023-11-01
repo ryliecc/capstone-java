@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.*;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -33,14 +34,16 @@ class BudgetServiceTest {
         LocalDateTime localDateTime = LocalDateTime.of(2020, 1, 1, 12, 0, 0);
         Instant fixedInstant = localDateTime.toInstant(ZoneOffset.UTC);
 
-        return new TransactionEntry("1", "title", fixedInstant, "1.61", "testId", "category");
+        return new TransactionEntry("1", "title", fixedInstant, "1.61", "testId", "category", "daily_transaction");
     }
 
     private MonthlyRecurringTransaction setUpRecurringTransaction() {
-        LocalDateTime localDateTime = LocalDateTime.of(2020, 1, 1, 12, 0, 0);
-        Instant fixedInstant = localDateTime.toInstant(ZoneOffset.UTC);
+        LocalDateTime startDateLocalDateTime = LocalDateTime.of(2020, 1, 1, 12, 0, 0);
+        Instant startDateFixedInstant = startDateLocalDateTime.toInstant(ZoneOffset.UTC);
+        LocalDateTime endDateLocalDateTime = LocalDateTime.of(2024, 1, 1, 12, 0, 0);
+        Instant endDateFixedInstant = endDateLocalDateTime.toInstant(ZoneOffset.UTC);
 
-        return new MonthlyRecurringTransaction("1", "title", fixedInstant, "1.61", "testId", "category");
+        return new MonthlyRecurringTransaction("1", "title", startDateFixedInstant, endDateFixedInstant, "1.61", "testId", "category");
     }
 
     private TransactionCategory setUpCategory() {
@@ -53,7 +56,7 @@ class BudgetServiceTest {
     @Test
     void getAllTransactions() {
         //GIVEN
-        List<TransactionsResponse> expected = List.of(new TransactionsResponse("1", "title", "2020-01-01T12:00:00Z", "1.61", "testId", "category"));
+        List<TransactionsResponse> expected = List.of(new TransactionsResponse("1", "title", "2020-01-01T12:00:00Z", "1.61", "testId", "category", "daily_transaction"));
 
         when(transactionRepo.findAll()).thenReturn(List.of(setUpTransaction()));
 
@@ -68,7 +71,7 @@ class BudgetServiceTest {
     @Test
     void getAllMonthlyTransactions() {
         // GIVEN
-        List<MonthlyTransactionResponse> expected = List.of(new MonthlyTransactionResponse("1", "title", "2020-01-01T12:00:00Z", "1.61", "testId", "category"));
+        List<MonthlyTransactionResponse> expected = List.of(new MonthlyTransactionResponse("1", "title", "2020-01-01T12:00:00Z", "2024-01-01T12:00:00Z", "1.61", "testId", "category"));
 
         when(recurringTransactionRepo.findAll()).thenReturn(List.of(setUpRecurringTransaction()));
 
@@ -135,6 +138,7 @@ class BudgetServiceTest {
         NewMonthlyTransaction newMonthlyTransaction = new NewMonthlyTransaction();
         newMonthlyTransaction.setTitle("title");
         newMonthlyTransaction.setStartDate("2020-01-01T12:00:00Z");
+        newMonthlyTransaction.setEndDate("not set");
         newMonthlyTransaction.setAmountOfMoney("1.61");
         newMonthlyTransaction.setCreatorId("testId");
         newMonthlyTransaction.setTransactionCategory("category");
@@ -220,23 +224,19 @@ class BudgetServiceTest {
         // GIVEN
         String creatorId = "testId";
 
-        TransactionEntry transaction1 = new TransactionEntry("1", "title1", Instant.now(), "10.50", creatorId, "category1");
-        TransactionEntry transaction2 = new TransactionEntry("2", "title2", Instant.now(), "5.25", creatorId, "category2");
-
-        MonthlyRecurringTransaction recurringTransaction1 = new MonthlyRecurringTransaction("1", "monthlyTitle1", Instant.now(), "20.00", creatorId, "category1");
-        MonthlyRecurringTransaction recurringTransaction2 = new MonthlyRecurringTransaction("2", "monthlyTitle2", Instant.now(), "15.75", creatorId, "category2");
+        // Mock TransactionEntry objects with valid Instant values
+        Instant now = Instant.now();
+        TransactionEntry transaction1 = new TransactionEntry("1", "title1", now.minus(1, ChronoUnit.DAYS), "10.50", creatorId, "category1", "daily_transaction");
+        TransactionEntry transaction2 = new TransactionEntry("2", "title2", now.minus(2, ChronoUnit.DAYS), "5.25", creatorId, "category2", "daily_transaction");
 
         when(transactionRepo.findAll()).thenReturn(List.of(transaction1, transaction2));
-        when(recurringTransactionRepo.findAll()).thenReturn(List.of(recurringTransaction1, recurringTransaction2));
 
         // Calculate the expected daily budget
         BigDecimal expectedTotalAmount = new BigDecimal("10.50").add(new BigDecimal("5.25"));
-        BigDecimal expectedTotalRecurringAmount = new BigDecimal("20.00").add(new BigDecimal("15.75"));
-        BigDecimal expectedTotalAmountForCurrentMonth = expectedTotalAmount.add(expectedTotalRecurringAmount);
         YearMonth currentYearMonth = YearMonth.now();
         int totalDaysInMonth = currentYearMonth.lengthOfMonth();
         int remainingDaysInMonth = totalDaysInMonth - LocalDate.now().getDayOfMonth() + 1;
-        BigDecimal expectedDailyBudget = expectedTotalAmountForCurrentMonth.divide(BigDecimal.valueOf(remainingDaysInMonth), 2, RoundingMode.HALF_UP);
+        BigDecimal expectedDailyBudget = expectedTotalAmount.divide(BigDecimal.valueOf(remainingDaysInMonth), 2, RoundingMode.HALF_UP);
 
         // WHEN
         String dailyBudget = budgetService.calculateDailyBudget(creatorId);
@@ -244,6 +244,7 @@ class BudgetServiceTest {
         // THEN
         Assertions.assertEquals(expectedDailyBudget.toString(), dailyBudget);
     }
+
 
 
 }

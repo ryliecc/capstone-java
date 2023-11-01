@@ -17,6 +17,7 @@ public class MonthlyRecurringTransaction {
     private String id;
     private String title;
     private Instant startDate;
+    private Instant endDate;
     private String amountOfMoney;
     private String creatorId;
     private String transactionCategory;
