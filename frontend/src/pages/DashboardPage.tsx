@@ -1,6 +1,5 @@
 import AppHeader from "../components/AppHeader.tsx";
 import LogoutIcon from "../assets/arrow-left-on-rectangle.svg";
-import Button from "../components/Button.tsx";
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 import useLocalStorageState from "use-local-storage-state";
@@ -105,10 +104,6 @@ export default function DashboardPage() {
             })
     }, [creatorId]);
 
-    function handleClickAllTransactions() {
-        navigateTo("/transactions")
-    }
-
     function handleClickLogout() {
         axios.post("/api/logout")
             .catch(error => {
@@ -123,10 +118,6 @@ export default function DashboardPage() {
 
     function handleClickAddExpense() {
         navigateTo("/new-expense");
-    }
-
-    function handleClickManageCategories() {
-        navigateTo("/category-management");
     }
 
     if (creatorId === "anonymousUser") {
@@ -154,9 +145,6 @@ export default function DashboardPage() {
                     <TransactionButtonImage src={MinusIcon} alt="Add expense"/>
                 </TransactionButton>
             </ButtonContainer>
-            <Button onClick={handleClickAllTransactions}
-                    buttonText="All transactions"/>
-            <Button buttonText="Manage categories" onClick={handleClickManageCategories} />
         </Main>
     </>
 }

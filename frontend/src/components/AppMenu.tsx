@@ -4,6 +4,7 @@ import MenuIcon from "../assets/bars-3.svg";
 import DashboardIcon from "../assets/home.svg"
 import TransactionsIcon from "../assets/credit-card.svg";
 import CategoriesIcon from "../assets/inbox-stack.svg"
+import {useNavigate} from "react-router-dom";
 
 export type props = {
     activePage: string
@@ -83,19 +84,32 @@ const ItemIcon = styled.img`
 `;
 
 export default function AppMenu(props: Readonly<props>) {
-    const [isMenuOpen, setMenuOpen] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const navigateTo = useNavigate();
 
     const toggleMenu = () => {
-        setMenuOpen(!isMenuOpen);
+        setIsMenuOpen(!isMenuOpen);
     };
+
+    function handleClickDashboard() {
+        navigateTo("/dashboard");
+    }
+
+    function handleClickTransactions() {
+        navigateTo("/transactions");
+    }
+
+    function handleClickCategories() {
+        navigateTo("/category-management");
+    }
     return <>
         <MenuButton onClick={toggleMenu}><ButtonImage src={MenuIcon}/></MenuButton>
         <MenuContainer isOpen={isMenuOpen}>
             <CloseMenuButton onClick={toggleMenu}><ButtonImage src={MenuIcon}/></CloseMenuButton>
             <MenuList>
-                <MenuItem isActive={props.activePage === "dashboard"}><ItemIcon src={DashboardIcon}/>Dashboard</MenuItem>
-                <MenuItem isActive={props.activePage === "transactions"}><ItemIcon src={TransactionsIcon}/>All transactions</MenuItem>
-                <MenuItem isActive={props.activePage === "categories"}><ItemIcon src={CategoriesIcon}/>Manage categories</MenuItem>
+                <MenuItem isActive={props.activePage === "dashboard"} onClick={handleClickDashboard}><ItemIcon src={DashboardIcon}/>Dashboard</MenuItem>
+                <MenuItem isActive={props.activePage === "transactions"} onClick={handleClickTransactions}><ItemIcon src={TransactionsIcon}/>All transactions</MenuItem>
+                <MenuItem isActive={props.activePage === "categories"} onClick={handleClickCategories}><ItemIcon src={CategoriesIcon}/>Manage categories</MenuItem>
             </MenuList>
         </MenuContainer>
     </>
