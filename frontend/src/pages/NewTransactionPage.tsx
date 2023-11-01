@@ -208,14 +208,8 @@ export default function NewTransactionPage(props: Readonly<props>) {
                 <FormInput name={"title"} id={"title"} type={"text"} required/>
                 <label htmlFor={"moneyAmount"}>{props.moneyText}</label>
                 <FormInput name={"amountOfMoney"} id={"moneyAmount"} type="number" step="0.01" min="0" required/>
-                <label>
-                    Monthly Transaction
-                    <input
-                        type="checkbox"
-                        checked={isMonthly}
-                        onChange={handleCheckboxChange}
-                    />
-                </label>
+                <label htmlFor="isMonthlyCheckbox">Monthly Transaction</label>
+                <input name="isMonthlyCheckbox" type="checkbox" checked={isMonthly} onChange={handleCheckboxChange}/>
                 {monthlyElement}
                 <div>Choose a category:</div>
                 <CategoryContainer>
