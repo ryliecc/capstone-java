@@ -71,21 +71,17 @@ public class BudgetMappingService {
         String startDateTimeString = newMonthlyTransaction.getStartDate();
         String endDateTimeString = newMonthlyTransaction.getEndDate();
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-
-        LocalDateTime startLocalTime = LocalDateTime.parse(startDateTimeString, formatter);
-        ZonedDateTime startZonedTime = startLocalTime.atZone(ZoneId.systemDefault());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")
+                .withZone(ZoneOffset.UTC);
 
 
-        Instant startDateInstant = startZonedTime.toInstant();
+        Instant startDateInstant = Instant.from(formatter.parse(startDateTimeString));
         Instant endDateInstant;
 
         if ("not set".equals(endDateTimeString)) {
             endDateInstant = startDateInstant.atZone(ZoneId.systemDefault()).plusYears(5).toInstant();
         } else {
-            LocalDateTime endLocalTime = LocalDateTime.parse(endDateTimeString, formatter);
-            ZonedDateTime endZonedTime = endLocalTime.atZone(ZoneId.systemDefault());
-            endDateInstant = endZonedTime.toInstant();
+            endDateInstant = Instant.from(formatter.parse(endDateTimeString));
         }
 
         return MonthlyRecurringTransaction.builder()
