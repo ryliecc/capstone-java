@@ -8,6 +8,7 @@ import TrashIcon from "../assets/trash.svg";
 import useLocalStorageState from "use-local-storage-state";
 import Background from "../components/Background.tsx";
 import BackButton from "../components/BackButton.tsx";
+import DeleteRecurringWindow from "../components/DeleteRecurringWindow.tsx";
 
 const Main = styled.main`
   display: flex;
@@ -78,6 +79,9 @@ export default function AllTransactionsPage() {
     const [creatorId, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
     const navigateTo = useNavigate();
     const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [isDeleteWindowVisible, setIsDeleteWindowVisible] = useState(false);
+    const [deleteId, setDeleteId] = useState("");
+    const [deleteReferenceId, setDeleteReferenceId] = useState("");
 
     useEffect(() => {
         axios.get("/api/users/me")
@@ -94,17 +98,24 @@ export default function AllTransactionsPage() {
             });
     }, [creatorId]);
 
-    function handleClickDelete(id: string) {
-        axios
-            .delete("/api/budget-app/" + id)
-            .then(() => {
-                setTransactions((prevTransactions) => {
-                    return prevTransactions.filter((transaction) => transaction.id !== id);
+    function handleClickDelete(id: string, referenceId: string) {
+        if (referenceId === "daily_transaction") {
+            axios
+                .delete("/api/budget-app/" + id)
+                .then(() => {
+                    setTransactions((prevTransactions) => {
+                        return prevTransactions.filter((transaction) => transaction.id !== id);
+                    });
+                })
+                .catch((error) => {
+                    console.error("Fehler beim Löschen", error);
                 });
-            })
-            .catch((error) => {
-                console.error("Fehler beim Löschen", error);
-            });
+        } else {
+            setDeleteId(id);
+            setDeleteReferenceId(referenceId);
+            setIsDeleteWindowVisible(true);
+        }
+
 
     }
 
@@ -116,15 +127,17 @@ export default function AllTransactionsPage() {
         <Main>
             <Background/>
             <BackButton/>
+            <DeleteRecurringWindow setIsVisible={setIsDeleteWindowVisible} isVisible={isDeleteWindowVisible} id={deleteId} referenceId={deleteReferenceId} setTransactions={setTransactions}/>
             <h2>Past transactions:</h2>
             <List>{transactions?.map((transaction) => {
                 return (<ListItem key={transaction.id}>
                     <DataContainer>
-                    <span>{transaction.title}</span>
-                    <span>{transaction.amountOfMoney}</span>
+                        <span>{transaction.title}</span>
+                        <span>{transaction.amountOfMoney}</span>
                     </DataContainer>
                     <Category>{transaction.transactionCategory}</Category>
-                    <DeleteButton type="button" onClick={() => handleClickDelete(transaction.id)}>
+                    <DeleteButton type="button"
+                                  onClick={() => handleClickDelete(transaction.id, transaction.referenceId)}>
                         <ButtonImage src={TrashIcon} alt="Trash Icon"/>
                     </DeleteButton>
                 </ListItem>);

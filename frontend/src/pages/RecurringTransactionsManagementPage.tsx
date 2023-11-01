@@ -63,7 +63,7 @@ export default function RecurringTransactionsManagementPage() {
             <BackButton/>
             <form onSubmit={handleSubmitNewTransaction}>
                 <label htmlFor="title">Title:<input name="title" type="text" required/> </label>
-                <label htmlFor="amountOfMoney">Money: <input name="amountOfMoney" type="number" step="0.01" min="0" required /> </label>
+                <label htmlFor="amountOfMoney">Money: <input name="amountOfMoney" type="number" step="0.01" required /> </label>
                 <label htmlFor="transactionCategory">Category: <input name="transactionCategory" type="text" required /> </label>
                 <label htmlFor="startDate">Start Date: <input name="startDate" type="datetime-local" required/></label>
                 <Button buttonText="Submit" type="submit"/>

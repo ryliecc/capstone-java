@@ -124,7 +124,11 @@ public class BudgetService {
     public void deleteMonthlyTransaction(String id) {
         recurringTransactionRepo.deleteById(id);
 
-        List<TransactionEntry> futureEntries = transactionRepo.findAllByReferenceIdAndTimeLoggedAfter(id, currentInstant);
+        List<TransactionEntry> futureEntries = transactionRepo.findAll()
+                .stream()
+                .filter(entry -> id.equals(entry.getReferenceId()))
+                .toList();
+
 
         transactionRepo.deleteAll(futureEntries);
     }
