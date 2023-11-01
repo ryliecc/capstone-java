@@ -16,6 +16,7 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -118,6 +119,7 @@ public class BudgetMappingService {
 
         while (!startDate.isAfter(endDate)) {
             TransactionEntry entry = new TransactionEntry();
+            entry.setId(UUID.randomUUID().toString());
             entry.setTitle(newTransaction.getTitle());
             entry.setTimeLogged(startDate.atStartOfDay(zoneId).toInstant());
             entry.setAmountOfMoney(newTransaction.getAmountOfMoney());

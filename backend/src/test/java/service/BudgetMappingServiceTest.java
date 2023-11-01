@@ -123,7 +123,7 @@ class BudgetMappingServiceTest {
         // GIVEN
         NewMonthlyTransaction newMonthlyTransaction = new NewMonthlyTransaction();
         newMonthlyTransaction.setTitle("new_monthly_title");
-        newMonthlyTransaction.setStartDate("2023-10-01T12:00:00Z");
+        newMonthlyTransaction.setStartDate("2020-01-01T01:00");
         newMonthlyTransaction.setEndDate("not set");
         newMonthlyTransaction.setAmountOfMoney("123.45");
         newMonthlyTransaction.setCreatorId("testId");
