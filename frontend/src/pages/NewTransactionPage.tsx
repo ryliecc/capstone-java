@@ -197,7 +197,7 @@ export default function NewTransactionPage(props: Readonly<props>) {
         navigateTo("/");
     }
     return <>
-        <AppHeader headerText={props.headerText}/>
+        <AppHeader fontsize={2.6} headerText={props.headerText}/>
         <Main>
             <Background/>
             <BackButton/>

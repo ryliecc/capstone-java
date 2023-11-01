@@ -39,7 +39,7 @@ export default function HomePage() {
         navigateTo("/dashboard");
     }
     return <>
-        <AppHeader headerText="Budget App"/>
+        <AppHeader fontsize={2.6} headerText="Budget App"/>
         <Main>
             <Background/>
             <div>Welcome to the Budget App! Please log in to proceed.</div>

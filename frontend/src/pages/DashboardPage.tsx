@@ -142,7 +142,7 @@ export default function DashboardPage() {
         navigateTo("/");
     }
     return <>
-        <AppHeader headerText="Dashboard"/>
+        <AppHeader fontsize={2.8} headerText="Dashboard"/>
         <Main>
             <Background/>
             <LogoutButton type="button" onClick={handleClickLogout}>

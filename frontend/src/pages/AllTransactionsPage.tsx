@@ -147,7 +147,7 @@ export default function AllTransactionsPage() {
         navigateTo("/");
     }
     return <>
-        <AppHeader headerText="Past expenses"/>
+        <AppHeader fontsize={2} headerText="Past transactions"/>
         <Main>
             <Background/>
             <BackButton/>

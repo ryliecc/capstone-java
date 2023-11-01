@@ -134,7 +134,7 @@ export default function CategoryManagementPage() {
         navigateTo("/");
     }
     return <>
-        <AppHeader headerText="All Categories"/>
+        <AppHeader fontsize={2.4} headerText="All Categories"/>
         <Main>
             <Background/>
             <BackButton/>
