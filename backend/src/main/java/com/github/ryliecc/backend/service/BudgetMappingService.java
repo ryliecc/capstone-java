@@ -12,9 +12,7 @@ import com.github.ryliecc.backend.models.transaction.monthly.NewMonthlyTransacti
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,15 +70,21 @@ public class BudgetMappingService {
         String startDateTimeString = newMonthlyTransaction.getStartDate();
         String endDateTimeString = newMonthlyTransaction.getEndDate();
 
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
-        Instant startDateInstant = Instant.from(formatter.parse(startDateTimeString));
+        LocalDateTime startLocalTime = LocalDateTime.parse(startDateTimeString, formatter);
+        ZonedDateTime startZonedTime = startLocalTime.atZone(ZoneId.systemDefault());
+
+
+        Instant startDateInstant = startZonedTime.toInstant();
         Instant endDateInstant;
 
         if ("not set".equals(endDateTimeString)) {
             endDateInstant = startDateInstant.atZone(ZoneId.systemDefault()).plusYears(5).toInstant();
         } else {
-            endDateInstant = Instant.from(formatter.parse(endDateTimeString));
+            LocalDateTime endLocalTime = LocalDateTime.parse(endDateTimeString, formatter);
+            ZonedDateTime endZonedTime = endLocalTime.atZone(ZoneId.systemDefault());
+            endDateInstant = endZonedTime.toInstant();
         }
 
         return MonthlyRecurringTransaction.builder()
