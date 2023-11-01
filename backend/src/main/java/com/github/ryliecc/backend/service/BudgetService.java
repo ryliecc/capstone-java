@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.YearMonth;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.List;
 
 @Service
@@ -29,7 +26,7 @@ public class BudgetService {
     private final MonthlyRecurringTransactionRepo recurringTransactionRepo;
     private final BudgetMappingService budgetMappingService;
 
-    private final Instant currentInstant = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant();
+    private final Instant currentInstant = LocalDate.now().atStartOfDay(ZoneOffset.UTC).toInstant();
 
     public String calculateDailyBudget(String creatorId) {
         YearMonth currentYearMonth = YearMonth.now();
@@ -57,6 +54,7 @@ public class BudgetService {
         return transactionRepo.findAll()
                 .stream()
                 .filter(transaction -> creatorId.equals(transaction.getCreatorId()))
+                .filter(transaction -> !transaction.getTimeLogged().isAfter(currentInstant))
                 .map(budgetMappingService::mapTransactionToResponse)
                 .toList();
     }
@@ -81,8 +79,8 @@ public class BudgetService {
 
         List<TransactionEntry> transactions = transactionRepo.findAll()
                 .stream()
-                .filter(transaction -> creatorId.equals(transaction.getCreatorId()) &&
-                        !transaction.getTimeLogged().isAfter(currentInstant))
+                .filter(transaction -> creatorId.equals(transaction.getCreatorId()))
+                .filter(transaction -> transaction.getTimeLogged().isBefore(currentInstant))
                 .toList();
 
         BigDecimal totalAmount = transactions.stream()

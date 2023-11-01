@@ -9,6 +9,7 @@ import useLocalStorageState from "use-local-storage-state";
 import Background from "../components/Background.tsx";
 import BackButton from "../components/BackButton.tsx";
 import DeleteRecurringWindow from "../components/DeleteRecurringWindow.tsx";
+import formatMoney from "../hooks/formatMoney.tsx";
 
 const Main = styled.main`
   display: flex;
@@ -133,7 +134,7 @@ export default function AllTransactionsPage() {
                 return (<ListItem key={transaction.id}>
                     <DataContainer>
                         <span>{transaction.title}</span>
-                        <span>{transaction.amountOfMoney}</span>
+                        <span>{formatMoney(transaction.amountOfMoney.toString())}</span>
                     </DataContainer>
                     <Category>{transaction.transactionCategory}</Category>
                     <DeleteButton type="button"

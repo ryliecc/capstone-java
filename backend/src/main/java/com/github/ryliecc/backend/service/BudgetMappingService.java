@@ -60,7 +60,7 @@ public class BudgetMappingService {
         return TransactionEntry.builder()
                 .title(newTransaction.getTitle())
                 .amountOfMoney(newTransaction.getAmountOfMoney())
-                .timeLogged(Instant.now())
+                .timeLogged(LocalDate.now().atStartOfDay(ZoneOffset.UTC).toInstant())
                 .creatorId(newTransaction.getCreatorId())
                 .transactionCategory(newTransaction.getTransactionCategory())
                 .referenceId("daily_transaction")

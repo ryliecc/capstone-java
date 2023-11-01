@@ -9,6 +9,7 @@ import axios from "axios";
 import PlusIcon from "../assets/plus.svg";
 import MinusIcon from "../assets/minus.svg";
 import Background from "../components/Background.tsx";
+import formatMoney from "../hooks/formatMoney.tsx";
 
 const Main = styled.main`
   display: flex;
@@ -150,8 +151,8 @@ export default function DashboardPage() {
             <div>Hello User {creatorId}!</div>
             <BalanceContainer>
                 <BudgetText>Daily Budget:</BudgetText>
-                {dailyBudget}€
-                <BalanceText>Balance: {userBalance}€</BalanceText>
+                {formatMoney(dailyBudget.toString())}€
+                <BalanceText>Balance: {formatMoney(userBalance.toString())}€</BalanceText>
             </BalanceContainer>
             <ButtonContainer>
                 <TransactionButton type="button" onClick={handleClickAddIncome}>
