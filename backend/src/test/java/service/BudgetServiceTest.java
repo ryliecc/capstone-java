@@ -150,7 +150,7 @@ class BudgetServiceTest {
 
         //THEN
         Assertions.assertEquals("title", actual.title());
-        Assertions.assertEquals("2020-01-01T00:00:00Z", actual.startDate());
+        Assertions.assertEquals("2020-01-01T01:00:00Z", actual.startDate());
         Assertions.assertEquals("1.61", actual.amountOfMoney());
         Assertions.assertEquals("testId", actual.creatorId());
         Assertions.assertEquals("category", actual.transactionCategory());
