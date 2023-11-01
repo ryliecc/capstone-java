@@ -79,7 +79,7 @@ public class BudgetMappingService {
         Instant endDateInstant;
 
         if ("not set".equals(endDateTimeString)) {
-            endDateInstant = startDateInstant.atZone(ZoneId.systemDefault()).plusYears(5).toInstant();
+            endDateInstant = startDateInstant.atZone(ZoneId.systemDefault()).plusYears(3).toInstant();
         } else {
             endDateInstant = Instant.from(formatter.parse(endDateTimeString));
         }
