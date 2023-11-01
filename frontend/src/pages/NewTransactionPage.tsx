@@ -12,6 +12,8 @@ import AddIcon from "../assets/plus-circle.svg";
 import Background from "../components/Background.tsx";
 import BackButton from "../components/BackButton.tsx";
 import {NewMonthlyTransaction} from "../models/NewMonthlyTransaction.tsx";
+import {Main} from "../components/Main.tsx";
+import AppMenu from "../components/AppMenu.tsx";
 
 export type props = {
     titleText: string,
@@ -19,16 +21,6 @@ export type props = {
     headerText: string,
     isExpense: boolean,
 }
-
-const Main = styled.main`
-  display: flex;
-  flex-direction: column;
-  gap: 0.6em;
-  justify-content: center;
-  align-content: center;
-  padding: 0.6em;
-  position: relative;
-`;
 
 const Form = styled.form`
   display: flex;
@@ -201,6 +193,7 @@ export default function NewTransactionPage(props: Readonly<props>) {
         <Main>
             <Background/>
             <BackButton/>
+            <AppMenu activePage="none"/>
             <NewCategoryWindow creatorId={creatorId} isExpense={props.isExpense} isVisible={newCategoryIsVisible}
                                setIsVisible={setNewCategoryIsVisible} updateCategories={updateCategories}/>
             <Form onSubmit={handleSubmitForm}>

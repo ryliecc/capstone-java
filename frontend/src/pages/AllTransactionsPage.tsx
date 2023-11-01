@@ -10,16 +10,8 @@ import Background from "../components/Background.tsx";
 import BackButton from "../components/BackButton.tsx";
 import DeleteRecurringWindow from "../components/DeleteRecurringWindow.tsx";
 import formatMoney from "../hooks/formatMoney.tsx";
-
-const Main = styled.main`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-content: center;
-  gap: 0.6em;
-  padding: 0.6em;
-  position: relative;
-`;
+import AppMenu from "../components/AppMenu.tsx";
+import {Main} from "../components/Main.tsx";
 
 const List = styled.ul`
   list-style: none;
@@ -151,6 +143,7 @@ export default function AllTransactionsPage() {
         <Main>
             <Background/>
             <BackButton/>
+            <AppMenu activePage="transactions"/>
             <DeleteRecurringWindow setIsVisible={setIsDeleteWindowVisible} isVisible={isDeleteWindowVisible} id={deleteId} referenceId={deleteReferenceId} setTransactions={setTransactions}/>
             <h2>Past transactions:</h2>
             {Object.keys(groupedTransactions).map((dateKey: string) => (
