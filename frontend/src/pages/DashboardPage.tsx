@@ -35,10 +35,16 @@ const BalanceContainer = styled.div`
   position: relative;
 `;
 
+const BudgetText = styled.div`
+  position: absolute;
+  font-size: 0.6em;
+  top: 3.4em;
+`;
+
 const BalanceText = styled.div`
   position: absolute;
   font-size: 0.4em;
-  top: 6em;
+  top: 10.4em;
 `;
 
 const ButtonContainer = styled.div`
@@ -91,6 +97,7 @@ export default function DashboardPage() {
     const navigateTo = useNavigate();
     const [creatorId, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
     const [userBalance, setUserBalance] = useState("0.00");
+    const [dailyBudget, setDailyBudget] = useState("0.00");
 
     useEffect(() => {
         axios.get("/api/budget-app/balance/" + creatorId)
@@ -98,6 +105,13 @@ export default function DashboardPage() {
                 setUserBalance(response.data);
             })
     }, [creatorId])
+
+    useEffect(() => {
+        axios.get("api/budget-app/daily-budget/" + creatorId)
+            .then(response => {
+                setDailyBudget(response.data);
+            })
+    }, [creatorId]);
 
     function handleClickAllTransactions() {
         navigateTo("/transactions")
@@ -135,8 +149,10 @@ export default function DashboardPage() {
             </LogoutButton>
             <div>Hello User {creatorId}!</div>
             <BalanceContainer>
-                <BalanceText>Current Balance:</BalanceText>
-                {userBalance}€</BalanceContainer>
+                <BudgetText>Daily Budget:</BudgetText>
+                {dailyBudget}€
+                <BalanceText>Balance: {userBalance}€</BalanceText>
+            </BalanceContainer>
             <ButtonContainer>
                 <TransactionButton type="button" onClick={handleClickAddIncome}>
                     <TransactionButtonImage src={PlusIcon} alt="Add income"/>
@@ -148,6 +164,7 @@ export default function DashboardPage() {
             <Button onClick={handleClickAllTransactions}
                     buttonText="All transactions"/>
             <Button buttonText="Manage categories" onClick={handleClickManageCategories} />
+            <Button buttonText="Manage recurring transactions" onClick={() => {navigateTo("/recurring-transaction-management")}} />
         </Main>
     </>
 }
