@@ -165,7 +165,6 @@ export default function DashboardPage() {
             <Button onClick={handleClickAllTransactions}
                     buttonText="All transactions"/>
             <Button buttonText="Manage categories" onClick={handleClickManageCategories} />
-            <Button buttonText="Manage recurring transactions" onClick={() => {navigateTo("/recurring-transaction-management")}} />
         </Main>
     </>
 }

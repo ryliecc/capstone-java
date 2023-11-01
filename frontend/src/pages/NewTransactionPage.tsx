@@ -11,13 +11,13 @@ import NewCategoryWindow from "../components/NewCategoryWindow.tsx";
 import AddIcon from "../assets/plus-circle.svg";
 import Background from "../components/Background.tsx";
 import BackButton from "../components/BackButton.tsx";
+import {NewMonthlyTransaction} from "../models/NewMonthlyTransaction.tsx";
 
 export type props = {
     titleText: string,
     moneyText: string,
     headerText: string,
     isExpense: boolean,
-    isMonthly?: boolean;
 }
 
 const Main = styled.main`
@@ -89,6 +89,7 @@ export default function NewTransactionPage(props: Readonly<props>) {
     const [transactionCategories, setTransactionCategories] = useState<Category[]>([]);
     const [newCategoryIsVisible, setNewCategoryIsVisible] = useState(false);
     const [creatorId, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
+    const [isMonthly, setIsMonthly] = useState(false);
     const navigateTo = useNavigate();
 
     useEffect(() => {
@@ -124,24 +125,47 @@ export default function NewTransactionPage(props: Readonly<props>) {
         const titleElement = formTarget.elements.namedItem("title") as HTMLInputElement;
         const amountElement = formTarget.elements.namedItem("amountOfMoney") as HTMLInputElement;
         const categoryElement = formTarget.elements.namedItem("transactionCategory") as HTMLInputElement;
+        const startDateElement = formTarget.elements.namedItem("startDate") as HTMLInputElement;
+        const endDateElement = formTarget.elements.namedItem("endDate") as HTMLInputElement;
 
         const amountOfMoneyData = props.isExpense ? ("-" + amountElement.value) : amountElement.value;
-        const newTransaction: NewTransaction = {
-            title: titleElement.value,
-            amountOfMoney: amountOfMoneyData,
-            creatorId: creatorId,
-            transactionCategory: categoryElement.value
-        };
+        if (!isMonthly) {
+            const newTransaction: NewTransaction = {
+                title: titleElement.value,
+                amountOfMoney: amountOfMoneyData,
+                creatorId: creatorId,
+                transactionCategory: categoryElement.value
+            };
 
-        axios
-            .post("/api/budget-app", newTransaction)
-            .then((response) => {
-                console.log("Erfolgreich gespeichert:" + response.data);
-            })
-            .catch((error) => {
-                console.error("Fehler beim Speichern:", error);
-            })
-            .then(() => navigateTo(-1));
+            axios
+                .post("/api/budget-app", newTransaction)
+                .then((response) => {
+                    console.log("Erfolgreich gespeichert:" + response.data);
+                })
+                .catch((error) => {
+                    console.error("Fehler beim Speichern:", error);
+                })
+                .then(() => navigateTo(-1));
+        } else {
+            const newMonthlyTransaction: NewMonthlyTransaction = {
+                title: titleElement.value,
+                startDate: startDateElement.value,
+                endDate: endDateElement.value ? endDateElement.value : "not set",
+                amountOfMoney: amountOfMoneyData,
+                creatorId: creatorId,
+                transactionCategory: categoryElement.value
+            }
+
+            axios.post("/api/budget-app/monthly", newMonthlyTransaction)
+                .then((response) => {
+                    console.log("Erfolgreich gespeichert:" + response.data);
+                })
+                .catch((error) => {
+                    console.error("Fehler beim Speichern:", error);
+                })
+                .then(() => navigateTo(-1));
+        }
+
     }
 
     function handleClickAddNewCategory() {
@@ -156,6 +180,18 @@ export default function NewTransactionPage(props: Readonly<props>) {
         </SingleCategory>)
     });
     const categoriesElement = transactionCategories.length >= 1 ? allCategories : "No categories created yet."
+
+
+    const monthlyTimeElement = (<><label htmlFor="startDate">Start Date: <FormInput name="startDate"
+                                                                                    type="datetime-local"
+                                                                                    required/></label>
+        <label htmlFor="endDate">End Date: <FormInput name="endDate" type="datetime-local" /></label></>)
+    const monthlyElement = isMonthly ? monthlyTimeElement : ""
+
+    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setIsMonthly(event.target.checked);
+    };
+
 
     if (creatorId === "anonymousUser") {
         navigateTo("/");
@@ -172,6 +208,15 @@ export default function NewTransactionPage(props: Readonly<props>) {
                 <FormInput name={"title"} id={"title"} type={"text"} required/>
                 <label htmlFor={"moneyAmount"}>{props.moneyText}</label>
                 <FormInput name={"amountOfMoney"} id={"moneyAmount"} type="number" step="0.01" min="0" required/>
+                <label>
+                    Monthly Transaction
+                    <input
+                        type="checkbox"
+                        checked={isMonthly}
+                        onChange={handleCheckboxChange}
+                    />
+                </label>
+                {monthlyElement}
                 <div>Choose a category:</div>
                 <CategoryContainer>
                     {categoriesElement}
