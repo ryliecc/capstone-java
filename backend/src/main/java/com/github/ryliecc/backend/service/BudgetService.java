@@ -26,7 +26,7 @@ public class BudgetService {
     private final MonthlyRecurringTransactionRepo recurringTransactionRepo;
     private final BudgetMappingService budgetMappingService;
 
-    private final Instant currentInstant = LocalDate.now().atStartOfDay(ZoneOffset.UTC).toInstant();
+    private final Instant currentInstant = LocalDate.now().plusDays(1).atStartOfDay(ZoneOffset.UTC).toInstant();
 
     public String calculateDailyBudget(String creatorId) {
         YearMonth currentYearMonth = YearMonth.now();
