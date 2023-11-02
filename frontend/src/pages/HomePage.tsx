@@ -9,7 +9,7 @@ import {Main} from "../components/Main.tsx";
 
 export default function HomePage() {
     const navigateTo = useNavigate();
-    const [creatorId, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
+    const [, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
 
     useEffect(() => {
         axios.get("/api/users/me")
