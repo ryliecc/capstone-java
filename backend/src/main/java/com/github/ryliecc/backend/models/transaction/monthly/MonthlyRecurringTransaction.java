@@ -1,8 +1,10 @@
-package com.github.ryliecc.backend.models;
+package com.github.ryliecc.backend.models.transaction.monthly;
 
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
+
+import java.time.Instant;
 
 @Document
 @NoArgsConstructor
@@ -10,10 +12,13 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 @Builder
 @Setter
 @Getter
-public class TransactionCategory {
+public class MonthlyRecurringTransaction {
     @MongoId
     private String id;
     private String title;
+    private Instant startDate;
+    private Instant endDate;
+    private String amountOfMoney;
     private String creatorId;
-    private String categoryType;
+    private String transactionCategory;
 }

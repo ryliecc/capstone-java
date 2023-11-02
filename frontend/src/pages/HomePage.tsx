@@ -1,31 +1,23 @@
 import {useNavigate} from "react-router-dom";
-import styled from "styled-components";
 import AppHeader from "../components/AppHeader.tsx";
 import Button from "../components/Button.tsx";
 import axios from "axios";
 import {useEffect} from "react";
 import useLocalStorageState from "use-local-storage-state";
 import Background from "../components/Background.tsx";
-
-const Main = styled.main`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-content: center;
-  text-align: center;
-  gap: 0.8em;
-  padding: 0.4em;
-  position: relative;
-`;
+import {Main} from "../components/Main.tsx";
 
 export default function HomePage() {
     const navigateTo = useNavigate();
-    const [creatorId, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
+    const [, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
 
     useEffect(() => {
         axios.get("/api/users/me")
             .then(response => {
                 setCreatorId(response.data);
+                if(response.data !== "anonymousUser") {
+                    navigateTo("/dashboard");
+                }
             })
     }, [])
 
@@ -35,11 +27,8 @@ export default function HomePage() {
     }
 
 
-    if(creatorId !== "anonymousUser") {
-        navigateTo("/dashboard");
-    }
     return <>
-        <AppHeader headerText="Budget App"/>
+        <AppHeader fontsize={2.6} headerText="Budget App"/>
         <Main>
             <Background/>
             <div>Welcome to the Budget App! Please log in to proceed.</div>

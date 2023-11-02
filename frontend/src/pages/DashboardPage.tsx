@@ -1,6 +1,5 @@
 import AppHeader from "../components/AppHeader.tsx";
 import LogoutIcon from "../assets/arrow-left-on-rectangle.svg";
-import Button from "../components/Button.tsx";
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 import useLocalStorageState from "use-local-storage-state";
@@ -9,17 +8,9 @@ import axios from "axios";
 import PlusIcon from "../assets/plus.svg";
 import MinusIcon from "../assets/minus.svg";
 import Background from "../components/Background.tsx";
-
-const Main = styled.main`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-content: center;
-  text-align: center;
-  gap: 0.8em;
-  padding: 0.4em;
-  position: relative;
-`;
+import formatMoney from "../hooks/formatMoney.tsx";
+import AppMenu from "../components/AppMenu.tsx";
+import {Main} from "../components/Main.tsx";
 
 const BalanceContainer = styled.div`
   width: 7em;
@@ -35,10 +26,16 @@ const BalanceContainer = styled.div`
   position: relative;
 `;
 
+const BudgetText = styled.div`
+  position: absolute;
+  font-size: 0.6em;
+  top: 3.4em;
+`;
+
 const BalanceText = styled.div`
   position: absolute;
   font-size: 0.4em;
-  top: 6em;
+  top: 10.4em;
 `;
 
 const ButtonContainer = styled.div`
@@ -91,6 +88,18 @@ export default function DashboardPage() {
     const navigateTo = useNavigate();
     const [creatorId, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
     const [userBalance, setUserBalance] = useState("0.00");
+    const [dailyBudget, setDailyBudget] = useState("0.00");
+
+
+    useEffect(() => {
+        axios.get("/api/users/me")
+            .then(response => {
+                setCreatorId(response.data);
+                if(response.data === "anonymousUser") {
+                    navigateTo("/");
+                }
+            })
+    }, [])
 
     useEffect(() => {
         axios.get("/api/budget-app/balance/" + creatorId)
@@ -99,9 +108,12 @@ export default function DashboardPage() {
             })
     }, [creatorId])
 
-    function handleClickAllTransactions() {
-        navigateTo("/transactions")
-    }
+    useEffect(() => {
+        axios.get("api/budget-app/daily-budget/" + creatorId)
+            .then(response => {
+                setDailyBudget(response.data);
+            })
+    }, [creatorId]);
 
     function handleClickLogout() {
         axios.post("/api/logout")
@@ -119,24 +131,20 @@ export default function DashboardPage() {
         navigateTo("/new-expense");
     }
 
-    function handleClickManageCategories() {
-        navigateTo("/category-management");
-    }
-
-    if (creatorId === "anonymousUser") {
-        navigateTo("/");
-    }
     return <>
-        <AppHeader headerText="Dashboard"/>
+        <AppHeader fontsize={2.8} headerText="Dashboard"/>
         <Main>
+            <AppMenu activePage="dashboard"/>
             <Background/>
             <LogoutButton type="button" onClick={handleClickLogout}>
                 <ButtonImage src={LogoutIcon} alt="Logout Icon"/>
             </LogoutButton>
             <div>Hello User {creatorId}!</div>
             <BalanceContainer>
-                <BalanceText>Current Balance:</BalanceText>
-                {userBalance}€</BalanceContainer>
+                <BudgetText>Daily Budget:</BudgetText>
+                {formatMoney(dailyBudget.toString())}€
+                <BalanceText>Balance: {formatMoney(userBalance.toString())}€</BalanceText>
+            </BalanceContainer>
             <ButtonContainer>
                 <TransactionButton type="button" onClick={handleClickAddIncome}>
                     <TransactionButtonImage src={PlusIcon} alt="Add income"/>
@@ -145,9 +153,6 @@ export default function DashboardPage() {
                     <TransactionButtonImage src={MinusIcon} alt="Add expense"/>
                 </TransactionButton>
             </ButtonContainer>
-            <Button onClick={handleClickAllTransactions}
-                    buttonText="All transactions"/>
-            <Button buttonText="Manage categories" onClick={handleClickManageCategories} />
         </Main>
     </>
 }

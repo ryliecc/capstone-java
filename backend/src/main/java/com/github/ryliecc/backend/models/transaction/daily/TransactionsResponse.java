@@ -1,4 +1,4 @@
-package com.github.ryliecc.backend.models;
+package com.github.ryliecc.backend.models.transaction.daily;
 
 import lombok.Builder;
 
@@ -8,6 +8,7 @@ public record TransactionsResponse(String id,
                                    String timeLogged,
                                    String amountOfMoney,
                                    String creatorId,
-                                   String transactionCategory) {
+                                   String transactionCategory,
+                                   String referenceId) {
 
 }

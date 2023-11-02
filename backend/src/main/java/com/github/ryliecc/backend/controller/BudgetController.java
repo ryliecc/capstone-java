@@ -1,6 +1,11 @@
 package com.github.ryliecc.backend.controller;
 
-import com.github.ryliecc.backend.models.*;
+import com.github.ryliecc.backend.models.categories.CategoryResponse;
+import com.github.ryliecc.backend.models.categories.NewCategory;
+import com.github.ryliecc.backend.models.transaction.daily.NewTransaction;
+import com.github.ryliecc.backend.models.transaction.daily.TransactionsResponse;
+import com.github.ryliecc.backend.models.transaction.monthly.MonthlyTransactionResponse;
+import com.github.ryliecc.backend.models.transaction.monthly.NewMonthlyTransaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +25,12 @@ public class BudgetController {
         return budgetService.getTransactionsByCreatorId(creatorId);
     }
 
+    @GetMapping("/monthly/{creatorId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<MonthlyTransactionResponse> getMonthlyTransactionsByCreatorId(@PathVariable String creatorId) {
+        return budgetService.getMonthlyTransactionsByCreatorId(creatorId);
+    }
+
     @GetMapping("/balance/{creatorId}")
     @ResponseStatus(HttpStatus.OK)
     public String getBalanceByCreatorId(@PathVariable String creatorId) {
@@ -32,10 +43,22 @@ public class BudgetController {
         return budgetService.getCategoriesByCreatorId(creatorId);
     }
 
+    @GetMapping("/daily-budget/{creatorId}")
+    @ResponseStatus(HttpStatus.OK)
+    public String getDailyBudgetByCreatorId(@PathVariable String creatorId) {
+        return budgetService.calculateDailyBudget(creatorId);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TransactionsResponse addTransaction(@RequestBody NewTransaction newTransaction) {
         return budgetService.addTransactionEntry(newTransaction);
+    }
+
+    @PostMapping("/monthly")
+    @ResponseStatus(HttpStatus.CREATED)
+    public MonthlyTransactionResponse addMonthlyTransaction(@RequestBody NewMonthlyTransaction newMonthlyTransaction) {
+        return budgetService.addMonthlyTransaction(newMonthlyTransaction);
     }
 
     @PostMapping("/category")
@@ -48,6 +71,12 @@ public class BudgetController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteTransaction(@PathVariable String id) {
         budgetService.deleteTransactionEntry(id);
+    }
+
+    @DeleteMapping("/monthly/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteMonthlyTransaction(@PathVariable String id) {
+        budgetService.deleteMonthlyTransaction(id);
     }
 
     @DeleteMapping("/category/{id}")

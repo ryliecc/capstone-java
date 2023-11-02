@@ -1,6 +1,14 @@
 package service;
 
-import com.github.ryliecc.backend.models.*;
+import com.github.ryliecc.backend.models.categories.CategoryResponse;
+import com.github.ryliecc.backend.models.categories.NewCategory;
+import com.github.ryliecc.backend.models.categories.TransactionCategory;
+import com.github.ryliecc.backend.models.transaction.daily.NewTransaction;
+import com.github.ryliecc.backend.models.transaction.daily.TransactionEntry;
+import com.github.ryliecc.backend.models.transaction.daily.TransactionsResponse;
+import com.github.ryliecc.backend.models.transaction.monthly.MonthlyRecurringTransaction;
+import com.github.ryliecc.backend.models.transaction.monthly.MonthlyTransactionResponse;
+import com.github.ryliecc.backend.models.transaction.monthly.NewMonthlyTransaction;
 import com.github.ryliecc.backend.service.BudgetMappingService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -85,4 +93,52 @@ class BudgetMappingServiceTest {
         assert actual.getCreatorId().equals("new_category_creator_id");
         assert actual.getCategoryType().equals("new_category_type");
     }
+
+    @Test
+    void mapRecurringTransactionToResponse() {
+        // GIVEN
+        MonthlyRecurringTransaction recurringTransaction = new MonthlyRecurringTransaction();
+        recurringTransaction.setId("recurring_id");
+        recurringTransaction.setTitle("recurring_title");
+        recurringTransaction.setStartDate(Instant.now());
+        recurringTransaction.setEndDate(Instant.now());
+        recurringTransaction.setAmountOfMoney("99.99");
+        recurringTransaction.setCreatorId("testId");
+        recurringTransaction.setTransactionCategory("category");
+
+        // WHEN
+        MonthlyTransactionResponse actual = budgetMappingService.mapRecurringTransactionToResponse(recurringTransaction);
+
+        // THEN
+        Assertions.assertEquals("recurring_id", actual.id());
+        assert actual.title().equals("recurring_title");
+        assert actual.startDate() != null;
+        assert actual.amountOfMoney().equals("99.99");
+        assert actual.creatorId().equals("testId");
+        assert actual.transactionCategory().equals("category");
+    }
+
+    @Test
+    void mapNewMonthlyTransactionToRecurringTransaction() {
+        // GIVEN
+        NewMonthlyTransaction newMonthlyTransaction = new NewMonthlyTransaction();
+        newMonthlyTransaction.setTitle("new_monthly_title");
+        newMonthlyTransaction.setStartDate("2020-01-01T01:00");
+        newMonthlyTransaction.setEndDate("not set");
+        newMonthlyTransaction.setAmountOfMoney("123.45");
+        newMonthlyTransaction.setCreatorId("testId");
+        newMonthlyTransaction.setTransactionCategory("new_category");
+
+        // WHEN
+        MonthlyRecurringTransaction actual = budgetMappingService.mapNewMonthlyTransactionToRecurringTransaction(newMonthlyTransaction);
+
+        // THEN
+        Assertions.assertEquals("new_monthly_title", actual.getTitle());
+        assert actual.getStartDate() != null;
+        assert actual.getAmountOfMoney().equals("123.45");
+        assert actual.getCreatorId().equals("testId");
+        assert actual.getTransactionCategory().equals("new_category");
+    }
+
+
 }

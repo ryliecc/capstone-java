@@ -10,16 +10,8 @@ import Background from "../components/Background.tsx";
 import BackButton from "../components/BackButton.tsx";
 import AddIcon from "../assets/plus-circle.svg";
 import NewCategoryWindow from "../components/NewCategoryWindow.tsx";
-
-const Main = styled.main`
-  display: flex;
-  flex-direction: column;
-  gap: 0.8em;
-  padding: 0.4em;
-  position: relative;
-  bottom: 0;
-  left: 0;
-`;
+import {Main} from "../components/Main.tsx";
+import AppMenu from "../components/AppMenu.tsx";
 
 const CategoryType = styled.h2`
   font-size: 1.6em;
@@ -94,6 +86,9 @@ export default function CategoryManagementPage() {
         axios.get("/api/users/me")
             .then(response => {
                 setCreatorId(response.data);
+                if(response.data === "anonymousUser") {
+                    navigateTo("/");
+                }
             })
     }, [])
 
@@ -130,14 +125,12 @@ export default function CategoryManagementPage() {
         setTransactionCategories((prevCategories: Category[]) => [...prevCategories, newCategory]);
     };
 
-    if (creatorId === "anonymousUser") {
-        navigateTo("/");
-    }
     return <>
-        <AppHeader headerText="All Categories"/>
+        <AppHeader fontsize={2.4} headerText="All Categories"/>
         <Main>
             <Background/>
             <BackButton/>
+            <AppMenu activePage="categories"/>
             <NewCategoryWindow creatorId={creatorId} isExpense={newCategoryType === "expense"} isVisible={newCategoryWindowIsVisible} setIsVisible={setNewCategoryWindowIsVisible} updateCategories={updateCategories} />
             <CategoryType>Income categories:</CategoryType>
             <CategoryList>

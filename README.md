@@ -16,11 +16,14 @@ The "Budget App" is a feature-rich financial management application with both Ja
 ### Dashboard
 
 - View your current financial balance at a glance.
+- Get insights into your daily budget and balance based on your transactions and the remaining days of the month.
 
 ### Income and Expense Tracking
 
 - Add income and expenses with a title, amount, and category.
 - Create and manage categories for your transactions.
+- Configure recurring transactions, both income and expenses, specifying a start date and optional end date.
+- Conveniently delete individual or all future transactions of the same type.
 
 ### Transaction History
 
@@ -30,6 +33,10 @@ The "Budget App" is a feature-rich financial management application with both Ja
 ### Category Management
 
 - View, create, and delete transaction categories.
+
+### Burger Menu
+
+- Access a convenient burger menu from all pages for quick navigation.
 
 ## Project Setup and Deployment
 
@@ -65,11 +72,9 @@ The "Budget App" is automatically deployed to [https://capstone-java-budget-app.
 
 ## Getting Started
 
-To get started with the "Budget App," follow these steps:
+To access and use the "Budget App," simply visit the deployed application at [https://capstone-java-budget-app.onrender.com](https://capstone-java-budget-app.onrender.com). No need to clone the repository or set up your own instance, as the main branch is automatically deployed.
 
-1. Clone the GitHub repository to your local machine.
-2. Build and run the Docker image for the "Budget App."
-3. Access the application in your web browser.
+Please note that the application relies on environment variables and secrets for secure operation, and these details are not publicly accessible. As a result, no additional setup or local installation is required to use the app. Simply visit the provided URL, log in, and start managing your finances seamlessly.
 
 Happy budgeting!
 

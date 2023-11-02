@@ -8,16 +8,10 @@ import TrashIcon from "../assets/trash.svg";
 import useLocalStorageState from "use-local-storage-state";
 import Background from "../components/Background.tsx";
 import BackButton from "../components/BackButton.tsx";
-
-const Main = styled.main`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-content: center;
-  gap: 0.6em;
-  padding: 0.6em;
-  position: relative;
-`;
+import DeleteRecurringWindow from "../components/DeleteRecurringWindow.tsx";
+import formatMoney from "../hooks/formatMoney.tsx";
+import AppMenu from "../components/AppMenu.tsx";
+import {Main} from "../components/Main.tsx";
 
 const List = styled.ul`
   list-style: none;
@@ -78,11 +72,17 @@ export default function AllTransactionsPage() {
     const [creatorId, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
     const navigateTo = useNavigate();
     const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [isDeleteWindowVisible, setIsDeleteWindowVisible] = useState(false);
+    const [deleteId, setDeleteId] = useState("");
+    const [deleteReferenceId, setDeleteReferenceId] = useState("");
 
     useEffect(() => {
         axios.get("/api/users/me")
             .then(response => {
                 setCreatorId(response.data);
+                if(response.data === "anonymousUser") {
+                    navigateTo("/");
+                }
             })
     }, [])
 
@@ -94,41 +94,80 @@ export default function AllTransactionsPage() {
             });
     }, [creatorId]);
 
-    function handleClickDelete(id: string) {
-        axios
-            .delete("/api/budget-app/" + id)
-            .then(() => {
-                setTransactions((prevTransactions) => {
-                    return prevTransactions.filter((transaction) => transaction.id !== id);
+    function handleClickDelete(id: string, referenceId: string) {
+        if (referenceId === "daily_transaction") {
+            axios
+                .delete("/api/budget-app/" + id)
+                .then(() => {
+                    setTransactions((prevTransactions) => {
+                        return prevTransactions.filter((transaction) => transaction.id !== id);
+                    });
+                })
+                .catch((error) => {
+                    console.error("Fehler beim Löschen", error);
                 });
-            })
-            .catch((error) => {
-                console.error("Fehler beim Löschen", error);
-            });
+        } else {
+            setDeleteId(id);
+            setDeleteReferenceId(referenceId);
+            setIsDeleteWindowVisible(true);
+        }
+
 
     }
 
-    if (creatorId === "anonymousUser") {
-        navigateTo("/");
+    // Sort transactions by date in descending order
+    const sortedTransactions = transactions.slice().sort((a: Transaction, b: Transaction) => {
+        const dateA= new Date(a.timeLogged).getTime();
+        const dateB= new Date(b.timeLogged).getTime();
+        return dateB - dateA;
+    });
+
+    // Group transactions by date
+    const groupedTransactions: { [dateKey: string]: Transaction[] } = {};
+
+    sortedTransactions.forEach((transaction: Transaction) => {
+        const dateKey: string = transaction.timeLogged.split("T")[0]; // Extract date part
+        if (!groupedTransactions[dateKey]) {
+            groupedTransactions[dateKey] = [];
+        }
+        groupedTransactions[dateKey].push(transaction);
+    });
+
+    function formatDate(dateKey: string) {
+        const parts = dateKey.split('-'); // Assuming the dateKey is in the format 'yyyy-mm-dd'
+        return `${parts[2]}/${parts[1]}/${parts[0]}`;
     }
+
     return <>
-        <AppHeader headerText="Past expenses"/>
+        <AppHeader fontsize={2} headerText="Past transactions"/>
         <Main>
             <Background/>
             <BackButton/>
+            <AppMenu activePage="transactions"/>
+            <DeleteRecurringWindow setIsVisible={setIsDeleteWindowVisible} isVisible={isDeleteWindowVisible} id={deleteId} referenceId={deleteReferenceId} setTransactions={setTransactions}/>
             <h2>Past transactions:</h2>
-            <List>{transactions?.map((transaction) => {
-                return (<ListItem key={transaction.id}>
-                    <DataContainer>
-                    <span>{transaction.title}</span>
-                    <span>{transaction.amountOfMoney}</span>
-                    </DataContainer>
-                    <Category>{transaction.transactionCategory}</Category>
-                    <DeleteButton type="button" onClick={() => handleClickDelete(transaction.id)}>
-                        <ButtonImage src={TrashIcon} alt="Trash Icon"/>
-                    </DeleteButton>
-                </ListItem>);
-            })}</List>
+            {Object.keys(groupedTransactions).map((dateKey: string) => (
+                <div key={dateKey}>
+                    <h3>{formatDate(dateKey)}</h3>
+                    <List>
+                        {groupedTransactions[dateKey].map((transaction: Transaction) => (
+                            <ListItem key={transaction.id}>
+                                <DataContainer>
+                                    <span>{transaction.title}</span>
+                                    <span>{formatMoney(transaction.amountOfMoney.toString())}€</span>
+                                </DataContainer>
+                                <Category>{transaction.transactionCategory}</Category>
+                                <DeleteButton
+                                    type="button"
+                                    onClick={() => handleClickDelete(transaction.id, transaction.referenceId)}
+                                >
+                                    <ButtonImage src={TrashIcon} alt="Trash Icon" />
+                                </DeleteButton>
+                            </ListItem>
+                        ))}
+                    </List>
+                </div>
+            ))}
         </Main>
     </>
 }

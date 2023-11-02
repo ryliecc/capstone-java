@@ -1,4 +1,4 @@
-package com.github.ryliecc.backend.models;
+package com.github.ryliecc.backend.models.transaction.daily;
 
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -20,4 +20,5 @@ public class TransactionEntry {
     private String amountOfMoney;
     private String creatorId;
     private String transactionCategory;
+    private String referenceId;
 }
