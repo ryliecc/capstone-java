@@ -117,10 +117,14 @@ export default function DashboardPage() {
 
     function handleClickLogout() {
         axios.post("/api/logout")
+            .then(() => {
+                setCreatorId("anonymousUser");
+                navigateTo("/");
+            })
             .catch(error => {
                 console.log("Fehler beim Ausloggen: " + error);
             });
-        setCreatorId("anonymousUser");
+
     }
 
     function handleClickAddIncome() {
