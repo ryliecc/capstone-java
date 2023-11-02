@@ -6,17 +6,7 @@ import axios from "axios";
 import {useEffect} from "react";
 import useLocalStorageState from "use-local-storage-state";
 import Background from "../components/Background.tsx";
-
-const Main = styled.main`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-content: center;
-  text-align: center;
-  gap: 0.8em;
-  padding: 0.4em;
-  position: relative;
-`;
+import {Main} from "../components/Main.tsx";
 
 export default function HomePage() {
     const navigateTo = useNavigate();
