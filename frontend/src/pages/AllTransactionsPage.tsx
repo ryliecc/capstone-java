@@ -80,6 +80,9 @@ export default function AllTransactionsPage() {
         axios.get("/api/users/me")
             .then(response => {
                 setCreatorId(response.data);
+                if(response.data === "anonymousUser") {
+                    navigateTo("/");
+                }
             })
     }, [])
 
@@ -135,9 +138,6 @@ export default function AllTransactionsPage() {
         return `${parts[2]}/${parts[1]}/${parts[0]}`;
     }
 
-    if (creatorId === "anonymousUser") {
-        navigateTo("/");
-    }
     return <>
         <AppHeader fontsize={2} headerText="Past transactions"/>
         <Main>

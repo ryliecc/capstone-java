@@ -86,6 +86,9 @@ export default function CategoryManagementPage() {
         axios.get("/api/users/me")
             .then(response => {
                 setCreatorId(response.data);
+                if(response.data === "anonymousUser") {
+                    navigateTo("/");
+                }
             })
     }, [])
 
@@ -122,9 +125,6 @@ export default function CategoryManagementPage() {
         setTransactionCategories((prevCategories: Category[]) => [...prevCategories, newCategory]);
     };
 
-    if (creatorId === "anonymousUser") {
-        navigateTo("/");
-    }
     return <>
         <AppHeader fontsize={2.4} headerText="All Categories"/>
         <Main>

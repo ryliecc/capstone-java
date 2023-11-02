@@ -88,6 +88,9 @@ export default function NewTransactionPage(props: Readonly<props>) {
         axios.get("/api/users/me")
             .then(response => {
                 setCreatorId(response.data);
+                if(response.data === "anonymousUser") {
+                    navigateTo("/");
+                }
             })
     }, [])
 
@@ -185,9 +188,6 @@ export default function NewTransactionPage(props: Readonly<props>) {
     };
 
 
-    if (creatorId === "anonymousUser") {
-        navigateTo("/");
-    }
     return <>
         <AppHeader fontsize={2.6} headerText={props.headerText}/>
         <Main>

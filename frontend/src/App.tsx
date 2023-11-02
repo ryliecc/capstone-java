@@ -8,7 +8,6 @@ import CategoryManagementPage from "./pages/CategoryManagementPage.tsx";
 
 
 export default function App() {
-
   return (
         <div className="App">
             <BrowserRouter>

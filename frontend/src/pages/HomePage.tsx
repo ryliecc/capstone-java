@@ -1,5 +1,4 @@
 import {useNavigate} from "react-router-dom";
-import styled from "styled-components";
 import AppHeader from "../components/AppHeader.tsx";
 import Button from "../components/Button.tsx";
 import axios from "axios";
@@ -16,6 +15,9 @@ export default function HomePage() {
         axios.get("/api/users/me")
             .then(response => {
                 setCreatorId(response.data);
+                if(response.data !== "anonymousUser") {
+                    navigateTo("/dashboard");
+                }
             })
     }, [])
 
@@ -25,9 +27,6 @@ export default function HomePage() {
     }
 
 
-    if(creatorId !== "anonymousUser") {
-        navigateTo("/dashboard");
-    }
     return <>
         <AppHeader fontsize={2.6} headerText="Budget App"/>
         <Main>

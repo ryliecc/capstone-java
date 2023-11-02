@@ -90,6 +90,17 @@ export default function DashboardPage() {
     const [userBalance, setUserBalance] = useState("0.00");
     const [dailyBudget, setDailyBudget] = useState("0.00");
 
+
+    useEffect(() => {
+        axios.get("/api/users/me")
+            .then(response => {
+                setCreatorId(response.data);
+                if(response.data === "anonymousUser") {
+                    navigateTo("/");
+                }
+            })
+    }, [])
+
     useEffect(() => {
         axios.get("/api/budget-app/balance/" + creatorId)
             .then(response => {
@@ -120,9 +131,6 @@ export default function DashboardPage() {
         navigateTo("/new-expense");
     }
 
-    if (creatorId === "anonymousUser") {
-        navigateTo("/");
-    }
     return <>
         <AppHeader fontsize={2.8} headerText="Dashboard"/>
         <Main>
