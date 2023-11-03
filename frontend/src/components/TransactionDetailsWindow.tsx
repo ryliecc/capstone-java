@@ -31,7 +31,9 @@ const CloseImage = styled.img`
     width: 3em;
 `;
 
-const EditButton = styled.button``;
+const EditButton = styled.button`
+    color: black;
+`;
 
 const Title = styled.h2`
   color: black;
@@ -78,11 +80,12 @@ export default function TransactionDetailsWindow(props: Readonly<props>) {
     }
 
     function handleClickDeleteButton() {
-
+        console.log("Delete was clicked.")
     }
 
     function handleSubmitEditForm(event: React.FormEvent) {
         event.preventDefault();
+        console.log("Submit was clicked.")
     }
 
     if(isEditForm) {

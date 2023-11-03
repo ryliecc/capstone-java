@@ -82,7 +82,7 @@ export default function AllTransactionsPage() {
         transactionCategory: "",
         referenceId: ""
     }
-    const [detailsTransaction, setDetailTransaction] = useState<Transaction>(initialTransaction);
+    const [detailsTransaction, setDetailsTransaction] = useState<Transaction>(initialTransaction);
     const [isDetailsWindowVisible, setIsDetailsWindowVisible] = useState(false);
 
 
@@ -138,7 +138,7 @@ export default function AllTransactionsPage() {
     }
 
     function handleClickTransaction(transaction: Transaction) {
-        setDetailTransaction(transaction);
+        setDetailsTransaction(transaction);
         setIsDetailsWindowVisible(true);
     }
 
