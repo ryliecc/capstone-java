@@ -3,12 +3,15 @@ package service;
 import com.github.ryliecc.backend.models.categories.CategoryResponse;
 import com.github.ryliecc.backend.models.categories.NewCategory;
 import com.github.ryliecc.backend.models.categories.TransactionCategory;
+import com.github.ryliecc.backend.models.categories.UpdatedCategory;
 import com.github.ryliecc.backend.models.transaction.daily.NewTransaction;
 import com.github.ryliecc.backend.models.transaction.daily.TransactionEntry;
 import com.github.ryliecc.backend.models.transaction.daily.TransactionsResponse;
+import com.github.ryliecc.backend.models.transaction.daily.UpdatedTransaction;
 import com.github.ryliecc.backend.models.transaction.monthly.MonthlyRecurringTransaction;
 import com.github.ryliecc.backend.models.transaction.monthly.MonthlyTransactionResponse;
 import com.github.ryliecc.backend.models.transaction.monthly.NewMonthlyTransaction;
+import com.github.ryliecc.backend.models.transaction.monthly.UpdatedMonthlyTransaction;
 import com.github.ryliecc.backend.service.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -245,6 +248,72 @@ class BudgetServiceTest {
         Assertions.assertEquals(expectedDailyBudget.toString(), dailyBudget);
     }
 
+    @Test
+    void updateTransactionEntry() {
+        // GIVEN
+        String transactionId = "1";
+        UpdatedTransaction updatedTransaction = new UpdatedTransaction();
+        updatedTransaction.setId(transactionId);
+        updatedTransaction.setTitle("Updated Title");
+        updatedTransaction.setAmountOfMoney("2.22");
+        updatedTransaction.setTransactionCategory("Updated Category");
 
+        TransactionEntry existingTransaction = setUpTransaction();
+        when(transactionRepo.findById(transactionId)).thenReturn(java.util.Optional.of(existingTransaction));
+
+        // WHEN
+        TransactionsResponse result = budgetService.updateTransactionEntry(updatedTransaction);
+
+        // THEN
+        Assertions.assertEquals(updatedTransaction.getTitle(), result.title());
+        Assertions.assertEquals(updatedTransaction.getAmountOfMoney(), result.amountOfMoney());
+        Assertions.assertEquals(updatedTransaction.getTransactionCategory(), result.transactionCategory());
+    }
+
+    @Test
+    void updateMonthlyTransaction() {
+        // GIVEN
+        String transactionId = "1";
+        UpdatedMonthlyTransaction updatedTransaction = new UpdatedMonthlyTransaction();
+        updatedTransaction.setId(transactionId);
+        updatedTransaction.setTitle("Updated Title");
+        updatedTransaction.setStartDate("2020-01-01T01:00");
+        updatedTransaction.setEndDate("2023-01-01T01:00");
+        updatedTransaction.setAmountOfMoney("3.33");
+        updatedTransaction.setTransactionCategory("Updated Category");
+
+        MonthlyRecurringTransaction existingRecurringTransaction = setUpRecurringTransaction();
+        when(recurringTransactionRepo.findById(transactionId)).thenReturn(java.util.Optional.of(existingRecurringTransaction));
+
+        // WHEN
+        MonthlyTransactionResponse result = budgetService.updateMonthlyTransaction(updatedTransaction);
+
+        // THEN
+        Assertions.assertEquals(updatedTransaction.getTitle(), result.title());
+        Assertions.assertEquals("2020-01-01T01:00:00Z", result.startDate());
+        Assertions.assertEquals("2023-01-01T01:00:00Z", result.endDate());
+        Assertions.assertEquals(updatedTransaction.getAmountOfMoney(), result.amountOfMoney());
+        Assertions.assertEquals(updatedTransaction.getTransactionCategory(), result.transactionCategory());
+    }
+
+    @Test
+    void updateCategory() {
+        // GIVEN
+        String categoryId = "1";
+        UpdatedCategory updatedCategory = new UpdatedCategory();
+        updatedCategory.setId(categoryId);
+        updatedCategory.setTitle("Updated Category Title");
+        updatedCategory.setCategoryType("income");
+
+        TransactionCategory existingCategory = setUpCategory();
+        when(categoryRepo.findById(categoryId)).thenReturn(java.util.Optional.of(existingCategory));
+
+        // WHEN
+        CategoryResponse result = budgetService.updateCategory(updatedCategory);
+
+        // THEN
+        Assertions.assertEquals(updatedCategory.getTitle(), result.title());
+        Assertions.assertEquals(updatedCategory.getCategoryType(), result.categoryType());
+    }
 
 }
