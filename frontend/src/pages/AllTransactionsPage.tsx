@@ -1,17 +1,16 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {Transaction} from "../models/TransactionModel.tsx";
-import {useNavigate} from "react-router-dom";
 import AppHeader from "../components/AppHeader.tsx";
 import styled from "styled-components";
 import TrashIcon from "../assets/trash.svg";
-import useLocalStorageState from "use-local-storage-state";
 import Background from "../components/Background.tsx";
 import BackButton from "../components/BackButton.tsx";
 import DeleteRecurringWindow from "../components/DeleteRecurringWindow.tsx";
 import formatMoney from "../hooks/formatMoney.tsx";
 import AppMenu from "../components/AppMenu.tsx";
 import {Main} from "../components/Main.tsx";
+import useLocalStorageState from "use-local-storage-state";
 
 const List = styled.ul`
   list-style: none;
@@ -69,22 +68,12 @@ const ButtonImage = styled.img`
 `;
 
 export default function AllTransactionsPage() {
-    const [creatorId, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
-    const navigateTo = useNavigate();
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [isDeleteWindowVisible, setIsDeleteWindowVisible] = useState(false);
     const [deleteId, setDeleteId] = useState("");
     const [deleteReferenceId, setDeleteReferenceId] = useState("");
+    const [creatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
 
-    useEffect(() => {
-        axios.get("/api/users/me")
-            .then(response => {
-                setCreatorId(response.data);
-                if(response.data === "anonymousUser") {
-                    navigateTo("/");
-                }
-            })
-    }, [])
 
     useEffect(() => {
         axios

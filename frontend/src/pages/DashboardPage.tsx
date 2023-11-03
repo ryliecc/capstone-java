@@ -2,7 +2,6 @@ import AppHeader from "../components/AppHeader.tsx";
 import LogoutIcon from "../assets/arrow-left-on-rectangle.svg";
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
-import useLocalStorageState from "use-local-storage-state";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import PlusIcon from "../assets/plus.svg";
@@ -11,6 +10,7 @@ import Background from "../components/Background.tsx";
 import formatMoney from "../hooks/formatMoney.tsx";
 import AppMenu from "../components/AppMenu.tsx";
 import {Main} from "../components/Main.tsx";
+import useLocalStorageState from "use-local-storage-state";
 
 const BalanceContainer = styled.div`
   width: 7em;
@@ -86,20 +86,19 @@ const ButtonImage = styled.img`
 
 export default function DashboardPage() {
     const navigateTo = useNavigate();
-    const [creatorId, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
     const [userBalance, setUserBalance] = useState("0.00");
     const [dailyBudget, setDailyBudget] = useState("0.00");
-
+    const [creatorId, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
 
     useEffect(() => {
-        axios.get("/api/users/me")
-            .then(response => {
+        axios.get("api/users/me")
+            .then((response) => {
                 setCreatorId(response.data);
                 if(response.data === "anonymousUser") {
                     navigateTo("/");
                 }
             })
-    }, [])
+    }, []);
 
     useEffect(() => {
         axios.get("/api/budget-app/balance/" + creatorId)
