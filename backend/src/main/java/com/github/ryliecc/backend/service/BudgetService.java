@@ -3,18 +3,22 @@ package com.github.ryliecc.backend.service;
 import com.github.ryliecc.backend.models.categories.CategoryResponse;
 import com.github.ryliecc.backend.models.categories.NewCategory;
 import com.github.ryliecc.backend.models.categories.TransactionCategory;
+import com.github.ryliecc.backend.models.categories.UpdatedCategory;
 import com.github.ryliecc.backend.models.transaction.daily.NewTransaction;
 import com.github.ryliecc.backend.models.transaction.daily.TransactionEntry;
 import com.github.ryliecc.backend.models.transaction.daily.TransactionsResponse;
+import com.github.ryliecc.backend.models.transaction.daily.UpdatedTransaction;
 import com.github.ryliecc.backend.models.transaction.monthly.MonthlyRecurringTransaction;
 import com.github.ryliecc.backend.models.transaction.monthly.MonthlyTransactionResponse;
 import com.github.ryliecc.backend.models.transaction.monthly.NewMonthlyTransaction;
+import com.github.ryliecc.backend.models.transaction.monthly.UpdatedMonthlyTransaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -47,7 +51,6 @@ public class BudgetService {
 
         return dailyBudget.toString();
     }
-
 
 
     public List<TransactionsResponse> getTransactionsByCreatorId(String creatorId) {
@@ -93,7 +96,6 @@ public class BudgetService {
     }
 
 
-
     public TransactionsResponse addTransactionEntry(NewTransaction newTransaction) {
         TransactionEntry transactionEntry = budgetMappingService.mapNewTransactionToTransactionEntry(newTransaction);
         TransactionEntry savedTransaction = transactionRepo.save(transactionEntry);
@@ -134,5 +136,61 @@ public class BudgetService {
 
     public void deleteCategory(String id) {
         categoryRepo.deleteById(id);
+    }
+
+    public TransactionsResponse updateTransactionEntry(UpdatedTransaction updatedTransaction) {
+        String timeLoggedString = updatedTransaction.getTimeLogged();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")
+                .withZone(ZoneOffset.UTC);
+
+        TransactionEntry transactionEntry = transactionRepo.findById(updatedTransaction.getId()).orElseThrow();
+        transactionEntry.setTitle(updatedTransaction.getTitle());
+        transactionEntry.setTimeLogged(Instant.from(formatter.parse(timeLoggedString)));
+        transactionEntry.setAmountOfMoney(updatedTransaction.getAmountOfMoney());
+        transactionEntry.setTransactionCategory(updatedTransaction.getTransactionCategory());
+        transactionEntry.setReferenceId(updatedTransaction.getReferenceId());
+
+        transactionRepo.save(transactionEntry);
+
+        return budgetMappingService.mapTransactionToResponse(transactionEntry);
+    }
+
+    public MonthlyTransactionResponse updateMonthlyTransaction(UpdatedMonthlyTransaction updatedTransaction) {
+        String startDateString = updatedTransaction.getStartDate();
+        String endDateString = updatedTransaction.getEndDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")
+                .withZone(ZoneOffset.UTC);
+        Instant startDateInstant = Instant.from(formatter.parse(startDateString));
+        Instant endDateInstant = Instant.from(formatter.parse(endDateString));
+
+        MonthlyRecurringTransaction existingEntry = recurringTransactionRepo.findById(updatedTransaction.getId()).orElseThrow();
+        List<TransactionEntry> correspondingTransactions = transactionRepo.findAll()
+                .stream()
+                .filter(transaction -> transaction.getReferenceId().equals(updatedTransaction.getId()))
+                .toList();
+
+        for (TransactionEntry correspondingTransaction : correspondingTransactions) {
+            transactionRepo.deleteById(correspondingTransaction.getId());
+        }
+
+        existingEntry.setTitle(updatedTransaction.getTitle());
+        existingEntry.setStartDate(startDateInstant);
+        existingEntry.setEndDate(endDateInstant);
+        existingEntry.setTransactionCategory(updatedTransaction.getTransactionCategory());
+        existingEntry.setAmountOfMoney(updatedTransaction.getAmountOfMoney());
+
+        List<TransactionEntry> newTransactionEntries = budgetMappingService.mapNewMonthlyTransaction(existingEntry);
+        transactionRepo.saveAll(newTransactionEntries);
+        recurringTransactionRepo.save(existingEntry);
+        return budgetMappingService.mapRecurringTransactionToResponse(existingEntry);
+    }
+
+    public CategoryResponse updateCategory(UpdatedCategory updatedCategory) {
+        TransactionCategory category = categoryRepo.findById(updatedCategory.getId()).orElseThrow();
+        category.setTitle(updatedCategory.getTitle());
+        category.setCategoryType(updatedCategory.getCategoryType());
+
+        categoryRepo.save(category);
+        return budgetMappingService.mapCategoryToResponse(category);
     }
 }

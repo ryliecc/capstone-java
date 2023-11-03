@@ -2,10 +2,13 @@ package com.github.ryliecc.backend.controller;
 
 import com.github.ryliecc.backend.models.categories.CategoryResponse;
 import com.github.ryliecc.backend.models.categories.NewCategory;
+import com.github.ryliecc.backend.models.categories.UpdatedCategory;
 import com.github.ryliecc.backend.models.transaction.daily.NewTransaction;
 import com.github.ryliecc.backend.models.transaction.daily.TransactionsResponse;
+import com.github.ryliecc.backend.models.transaction.daily.UpdatedTransaction;
 import com.github.ryliecc.backend.models.transaction.monthly.MonthlyTransactionResponse;
 import com.github.ryliecc.backend.models.transaction.monthly.NewMonthlyTransaction;
+import com.github.ryliecc.backend.models.transaction.monthly.UpdatedMonthlyTransaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -83,5 +86,23 @@ public class BudgetController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteCategory(@PathVariable String id) {
         budgetService.deleteCategory(id);
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public TransactionsResponse updateTransaction(@RequestBody UpdatedTransaction updatedTransaction) {
+        return budgetService.updateTransactionEntry(updatedTransaction);
+    }
+
+    @PutMapping("/monthly")
+    @ResponseStatus(HttpStatus.OK)
+    public MonthlyTransactionResponse updateRecurringTransaction(@RequestBody UpdatedMonthlyTransaction updatedTransaction) {
+        return budgetService.updateMonthlyTransaction(updatedTransaction);
+    }
+
+    @PutMapping("/category")
+    @ResponseStatus(HttpStatus.OK)
+    public CategoryResponse updateCategory(@RequestBody UpdatedCategory updatedCategory) {
+        return budgetService.updateCategory(updatedCategory);
     }
 }
