@@ -258,6 +258,10 @@ class BudgetServiceTest {
         updatedTransaction.setAmountOfMoney("2.22");
         updatedTransaction.setTransactionCategory("Updated Category");
 
+        String validTimeLogged = "2023-11-03T14:30";
+
+        updatedTransaction.setTimeLogged(validTimeLogged);
+
         TransactionEntry existingTransaction = setUpTransaction();
         when(transactionRepo.findById(transactionId)).thenReturn(java.util.Optional.of(existingTransaction));
 
@@ -269,6 +273,7 @@ class BudgetServiceTest {
         Assertions.assertEquals(updatedTransaction.getAmountOfMoney(), result.amountOfMoney());
         Assertions.assertEquals(updatedTransaction.getTransactionCategory(), result.transactionCategory());
     }
+
 
     @Test
     void updateMonthlyTransaction() {
