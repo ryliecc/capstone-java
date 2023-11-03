@@ -36,7 +36,7 @@ const MenuButton = styled.button<{ isOpen: boolean }>`
   right: 0.4em;
   font-size: 1em;
   bottom: 0;
-  z-index: 10;
+  z-index: 2;
 `;
 
 const ButtonImage = styled.img<{ isOpen: boolean }>`

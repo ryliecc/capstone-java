@@ -11,15 +11,15 @@ import formatMoney from "../hooks/formatMoney.tsx";
 import AppMenu from "../components/AppMenu.tsx";
 import {Main} from "../components/Main.tsx";
 import useLocalStorageState from "use-local-storage-state";
+import TransactionDetailsWindow from "../components/TransactionDetailsWindow.tsx";
 
-const List = styled.ul`
-  list-style: none;
+const List = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.6em;
 `;
 
-const ListItem = styled.li`
+const ListItem = styled.button`
   display: flex;
   flex-direction: column;
   position: relative;
@@ -73,6 +73,17 @@ export default function AllTransactionsPage() {
     const [deleteId, setDeleteId] = useState("");
     const [deleteReferenceId, setDeleteReferenceId] = useState("");
     const [creatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
+    const initialTransaction: Transaction = {
+        id: "",
+        title: "",
+        timeLogged: "",
+        amountOfMoney: "",
+        creatorId: "",
+        transactionCategory: "",
+        referenceId: ""
+    }
+    const [detailsTransaction, setDetailTransaction] = useState<Transaction>(initialTransaction);
+    const [isDetailsWindowVisible, setIsDetailsWindowVisible] = useState(false);
 
 
     useEffect(() => {
@@ -82,6 +93,7 @@ export default function AllTransactionsPage() {
                 setTransactions(response.data);
             });
     }, [creatorId]);
+
 
     function handleClickDelete(id: string, referenceId: string) {
         if (referenceId === "daily_transaction") {
@@ -104,18 +116,16 @@ export default function AllTransactionsPage() {
 
     }
 
-    // Sort transactions by date in descending order
     const sortedTransactions = transactions.slice().sort((a: Transaction, b: Transaction) => {
-        const dateA= new Date(a.timeLogged).getTime();
-        const dateB= new Date(b.timeLogged).getTime();
+        const dateA = new Date(a.timeLogged).getTime();
+        const dateB = new Date(b.timeLogged).getTime();
         return dateB - dateA;
     });
 
-    // Group transactions by date
     const groupedTransactions: { [dateKey: string]: Transaction[] } = {};
 
     sortedTransactions.forEach((transaction: Transaction) => {
-        const dateKey: string = transaction.timeLogged.split("T")[0]; // Extract date part
+        const dateKey: string = transaction.timeLogged.split("T")[0];
         if (!groupedTransactions[dateKey]) {
             groupedTransactions[dateKey] = [];
         }
@@ -123,8 +133,13 @@ export default function AllTransactionsPage() {
     });
 
     function formatDate(dateKey: string) {
-        const parts = dateKey.split('-'); // Assuming the dateKey is in the format 'yyyy-mm-dd'
+        const parts = dateKey.split('-');
         return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
+
+    function handleClickTransaction(transaction: Transaction) {
+        setDetailTransaction(transaction);
+        setIsDetailsWindowVisible(true);
     }
 
     return <>
@@ -133,14 +148,19 @@ export default function AllTransactionsPage() {
             <Background/>
             <BackButton/>
             <AppMenu activePage="transactions"/>
-            <DeleteRecurringWindow setIsVisible={setIsDeleteWindowVisible} isVisible={isDeleteWindowVisible} id={deleteId} referenceId={deleteReferenceId} setTransactions={setTransactions}/>
+            <TransactionDetailsWindow transaction={detailsTransaction} isVisible={isDetailsWindowVisible}
+                                      setIsVisible={setIsDetailsWindowVisible}/>
+            <DeleteRecurringWindow setIsVisible={setIsDeleteWindowVisible} isVisible={isDeleteWindowVisible}
+                                   id={deleteId} referenceId={deleteReferenceId} setTransactions={setTransactions}/>
             <h2>Past transactions:</h2>
             {Object.keys(groupedTransactions).map((dateKey: string) => (
                 <div key={dateKey}>
                     <h3>{formatDate(dateKey)}</h3>
                     <List>
                         {groupedTransactions[dateKey].map((transaction: Transaction) => (
-                            <ListItem key={transaction.id}>
+                            <ListItem type="button" key={transaction.id} onClick={() => {
+                                handleClickTransaction(transaction)
+                            }}>
                                 <DataContainer>
                                     <span>{transaction.title}</span>
                                     <span>{formatMoney(transaction.amountOfMoney.toString())}€</span>
@@ -150,7 +170,7 @@ export default function AllTransactionsPage() {
                                     type="button"
                                     onClick={() => handleClickDelete(transaction.id, transaction.referenceId)}
                                 >
-                                    <ButtonImage src={TrashIcon} alt="Trash Icon" />
+                                    <ButtonImage src={TrashIcon} alt="Trash Icon"/>
                                 </DeleteButton>
                             </ListItem>
                         ))}
