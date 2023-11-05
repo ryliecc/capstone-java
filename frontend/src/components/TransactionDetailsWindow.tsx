@@ -29,7 +29,20 @@ const Container = styled.div<{ $isVisible: boolean }>`
   color: black;
 `;
 
-const CloseButton = styled.button``;
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-top: 4em;
+  justify-content: center;
+  align-items: center;
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  border: none;
+  right: 1.4em;
+  top: 1em;
+`;
 
 const CloseImage = styled.img`
   width: 3em;
@@ -37,15 +50,21 @@ const CloseImage = styled.img`
 
 const EditButton = styled.button`
   color: black;
+  position: absolute;
+  left: 0.8em;
+  top: 0.4em;
+  font-size: 1.4em;
+  padding: 0.4em;
 `;
 
 const Title = styled.h2`
   color: black;
-  font-size: 1.4em;
+  font-size: 2.4em;
 `;
 
 const MoneyAmount = styled.p`
   color: black;
+  font-size: 2em;
 `;
 
 const Category = styled.div`
@@ -62,10 +81,14 @@ const RecurringLabel = styled.div`
 
 const DeleteButton = styled.button`
   color: black;
+  font-size: 2em;
+  border: none;
 `;
 
 const DeleteImage = styled.img`
-  width: 3em;
+  width: 1.2em;
+  position: relative;
+  top: 0.2em;
 `;
 
 const EditForm = styled.form``;
@@ -121,30 +144,34 @@ export default function TransactionDetailsWindow(props: Readonly<props>) {
 
     if (isEditForm) {
         return <Container $isVisible={props.isVisible}>
-            <CloseButton type="button" onClick={handleClickCloseWindow}><CloseImage src={CloseIcon}
-                                                                                    alt="Close Button"/></CloseButton>
-            <EditForm onSubmit={handleSubmitEditForm}>
-                <ButtonContainer>
-                    <Button buttonText="Submit" type="submit"/>
-                    <Button buttonText="Cancel" onClick={handleClickCancelEdit} />
-                </ButtonContainer>
-            </EditForm>
+            <Content>
+                <CloseButton type="button" onClick={handleClickCloseWindow}><CloseImage src={CloseIcon}
+                                                                                        alt="Close Button"/></CloseButton>
+                <EditForm onSubmit={handleSubmitEditForm}>
+                    <ButtonContainer>
+                        <Button buttonText="Submit" type="submit"/>
+                        <Button buttonText="Cancel" onClick={handleClickCancelEdit}/>
+                    </ButtonContainer>
+                </EditForm>
+            </Content>
         </Container>
     }
     return <Container $isVisible={props.isVisible}>
-        <DeleteRecurringWindow setIsVisible={setIsDeleteWindowVisible} isVisible={isDeleteWindowVisible}
-                               id={props.transaction.id} referenceId={props.transaction.referenceId}
-                               setTransactions={props.setTransactions}/>
-        <CloseButton type="button" onClick={handleClickCloseWindow}><CloseImage src={CloseIcon}
-                                                                                alt="Close Button"/></CloseButton>
-        <EditButton type="button" onClick={handleClickEditButton}>Edit</EditButton>
-        <Title>{props.transaction.title}</Title>
-        <MoneyAmount>{formatMoney(props.transaction.amountOfMoney)}€</MoneyAmount>
-        <Category>{props.transaction.transactionCategory}</Category>
-        {TimeElement}
-        <DeleteButton type="button" onClick={handleClickDeleteButton}>
-            <DeleteImage src={DeleteIcon} alt="Delete Button"/>
-            Delete
-        </DeleteButton>
+        <Content>
+            <DeleteRecurringWindow setIsVisible={setIsDeleteWindowVisible} isVisible={isDeleteWindowVisible}
+                                   id={props.transaction.id} referenceId={props.transaction.referenceId}
+                                   setTransactions={props.setTransactions}/>
+            <CloseButton type="button" onClick={handleClickCloseWindow}><CloseImage src={CloseIcon}
+                                                                                    alt="Close Button"/></CloseButton>
+            <EditButton type="button" onClick={handleClickEditButton}>Edit</EditButton>
+            <MoneyAmount>{formatMoney(props.transaction.amountOfMoney)}€</MoneyAmount>
+            <Title>{props.transaction.title}</Title>
+            <Category>{props.transaction.transactionCategory}</Category>
+            {TimeElement}
+            <DeleteButton type="button" onClick={handleClickDeleteButton}>
+                <DeleteImage src={DeleteIcon} alt="Delete Button"/>
+                Delete
+            </DeleteButton>
+        </Content>
     </Container>
 }
