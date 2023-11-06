@@ -4,7 +4,6 @@ import {useNavigate} from "react-router-dom";
 import AppHeader from "../components/AppHeader.tsx";
 import Button from "../components/Button.tsx";
 import styled from "styled-components";
-import useLocalStorageState from "use-local-storage-state";
 import React, {useEffect, useState} from "react";
 import {Category} from "../models/CategoryModel.tsx";
 import NewCategoryWindow from "../components/NewCategoryWindow.tsx";
@@ -14,12 +13,13 @@ import BackButton from "../components/BackButton.tsx";
 import {NewMonthlyTransaction} from "../models/NewMonthlyTransaction.tsx";
 import {Main} from "../components/Main.tsx";
 import AppMenu from "../components/AppMenu.tsx";
+import useLocalStorageState from "use-local-storage-state";
 
 export type props = {
     titleText: string,
     moneyText: string,
     headerText: string,
-    isExpense: boolean,
+    isExpense: boolean
 }
 
 const Form = styled.form`
@@ -80,19 +80,10 @@ const ButtonImage = styled.img`
 export default function NewTransactionPage(props: Readonly<props>) {
     const [transactionCategories, setTransactionCategories] = useState<Category[]>([]);
     const [newCategoryIsVisible, setNewCategoryIsVisible] = useState(false);
-    const [creatorId, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
     const [isMonthly, setIsMonthly] = useState(false);
+    const [creatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
     const navigateTo = useNavigate();
 
-    useEffect(() => {
-        axios.get("/api/users/me")
-            .then(response => {
-                setCreatorId(response.data);
-                if(response.data === "anonymousUser") {
-                    navigateTo("/");
-                }
-            })
-    }, [])
 
     useEffect(() => {
         axios.get("api/budget-app/category/" + creatorId)

@@ -2,8 +2,6 @@ import AppHeader from "../components/AppHeader.tsx";
 import {useEffect, useState} from "react";
 import {Category} from "../models/CategoryModel.tsx";
 import axios from "axios";
-import useLocalStorageState from "use-local-storage-state";
-import {useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import TrashIcon from "../assets/trash.svg";
 import Background from "../components/Background.tsx";
@@ -12,6 +10,7 @@ import AddIcon from "../assets/plus-circle.svg";
 import NewCategoryWindow from "../components/NewCategoryWindow.tsx";
 import {Main} from "../components/Main.tsx";
 import AppMenu from "../components/AppMenu.tsx";
+import useLocalStorageState from "use-local-storage-state";
 
 const CategoryType = styled.h2`
   font-size: 1.6em;
@@ -70,10 +69,9 @@ const DeleteImage = styled.img`
 
 export default function CategoryManagementPage() {
     const [transactionCategories, setTransactionCategories] = useState<Category[]>([]);
-    const [creatorId, setCreatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
-    const navigateTo = useNavigate();
     const [newCategoryType, setNewCategoryType] = useState("income");
     const [newCategoryWindowIsVisible, setNewCategoryWindowIsVisible] = useState(false);
+    const [creatorId] = useLocalStorageState("creatorId", {defaultValue: "anonymousUser"});
 
     const incomeCategories: Category[] = transactionCategories.filter((category: Category) => {
         return category.categoryType === "income";
@@ -83,21 +81,11 @@ export default function CategoryManagementPage() {
     })
 
     useEffect(() => {
-        axios.get("/api/users/me")
-            .then(response => {
-                setCreatorId(response.data);
-                if(response.data === "anonymousUser") {
-                    navigateTo("/");
-                }
-            })
-    }, [])
-
-    useEffect(() => {
         axios.get("api/budget-app/category/" + creatorId)
             .then(response => {
                 setTransactionCategories(response.data);
             })
-    }, []);
+    }, [creatorId]);
 
     function handleClickDelete(id: string) {
         axios.delete("/api/budget-app/category/" + id)

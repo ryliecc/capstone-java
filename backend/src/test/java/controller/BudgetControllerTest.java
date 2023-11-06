@@ -3,10 +3,13 @@ package controller;
 import com.github.ryliecc.backend.controller.BudgetController;
 import com.github.ryliecc.backend.models.categories.CategoryResponse;
 import com.github.ryliecc.backend.models.categories.NewCategory;
+import com.github.ryliecc.backend.models.categories.UpdatedCategory;
 import com.github.ryliecc.backend.models.transaction.daily.NewTransaction;
 import com.github.ryliecc.backend.models.transaction.daily.TransactionsResponse;
+import com.github.ryliecc.backend.models.transaction.daily.UpdatedTransaction;
 import com.github.ryliecc.backend.models.transaction.monthly.MonthlyTransactionResponse;
 import com.github.ryliecc.backend.models.transaction.monthly.NewMonthlyTransaction;
+import com.github.ryliecc.backend.models.transaction.monthly.UpdatedMonthlyTransaction;
 import com.github.ryliecc.backend.service.BudgetService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -217,4 +220,63 @@ class BudgetControllerTest {
         // THEN
         verify(budgetService).deleteCategory(categoryId);
     }
+
+    @Test
+    void updateTransaction() {
+        // GIVEN
+        UpdatedTransaction updatedTransaction = new UpdatedTransaction();
+        updatedTransaction.setId("1");
+        updatedTransaction.setTitle("Updated Title");
+        updatedTransaction.setAmountOfMoney("2.22");
+        updatedTransaction.setTransactionCategory("Updated Category");
+
+        TransactionsResponse response = new TransactionsResponse("1", "Updated Title", "2020-01-01T12:00:00Z", "2.22", "testId", "Updated Category", "daily_transaction");
+        when(budgetService.updateTransactionEntry(updatedTransaction)).thenReturn(response);
+
+        // WHEN
+        TransactionsResponse result = budgetController.updateTransaction(updatedTransaction);
+
+        // THEN
+        assertEquals(response, result);
+    }
+
+    @Test
+    void updateRecurringTransaction() {
+        // GIVEN
+        UpdatedMonthlyTransaction updatedTransaction = new UpdatedMonthlyTransaction();
+        updatedTransaction.setId("1");
+        updatedTransaction.setTitle("Updated Title");
+        updatedTransaction.setStartDate("2020-01-01T12:00:00Z");
+        updatedTransaction.setEndDate("2021-01-01T12:00:00Z");
+        updatedTransaction.setAmountOfMoney("2.22");
+        updatedTransaction.setTransactionCategory("Updated Category");
+
+        MonthlyTransactionResponse response = new MonthlyTransactionResponse("1", "Updated Title", "2020-01-01T12:00:00Z", "2021-01-01T12:00:00Z", "2.22", "testId", "Updated Category");
+        when(budgetService.updateMonthlyTransaction(updatedTransaction)).thenReturn(response);
+
+        // WHEN
+        MonthlyTransactionResponse result = budgetController.updateRecurringTransaction(updatedTransaction);
+
+        // THEN
+        assertEquals(response, result);
+    }
+
+    @Test
+    void updateCategory() {
+        // GIVEN
+        UpdatedCategory updatedCategory = new UpdatedCategory();
+        updatedCategory.setId("1");
+        updatedCategory.setTitle("Updated Category Title");
+        updatedCategory.setCategoryType("income");
+
+        CategoryResponse response = new CategoryResponse("1", "Updated Category Title", "testId", "income");
+        when(budgetService.updateCategory(updatedCategory)).thenReturn(response);
+
+        // WHEN
+        CategoryResponse result = budgetController.updateCategory(updatedCategory);
+
+        // THEN
+        assertEquals(response, result);
+    }
+
 }

@@ -6,6 +6,7 @@ import com.github.ryliecc.backend.models.categories.TransactionCategory;
 import com.github.ryliecc.backend.models.transaction.daily.NewTransaction;
 import com.github.ryliecc.backend.models.transaction.daily.TransactionEntry;
 import com.github.ryliecc.backend.models.transaction.daily.TransactionsResponse;
+import com.github.ryliecc.backend.models.transaction.daily.UpdatedTransaction;
 import com.github.ryliecc.backend.models.transaction.monthly.MonthlyRecurringTransaction;
 import com.github.ryliecc.backend.models.transaction.monthly.MonthlyTransactionResponse;
 import com.github.ryliecc.backend.models.transaction.monthly.NewMonthlyTransaction;
