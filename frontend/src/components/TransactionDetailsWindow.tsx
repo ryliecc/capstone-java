@@ -91,7 +91,21 @@ const DeleteImage = styled.img`
   top: 0.2em;
 `;
 
-const EditForm = styled.form``;
+const EditForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  padding-top: 4em;
+  justify-content: center;
+  align-items: center;
+`;
+
+const MoneyInput = styled.input`
+  color: black;
+  font-size: 2em;
+  width: 6em;
+  border: none;
+  text-align: center;
+`;
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -103,12 +117,14 @@ export default function TransactionDetailsWindow(props: Readonly<props>) {
     const isRecurring: boolean = props.transaction.referenceId !== "daily_transaction";
     const [isDeleteWindowVisible, setIsDeleteWindowVisible] = useState(false);
 
+    const [moneyInputValue, setMoneyInputValue] = useState<number>(props.transaction.amountOfMoney)
+
     const TimeElement = isRecurring ? (<RecurringLabel>Recurring Element</RecurringLabel>) : (
         <TimeLabel>Date: {props.transaction.timeLogged}</TimeLabel>);
 
     function handleClickCloseWindow() {
-        props.setIsVisible(false);
         setIsEditForm(false);
+        props.setIsVisible(false);
     }
 
     function handleClickEditButton() {
@@ -144,16 +160,17 @@ export default function TransactionDetailsWindow(props: Readonly<props>) {
 
     if (isEditForm) {
         return <Container $isVisible={props.isVisible}>
-            <Content>
                 <CloseButton type="button" onClick={handleClickCloseWindow}><CloseImage src={CloseIcon}
                                                                                         alt="Close Button"/></CloseButton>
                 <EditForm onSubmit={handleSubmitEditForm}>
+                    <MoneyInput type="number" step="0.01" name="amountOfMoney" value={props.transaction.amountOfMoney}/>
+                    <input type="text" name="title" value={props.transaction.title}/>
+                    <input type="datetime-local" name="timeLogged" value={props.transaction.timeLogged}/>
                     <ButtonContainer>
                         <Button buttonText="Submit" type="submit"/>
                         <Button buttonText="Cancel" onClick={handleClickCancelEdit}/>
                     </ButtonContainer>
                 </EditForm>
-            </Content>
         </Container>
     }
     return <Container $isVisible={props.isVisible}>
